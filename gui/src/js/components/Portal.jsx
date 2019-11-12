@@ -28,7 +28,7 @@ class Portal extends Component {
     async componentDidMount() {
       try {
         if (isLogin()) {
-          const {userInfo} = getUser()
+          const userInfo = getUser()
           this.setState({ 
             isAuthenticated: true,
             user:userInfo

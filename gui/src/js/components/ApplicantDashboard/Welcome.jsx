@@ -6,7 +6,6 @@ import styled from 'styled-components'
 export default class Welcome extends Component {
     constructor(props) {
       super(props);
-      console.log('all the props in welcome: ',this.props.user)
     }
       render() {
         // const {user} = this.props.user;

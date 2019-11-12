@@ -70,7 +70,6 @@ export default function NavBar(props) {
   const classes = useStyles();
  
     const {title, handleLogout} = props
-    console.log({title})
     return (
         <div className={classes.root}>
         <AppBar position="static">

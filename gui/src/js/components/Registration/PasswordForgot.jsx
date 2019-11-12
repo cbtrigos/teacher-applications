@@ -46,9 +46,7 @@ export default class PasswordForgot extends Component {
               email,
             },
           );
-          console.log(response.data);
           if (response.data === 'recovery email sent') {
-            console.log(this.state.messageFromServer === "recovery email sent")
             this.setState({
               showError: false,
               messageFromServer: 'recovery email sent',

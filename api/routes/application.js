@@ -34,7 +34,6 @@ exports.save = function(req,res){
 
     connection.query('INSERT INTO applications SET ?',application, function (error, results, fields) {
     if (error) {
-        console.log("error ocurred",error);
         res.status(400).send("error occured")
 
     }else{
@@ -54,7 +53,6 @@ exports.submit = function(req,res){
           if(results.length >0){ 
             connection.query('UPDATE applications SET submitted = ? WHERE application_id = ?',['True', application_id], function (error, results, fields) {
                 if (error) {
-                    console.log("error ocurred",error);
                     res.status(400).send("error occured")
             
                 }else{

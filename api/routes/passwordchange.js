@@ -43,7 +43,6 @@ exports.forgotpassword = function(req,res){
 
     connection.query('INSERT INTO password_change_requests SET ?', request, function (error, results, fields) {
       if (error) {
-        console.log("error ocurred",error);
         res.status(400).json("insertion into password_change_requests failed");
         res.end();
       }
@@ -74,14 +73,10 @@ exports.forgotpassword = function(req,res){
       let valid = true;
       transporter.sendMail(mailOptions, function(err, info) {
          if(err) {
-           console.error('there was an error: ', err);
            valid = false; 
-         } else {
-           console.log('here is the response: ', response);
-         }
+         } 
       });
         if (valid) {
-          console.log('recovery email sent')
           return res.status(200).send('recovery email sent');}
           else {
             return res.status(500).send('Failed to send')

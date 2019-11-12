@@ -7,7 +7,6 @@ import styled from 'styled-components'
 export class FormUserDetails extends Component {
   render() {
     const { values, handleChangeSave, submit, validateForm } = this.props;
-    console.log(values)
         return (
             <Wrapper>
             <FormWrapper>

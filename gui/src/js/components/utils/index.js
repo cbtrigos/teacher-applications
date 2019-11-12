@@ -14,8 +14,6 @@ export const logout = () => {
 
 export const login = user => {
   localStorage.setItem(TOKEN_KEY, JSON.stringify(user));
-  console.log(JSON.stringify(user))
-  console.log('and if I try to retrieve it?', getUser())
 }
 
 export const getUserName = () => {

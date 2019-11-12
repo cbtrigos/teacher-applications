@@ -97,7 +97,6 @@ export default class Application extends Component {
 
   handleChangeSave = input => e => {
     this.setState({ [input]: e.target.value });
-    console.log(this.state)
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
       switch (input) {

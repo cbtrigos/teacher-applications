@@ -9,8 +9,6 @@ import Welcome from './Welcome.jsx'
 export default class ApplicantDash extends Component {
   constructor(props) {
     super(props);
-    console.log('props in the applicantdash: this.props.user', this.props.user)
-
     this.state = {
       view: 'welcome'
     };
