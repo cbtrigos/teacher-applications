@@ -1,34 +1,36 @@
-import React, { Component } from 'react';
-import {FormUserDetails, Submit} from "./RegistrationInfo.jsx"
+import React from 'react';
 import axios from 'axios'
+
+import {FormUserDetails, Submit} from "./RegistrationInfo.jsx"
 import { login } from '../utils';
 
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
-// const passwordRegex = RegExp(/(?=.*[0-9])/);
-var passwordRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})");
+const passwordRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})");
 
 
-export default class UserForm extends Component {
-  state = {
-    step: 1,
-    firstName: '',
-    lastName: '',
-    email: '',
-    gender: '',
-    DOB: '',
-    password1: '', 
-    password2: '', 
-    formErrors: {
+export default class UserForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      step: 1,
       firstName: '',
       lastName: '',
       email: '',
+      gender: '',
       DOB: '',
-      password1: '',
-      password2: '',
-    },
+      password1: '', 
+      password2: '', 
+      formErrors: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        DOB: '',
+        password1: '',
+        password2: '',
+      },
+    };
   };
-
   // Proceed to next step
   nextStep = () => {
     const { step } = this.state;
@@ -43,20 +45,20 @@ export default class UserForm extends Component {
     });
   };
 
-  validateForm = (errors) => {
+  validateForm = () => {
     let valid = true;
-    Object.values(errors).forEach(
-      (val) => val.length > 0 && (valid = false)
+    Object.values(this.state.formErrors).forEach(
+      (e) => e.length > 0 && (valid = false)
     );
     Object.values(this.state).forEach(
-      (val) => val.length === 0 && (valid = false)
+      (val) => val === '' && (valid = false)
     );
     return valid;
   }
   
   submit = (event) => {
     event.preventDefault();
-    if(this.validateForm(this.state.formErrors)) {
+    
       axios 
         .post('http://localhost:5000/api/register', 
           {"email": this.state.email,
@@ -67,10 +69,9 @@ export default class UserForm extends Component {
             "birth_date": this.state.DOB
         }) 
         .then(response => {
-          if (response.data==="user registered sucessfully") {
+          if (response.data.message==="user registered sucessfully") {
             console.log('registered successfully')
-            login()
-            this.props.history.push('/dashboard')
+            this.props.handleLogin(response.data.user)
             
           } else if (response.data==='email already used'){
             console.log('email already used')
@@ -79,15 +80,11 @@ export default class UserForm extends Component {
         })
 
 
-    }else{
-      console.log(this.state)
-      console.error('Invalid Form')
-    }
+
   }
 
   handleChangeSave = input => e => {
-    event.preventDefault();
-
+    // event.preventDefault();
     this.setState({ [input]: e.target.value });
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
@@ -123,14 +120,15 @@ export default class UserForm extends Component {
           value !== this.state.password1 ? "Passwords not equal" : "";
         break;
   }
-  // this.setState({ formErrors, [name]: value });
-  // console.log(this.state)
+  this.setState({ formErrors, [name]: value });
+  console.log(this.state)
+  console.log('valid form? ', this.validateForm())
 
   }
 
   render() {
-    const { step, firstName, lastName, email, gender, DOB, password1, password2, submitted, formErrors} = this.state;
-    const values = { firstName, lastName, email, gender,  DOB, password1, password2, submitted, formErrors};
+    const { step, firstName, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
+    const values = { firstName, lastName, email, gender,  DOB, password1, password2, formErrors};
 
     switch (step) {
       case 1:
@@ -139,6 +137,7 @@ export default class UserForm extends Component {
             nextStep={this.nextStep}
             handleChangeSave={this.handleChangeSave}
             submit = {this.submit}
+            validateForm = {this.validateForm}
             values={values}
           />
           );

@@ -23,14 +23,13 @@ exports.forgotpassword = function(req,res){
   var email= req.body.email;
   const token = crypto.randomBytes(64).toString('hex');
 
-  if (email === '') { //if no email is provided
+  if (email === '') { 
     res.json('email required');
     res.end();
   }
 
   connection.query('SELECT *FROM applicants WHERE email = ?',email, function (error, results, fields) {
-  if(results.length == 0) { //if no users have that email
-        console.log('email not in database')
+  if(results.length == 0) { 
         res.status(400).json('email not in db')
         res.end();
       }
@@ -115,7 +114,7 @@ exports.reset_valid = function(req,res){
   });
 }
 
-exports.reset_password = function(req,res){ // id, password
+exports.reset_password = function(req,res){ 
   var token = req.body.id;
   let hash_password = bcrypt.hashSync(req.body.password, 12);
 

@@ -1,89 +1,61 @@
 import React, { Component } from "react";
 import axios from 'axios';
 import {H1, Wrapper, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton, A_center} from './Styling.jsx'
-import {login} from './utils'
+// import {login} from './utils'
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+import { Button} from "react-bootstrap";
+import { Link, withRouter} from "react-router-dom";
+import { login } from "./utils/index.js";
 
 
-const formValid = ({ formErrors, ...rest }) => {
-  let valid = true;
-
-  // validate form errors being empty
-  Object.values(formErrors).forEach(val => {
-    val.length > 0 && (valid = false);
-  });
-
-  // validate the form was filled out
-  Object.values(rest).forEach(val => {
-    val === null && (valid = false);
-  });
-
-  return valid;
-};
-
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
+    console.log('in login constructor', this.props.handleLogin)
 
+    
     this.state = {
-      email: null,
-      password: null,
-      formErrors: {
-        email: "",
-        password: ""
-      }
+      isLoading: false, 
+      email: "",
+      password: "",
     };
+      this.handleSubmit=this.handleSubmit.bind(this);
+      this.handleChange=this.handleChange.bind(this);
   }
+      formValid = () => {
+        return emailRegex.test(this.state.email) > 0 && this.state.password.length > 6;
+      };
 
-  handleSubmit = e => {
-    // const { enter } = this.props;
-    e.preventDefault();
-    if (formValid(this.state)) {
-      axios 
-      .post('http://localhost:5000/api/login', 
-        {"email": this.state.email,
-          "password": this.state.password, 
-      }) 
-      .then(response => {
-        if (response.data==="login successful") {
-          login() 
-          this.props.history.push('/dashboard')
+      handleChange = e => {
+        const { name, value } = e.target;
+        this.setState({[name]: value });
+      };
 
-        } else if (response.data==='email does not exist'){
-          console.log('email does not exist')
-        } else if (response.data==='email and password do not match'){
-          console.log('check the credentials')
-        } else {console.log(response.data)}
-      })
-    }
-  };
 
-  handleChange = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    let formErrors = { ...this.state.formErrors };
+      handleSubmit = async e => {
+        e.preventDefault();
+        this.setState({ isLoading: true });
 
-    switch (name) {
-      case "email":
-        formErrors.email = emailRegex.test(value)
-          ? ""
-          : "invalid email address";
-        break;
-      case "password":
-        formErrors.password =
-          value.length < 6 ? "not a valid password" : "";
-        break;
-      default:
-        break;
-    }
+        axios 
+        .post('http://localhost:5000/api/login', 
+          {"email": this.state.email,
+            "password": this.state.password, 
+        }) 
+        .then(response => {
+          console.log(response)
+          if (response.data.message==="login successful") {
+            this.props.handleLogin(response.data.user);
+          } 
+          else if (response.data==='email does not exist'){
+            alert(response.data)
+          } else if (response.data==="email and password do not match"){
+            alert(response.data)
+          } else  alert('no can do')
+        })
+      };
 
-    this.setState({ formErrors, [name]: value }, () => console.log(this.state));
-  };
 
   render() {
-    const { formErrors } = this.state;
-
-
         return (
             <Wrapper>
             <FormWrapper>
@@ -99,9 +71,7 @@ export default class Login extends Component {
                         noValidate
                         onChange={this.handleChange}
                         />
-                    {formErrors.email.length > 0 && (
-                <ErrorMessage>{formErrors.email}</ErrorMessage>
-              )}
+
                 </New>
                 <New>
                     <Label htmlFor="password"> Password</Label>
@@ -113,11 +83,9 @@ export default class Login extends Component {
                         noValidate
                         onChange={this.handleChange}
                         />
-                    {formErrors.password.length > 0 && (
-                <ErrorMessage>{formErrors.password}</ErrorMessage>
-              )}
+                 
                 </New>
-                <CreateButton type="submit">Sign in</CreateButton>
+                <CreateButton type="submit" disabled={!this.formValid(this.state)} >Sign in</CreateButton>
                 <A_center href="/password-forgot"> Forgot your password? </A_center>
                 <A_center href="/register"> Don't have an account? Register here! </A_center>
                 </Form>
@@ -129,3 +97,4 @@ export default class Login extends Component {
 };
 
 
+export default withRouter(Login);

@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import {H1, Wrapper, SharedNew, Buttons, Button, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton, A_center} from '../Styling.jsx'
+import {H1, Wrapper, Buttons, Button, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../Styling.jsx'
 import styled from 'styled-components'
 
 
 // The "Personal Details" page is the 1st panel of the registration 
 export class FormUserDetails extends Component {
   render() {
-    const { values, handleChangeSave, nextStep, checkForm, submit } = this.props;
+    const { values, handleChangeSave, submit, validateForm } = this.props;
+    console.log(values)
         return (
             <Wrapper>
             <FormWrapper>
@@ -27,7 +28,7 @@ export class FormUserDetails extends Component {
                 <ErrorMessage>{values.formErrors.firstName}</ErrorMessage>
               )} 
                 </Left>
-                <SharedNew>
+                <New>
                     <Label htmlFor="lastName">Last Name</Label>
                     <Input
                         type = "text"
@@ -42,13 +43,13 @@ export class FormUserDetails extends Component {
                     {values.formErrors.lastName.length > 0 && (
                     <ErrorMessage>{values.formErrors.lastName}</ErrorMessage>
                 )}
-                </SharedNew> 
+                </New> 
                 </Buttons>
                 <New>
                     <Label htmlFor="email">Email </Label>
                     <Input
                         type = "text"
-                        placeholder="email"
+                        placeholder="Email"
                         name="email"
                         noValidate
                         onChange={handleChangeSave('email')}
@@ -59,49 +60,53 @@ export class FormUserDetails extends Component {
 
                 <New> 
                   <Label htmlFor="Gender">Gender </Label>
-                  <CForm> 
-                      <Label>
-                        <Button
-                          type="radio"
-                          value="female"
-                          onClick={handleChangeSave('gender') }
-                          checked={values.gender === "female"}
-                        />
-                        Female
-                      </Label>
-                      <Label>
-                        <Button
-                          type="radio"
-                          value="male"
-                          onClick={handleChangeSave('gender') }
-                          checked={values.gender === "male"}
-                        />
-                        Male
-                      </Label>
-                      <Label>
-                        <Button
-                          type="radio"
-                          value="other"
-                          onChange={handleChangeSave('gender') }
-                          checked={values.gender === "other"}
-                        /> Other</Label>
-                  </CForm>
+              <Buttons props={'center'}>
+              <FlexContainer>
+                  <RadioButton
+                    type="radio"
+                    name="radio"
+                    value="female"
+                    checked={values.gender === "female"}
+                    onChange={handleChangeSave('gender')}/>
+                  <Label gender>Female</Label>
+                </FlexContainer>
+
+                <FlexContainer>
+                  <RadioButton
+                    type="radio"
+                    name="radio"
+                    value="male"
+                    checked={values.gender === "male"}
+                    onChange={handleChangeSave('gender')}/>
+                  <Label gender>Male</Label>
+                </FlexContainer>
+
+                <FlexContainer>
+                  <RadioButton
+                    type="radio"
+                    name="radio"
+                    value="nonbinary"
+                    checked={values.gender === "nonbinary"}
+                    onChange={handleChangeSave('gender')}/>
+                  <Label gender>Nonbinary</Label>
+                </FlexContainer>
+                  </Buttons>
+
+
+
                 </New>
 
                 <New>
                     <Label htmlFor="DOB"> Date of Birth</Label>
-
                         <Input
                             type = "date"
                             className=""
-                            placeholder="Date of Birth"
+                            placeholder="MM/DD/YYYY"
                             name='DOB'
                             noValidate
                             onChange={handleChangeSave('DOB')}
                             defaultValue={values.DOB}
-
                             />
-                  
                 <ErrorMessage>{values.formErrors.DOB}</ErrorMessage>
                 </New>
 
@@ -140,6 +145,7 @@ export class FormUserDetails extends Component {
                 color="primary"
                 variant="contained"
                 onClick={submit}
+                disabled={!validateForm()}
               >Create Account</CreateButton> 
               <A_center href="/login"> Have an account? Sign in here! </A_center>
             </FormWrapper>
@@ -160,7 +166,7 @@ export class Submit extends Component {
           <Wrapper>
             <FormWrapper>
               <H1>Registration</H1>
-                <h2>3/3: Confirm User Details</h2>
+                <h2>Confirm User Details</h2>
             <br />
             <Div>
               <Category> First Name: </Category> <It> {values.firstName} </It>
@@ -199,12 +205,6 @@ export class Submit extends Component {
 
 
 
-const CForm = styled.div`
-  display: -webkit-flex;
-  justify-content: center;
-  width: 100%;
-  padding-bottom: 5px;
-`
 const Div = styled.div`
 margin: 13px;`
 
@@ -215,3 +215,24 @@ font: inherit;`
 const It= styled.h2`
 font: inherit;
 text-style: italic`
+
+
+const RadioButton = styled.input`
+  z-index: 1;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  &:hover ~ ${RadioButton} {
+    background: #bebebe;
+  }
+  &:checked + ${RadioButton} {
+    background: #db7290;
+    border: 1px solid #db7290;
+    }
+  }
+`;
+
+const FlexContainer = styled.div`
+width: 20%;
+text-align: center;
+`

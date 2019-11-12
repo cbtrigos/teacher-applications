@@ -9,6 +9,8 @@ import Welcome from './Welcome.jsx'
 export default class ApplicantDash extends Component {
   constructor(props) {
     super(props);
+    console.log('props in the applicantdash: this.props.user', this.props.user)
+
     this.state = {
       view: 'welcome'
     };
@@ -24,9 +26,8 @@ export default class ApplicantDash extends Component {
               <Menu>
               <MenuBar updateView={this.updateView}/> 
               </Menu>
-
               <View> 
-              {this.state.view=='welcome' && (<Welcome />)}
+              {this.state.view=='welcome' && (<Welcome user={this.props.user}/>)}
               {this.state.view=='create application' && ( <Application/>)}
               </View> 
           </SideWrapper>

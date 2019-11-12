@@ -5,6 +5,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
+import {Wrapper } from './Styling.jsx'
 import styled from "styled-components"
 
 const Coat_of_arms_of_Sierra_Leone= 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Coat_of_arms_of_Sierra_Leone.svg/1200px-Coat_of_arms_of_Sierra_Leone.svg.png'
@@ -37,11 +38,11 @@ const posts = [
 
 export default function Modules(props) {
     return (
+      <Wrapper> 
         <Gri >
             {posts.map(post => (
              <Post key={post.itemid} > 
-              <Grid >
-                {/* <Card> */}
+
                   <CardActionArea>
                     <CardMedia
                       component="img"
@@ -61,12 +62,12 @@ export default function Modules(props) {
                       Learn More >
                     </Button>
                   </CardActions>
-                {/* </Card> */}
-              </Grid>
+
               </Post>
 
             ))}
-        </Gri>
+        </Gri>   
+      </Wrapper>
       );
     }
 
@@ -75,14 +76,15 @@ const Gri = styled.div`
     display: flex;
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
-    margin: 10pt;
+    // margin: 10pt;
     justify-content: center;
+    background-color: none;
 `;
 
 const Post = styled.section`
     background: lightgrey;
     margin: 3pt 3pt 0pt 3pt;
-    padding: white;
+    // padding: white;
     min-width: 46%;
     width: 24%;
 

@@ -9,7 +9,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import SearchIcon from '@material-ui/icons/Search';
 import styled from 'styled-components'
 import {Tool, MenuButton, Right, Left} from './Styling.jsx'
-import {logout, isLogin} from './utils'
+// import {isLogin, logout} from './utils'
 
 // import coat_of_arms from "../Images/coat_of_arms.png"
 
@@ -69,7 +69,7 @@ const useStyles = makeStyles(theme => ({
 export default function NavBar(props) {
   const classes = useStyles();
  
-    const {title} = props.title
+    const {title, handleLogout} = props
     console.log({title})
     return (
         <div className={classes.root}>
@@ -78,7 +78,7 @@ export default function NavBar(props) {
             <Tool> 
             <Left>
             <Typography className={classes.title} variant="h6" noWrap>
-                {title} hi
+                {title} 
             </Typography>
             </Left>
             <Right>
@@ -86,10 +86,8 @@ export default function NavBar(props) {
             <a href="/"> <MenuButton>HOME</MenuButton> </a>
             <a href="/contact"> <MenuButton>CONTACT</MenuButton> </a>
             <a href="/faq"> <MenuButton>FAQ</MenuButton> </a>
-            <a href="/login"> <MenuButton>LOGIN</MenuButton> </a> 
-            {/* {isLogin() ? <MenuButton onclick={logout()}>LOGOUT</MenuButton> 
-                        :<a href="/login"> <MenuButton>LOGIN</MenuButton> </a> 
-          } */}
+            <a href="/login"> <MenuButton>LOGIN</MenuButton> </a>
+            {/* <a><MenuButton onclick={handleLogout}>LOGOUT</MenuButton> </a> */}
             <div className={classes.search}>
                 <div className={classes.searchIcon}>
                 <SearchIcon />

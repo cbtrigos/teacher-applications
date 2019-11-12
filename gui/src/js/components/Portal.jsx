@@ -1,73 +1,122 @@
 import ReactDOM from "react-dom";
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, Fragment } from "react";
+import { Link, withRouter } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
+import { Navbar, Nav, NavItem } from "react-bootstrap";
+import Routes from "../constants/Routes.jsx"
 
-import NavBar from "./NavBar.jsx";
-import Modules from "./FrontModules.jsx";
-import Faq from "./Faq.jsx";
-import Login from "./Login.jsx";
-import Contact from "./Contact.jsx";
-import Register from "./Registration/Register.jsx"
-import PasswordForgot from "./Registration/PasswordForgot.jsx"
-import ResetPassword from "./Registration/ResetPassword.jsx"
-import ApplicantDash from "./ApplicantDashboard/ApplicantDash.jsx"
-import { BrowserRouter as Router, Switch, Route, Link, Redirect} from 'react-router-dom';
-import {logout, isLogin} from './utils'
+// import NavBar from "./NavBar.jsx";
+import { BrowserRouter as Router} from 'react-router-dom';
+import {logout, isLogin, login, getUser} from './utils'
+import {Tool, MenuButton, Right, Left} from './Styling.jsx'
 
-const PrivateRoute = ({ component: Component, ...rest}) => (
-  <Route {...rest} render={()=> (
-    isLogin() ?
-    <Component/>
-    : <Redirect to='/login'/>
-  )}/>
-)
 
-export default class Portal extends React.Component {
-  constructor(props) {
-    super(props);
+
+
+class Portal extends Component {
+    constructor(props) {
+      super(props);
+      
       this.state = {
-        isLogin: isLogin(), 
-        user: null, 
+        isAuthenticated: false,
+        isAuthenticating: true, 
+        user: {}
       };
-  }
+      this.handleLogin = this.handleLogin.bind(this);
+    }
+
+    async componentDidMount() {
+      try {
+        if (isLogin()) {
+          const {userInfo} = getUser()
+          this.setState({ 
+            isAuthenticated: true,
+            user:userInfo
+           });
+        }
+      }
+      catch(e) {
+        if (e !== 'No current user') {
+          alert(e);
+        }
+      }
+      this.setState({ isAuthenticating: false });
+
+    }
+
+    handleLogin = async (userInfo) => {
+      await login(userInfo); 
+      this.setState({ 
+        isAuthenticated: true,
+        user: userInfo
+       });
+    }
 
 
-  
-  // userLogin = input => e => {
-  //   event.preventDefault();
-  //   this.setState({ 
-  //     logged_in: true,
-  //     user: [input]
-  //   });
-  // }
+      handleLogout = async event => {
+        await logout();
+        this.setState({ 
+          isAuthenticated: false,
+          user: {}
+        });
+      }
 
-  handleLogout = () => {
-    logout();
-    this.setState({
-        isLogin: false
-    })
-}
 
-  render() {
-    return (
-      <div> 
-        <NavBar title='teacher portal'/>   
-         <Router> 
 
-          <Route path='/faq' exact component ={Faq}/>  
-          <Route path='/contact' exact component ={Contact}/>  
-          <Route path='/password-forgot' exact component ={PasswordForgot}/>  
-          <Route path='/login' exact component = {Login} userLogin={this.userLogin}/>   
-          <Route path="/" exact component = {Modules}/> 
-          <Route path='/register' exact component ={Register}/>
-          <Route path='/reset'  component ={ResetPassword}/>
-          <Route path='/dashboard' component = {ApplicantDash} />
-          <PrivateRoute path='/dashboard' component = {ApplicantDash}/>
+      render() {
+        const childProps = {
+          isAuthenticated: this.state.isAuthenticated,
+          handleLogin: this.handleLogin,
+          user: this.state.user
+        };
+        return (
+          !this.state.isAuthenticating &&
+          <div> 
+    {/* <NavBar title='teacher portal' handleLogout={this.handleLogout}/>    */}
+            <Router> 
+            <Navbar fluid collapseOnSelect>
+              <Navbar.Header>
+                <Navbar.Brand>
+                  <Link to="/">Home</Link>
+                </Navbar.Brand>
+                <Navbar.Toggle />
+              </Navbar.Header>
+              <Navbar.Collapse>
+                <Nav pullRight>
+                  <LinkContainer to="/faq">
+                    <NavItem>FAQ</NavItem>
+                  </LinkContainer>
+                  <LinkContainer to="/contact">
+                    <NavItem>Contact</NavItem>
+                  </LinkContainer>        
+                  {this.state.isAuthenticated
+                    ? <Fragment>
+                    <LinkContainer to="/dashboard">
+                      <NavItem>Dashboard</NavItem>
+                    </LinkContainer>
+                    <NavItem onClick={this.handleLogout}>Logout</NavItem>
 
-      </Router>
-      </div>
+                    </Fragment>
+                    : <Fragment>
+                        <LinkContainer to="/register">
+                          <NavItem>Signup</NavItem>
+                        </LinkContainer>
+                        <LinkContainer to="/login" >
+                          <NavItem>Login</NavItem>
+                        </LinkContainer>
+                        </Fragment>
+                  }   
+    
 
+                </Nav>
+              </Navbar.Collapse>
+          </Navbar> 
+          <Routes childProps={childProps} />
+          </Router >
+          </div>
     );
 }}
+export default withRouter(Portal);
+
 const wrapper = document.getElementById("welcome-page");
 wrapper ? ReactDOM.render(<Portal />, wrapper) : false;
-

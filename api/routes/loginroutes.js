@@ -1,10 +1,9 @@
-var mysql      = require('mysql');
+var mysql = require('mysql');
 const bcrypt = require('bcrypt');
 var {db} = require('../authentication/mysql.json')
 
   //                                 CONNECTING TO MYSQL
 
-const pass = db 
 var connection = mysql.createConnection(
   db
 );
@@ -35,18 +34,33 @@ connection.connect(function(err) {
     }
     connection.query('SELECT * FROM applicants WHERE email = ?',[applicants['email']], function (error, results, fields) {
     if(results.length >0) {
-          console.log('error ocurred', error)
-          res.status(201).send("email already used")
-
+      res.status(201).send("email already used")
         }
     else {
         connection.query('INSERT INTO applicants SET ?',applicants, function (error, results, fields) {
         if (error) {
-          console.log("error ocurred",error);
           res.status(400).send("error occured")
 
         }else{
-          res.status(201).send("user registered sucessfully")
+            connection.query('SELECT * FROM applicants WHERE email = ?',[applicants['email']], function (error, results, fields) {
+              if (error) {
+                res.status(400).send('error occured')
+              }else{
+                if(results.length >0){
+                    res.status(200).send(
+                      {message:'user registered sucessfully', 
+                      user: {
+                        id: results[0].applicant_id, 
+                        first_name: results[0].first_name, 
+                        last_name: results[0].last_name, 
+                        email: results[0].email, 
+                        birth_date: results[0].birth_date, 
+                        gender: results[0].gender, 
+                        created: results[0].created
+                      }})
+                  } 
+                }
+              })
         }}
         );}
       });
@@ -62,16 +76,25 @@ connection.connect(function(err) {
   exports.login = function(req,res){
     var email= req.body.email;
     var password = req.body.password;
-    console.log(email, password)
     connection.query('SELECT * FROM applicants WHERE email = ?',[email], function (error, results, fields) {
     if (error) {
       res.status(400).send('error occured')
     }else{
       if(results.length >0){ 
         if(bcrypt.compareSync(password, results[0].password)) {
-          res.status(200).send('login successful')
+          res.status(200).send(
+            {message:'login successful', 
+            user: {
+              id: results[0].applicant_id, 
+              first_name: results[0].first_name, 
+              last_name: results[0].last_name, 
+              email: results[0].email, 
+              birth_date: results[0].birth_date, 
+              gender: results[0].gender, 
+              created: results[0].created
+            }})
          } else {
-          res.status(204).send("email and password do not match")
+          res.status(204).send('email and password do not match')
          }
       }
       else{

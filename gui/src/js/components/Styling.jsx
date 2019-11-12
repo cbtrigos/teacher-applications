@@ -37,24 +37,39 @@ export const Form = styled.form`
 `
 
 export const Label = styled.h1`
-    font-size: 0.8em;
-    color: #222;
+    font-size: 1.2em;
+    width: 100%;
+    color: #111;
     font-weight: lighter;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     float:left
-    margin: 0 .3em 0.25em 0;`
+    padding: 1%;
+    margin: 1%;
+    ${props =>
+        props.gender ?
+        `font-size: 1em;
+        font-weight: light;
+        color: black;    `
+        : ``};
+
+
+    `
 
 export const Input = styled.input`
     padding: 10px 10px;
+    margin: 0 0 1.5% 0;
     width: 100%;
     border-radius: 5px;
     outline: none;
     border: 1px solid #cfcfcf;
     float: right;
-    &:placeholder {
-        font-size: .8em;
-        font-weight: lighter;
+    ::placeholder {
+        font-size: 1em;
+        font-weight: light;
         color: #999;
-    }`
+    }
+    `
 
 export const Button = styled.button`
     margin-right : 10px;`
@@ -62,12 +77,6 @@ export const Button = styled.button`
 export const New = styled.div`
     flex-wrap: break-word;
     width: 100%;
-    margin: 1% 0 1% 0;
-    `
-export const SharedNew = styled.div`
-    flex-wrap: break-word;
-    width: 100%;
-    // margin: 1% 0 1% 0;
     `
 
 export const ErrorMessage = styled.h1`
@@ -75,7 +84,6 @@ export const ErrorMessage = styled.h1`
     font-size: 0.75em;`
 
 export const CreateButton = styled.button`
-    background-color: #519e8a;
     color: #fff;
     border: 2px solid #fff;
     margin-top: 1em;
@@ -91,7 +99,16 @@ export const CreateButton = styled.button`
         border: 2px solid #519e8a;}
     :& small {
         color: #999;
-        font-weight: lighter;}` 
+        font-weight: lighter;}
+        ${props =>
+            props.disabled ?
+            `
+            background: lightgrey;
+            `: `
+            background: #519e8a;
+            `};
+        ` 
+    
 
 export const A_center = styled.a`
     width: 100%;
@@ -110,7 +127,15 @@ export const Error = styled(Label)`
 export const Buttons = styled.div`
     display: -webkit-flex;
     width: 100%;
-    flex-direction: space-between`
+    justify-content: center;
+
+    ${props =>
+        props.center ?
+        `
+        justify-content: center;
+        `: `
+        flex-direction: space-between;
+        `}`
 
 export const Right = styled.div`
     float: right;
@@ -124,10 +149,8 @@ export const Left = styled.div`
 export const Tool = styled.section`
     background: #817990;
     color: white;
-    display: -webkit-flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 10px;`
+    `
+    
     
 export const MenuButton=styled.button`
     background: inherit;

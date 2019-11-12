@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {H1, TextArea, Wrapper, SharedNew, Buttons, Button, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton, A_center} from '../Styling.jsx'
+import {H1, TextArea, Wrapper, Buttons, Button, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton, A_center} from '../Styling.jsx'
 import styled from 'styled-components'
 
 
@@ -29,7 +29,7 @@ export class PersonalInfo extends Component {
                <ErrorMessage>{values.formErrors.firstName}</ErrorMessage>
                )}  */}
                 </Left>
-                <SharedNew>
+                <New>
                     <Label htmlFor="lastName">Last Name</Label>
                     <Input
                         type = "text"
@@ -44,7 +44,7 @@ export class PersonalInfo extends Component {
                     {/* {values.formErrors.lastName.length > 0 && (
                     <ErrorMessage>{values.formErrors.lastName}</ErrorMessage> */}
                 {/* )} */}
-                </SharedNew> 
+                </New> 
                 </Buttons>
 
                 <New>
