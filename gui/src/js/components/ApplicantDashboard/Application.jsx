@@ -1,33 +1,16 @@
 import React, { Component } from "react";
-import {Wrapper, FormWrapper,} from '../Styling.jsx'
-import {PersonalInfo, TeacherInfo, ShortAnswer, Submit} from "./ApplicationInfo.jsx"
+import {Wrapper, FormWrapper,} from '../../constants/utils/Styling.jsx'
+import {AppType, PersonalInfo, TeacherInfo, ShortAnswer, Attachments, Submit} from "./ApplicationInfo.jsx"
 import styled from "styled-components";
-
-
-
-// const formValid = ({ formErrors, ...rest }) => {
-//   let valid = true;
-
-//   // validate form errors being empty
-//   Object.values(formErrors).forEach(val => {
-//     val.length > 0 && (valid = false);
-//   });
-
-//   // validate the form was filled out
-//   Object.values(rest).forEach(val => {
-//     val === null && (valid = false);
-//   });
-
-//   return valid;
-// };
 
 export default class Application extends Component {
   constructor(props) {
     super(props);
+    const user = props.user
     this.state = {
-      step: 1,
+      step: 0,
       application_id: null,
-      application_type:'Secondary',
+      application_type: null,
       employing_authority:null,
       school_name:null,
       other_names:null,
@@ -39,20 +22,16 @@ export default class Application extends Component {
       qualifications: null,
       special_skills: null,
       created: null,
-      first_name:null,
-      last_name:null,
-      email: null,
-      sex: null,
-  formErrors: {
-    email: "",
-    password: ""
-  }
+      first_name:user.first_name,
+      last_name:user.last_name,
+      email:user.email,
+      sex: user.gender,
 };
   }
 
   submit = (event) => {
     event.preventDefault();
-    // if(this.validateForm(this.state.formErrors)) {
+
     //   axios 
     //     .post('http://localhost:5000/api/application-submit', 
     //       {"email": this.state.email,
@@ -71,16 +50,21 @@ export default class Application extends Component {
     //       else {console.log(response.data)}
     //     })
 
-
-    // }else{
-    //   console.log(this.state)
-    //   console.error('Invalid Form')
-    // }
     console.log('submitted!!')
   }
 
 
-    // Proceed to next step
+    validateForm = () => {
+      let valid = true;
+      Object.values(this.state.formErrors).forEach(
+        (e) => e.length > 0 && (valid = false)
+      );
+      Object.values(this.state).forEach(
+        (val) => val === '' && (valid = false)
+      );
+      return valid;
+    }
+
     nextStep = () => {
       const { step } = this.state;
       this.setState({
@@ -97,30 +81,23 @@ export default class Application extends Component {
 
   handleChangeSave = input => e => {
     this.setState({ [input]: e.target.value });
-    console.log(this.state)
     const { name, value } = e.target;
-    let formErrors = { ...this.state.formErrors };
-      switch (input) {
-
-        case "employing_Authority":
-          formErrors.DOB =
-          value.length =0 ? "This field is required. Please return and fill this out. " : ""
-        break;
-
-        case "nationality":
-            formErrors.DOB =
-            value.length =0 ? "This field is required. Please return and fill this out. " : ""
-          break;
-
   }
-  this.setState({ formErrors, [name]: value });
-  }
+
 
   render() {
-    const { prev_appt, nationality, application_type, step, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, gender,formErrors} = this.state;
-    const values = {prev_appt, nationality, application_type, step, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, gender,formErrors};
-
+    const { prev_appt, nationality, application_type, step, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state;
+    const values = {prev_appt, nationality, application_type, step, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex};
     switch (step) {
+      case 0: 
+        return (
+          <AppType 
+          nextStep={this.nextStep}
+          handleChangeSave={this.handleChangeSave}
+          nextStep = {this.nextStep}
+          values={values}
+          />
+        )
       case 1:
         return (
           <PersonalInfo
@@ -149,11 +126,22 @@ export default class Application extends Component {
         );
       case 4:
           return (
-            <Submit
+            <Attachments
               prevStep={this.prevStep}
-              submit = {this.submit}
+              nextStep={this.nextStep}
+              prevStep={this.prevStep}
               values={values}
-            />);    }
+            />);    
+      case 5:
+        return (
+          <Submit
+            prevStep={this.prevStep}
+            submit = {this.submit}
+            values={values}
+          />);    
+          
+          
+          }
   }
 };
 

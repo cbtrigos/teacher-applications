@@ -1,5 +1,5 @@
 import React from "react";
-import {H1, Wrapper, FormWrapper} from './Styling.jsx'
+import {H1, Wrapper, FormWrapper} from '../constants/utils/Styling.jsx'
 
 export default function NotFound() {
     return (

@@ -19,7 +19,6 @@ function querystring(name, url = window.location.href) {
 
 export default ({ component: C, props: cProps, ...rest }) => {
   const redirect = querystring("redirect");
-  {console.log('in unauthroutes', cProps)};
   return (
     <Route
       {...rest}
@@ -28,7 +27,7 @@ export default ({ component: C, props: cProps, ...rest }) => {
                                 //else if logged in --> go to dashboard
           ? <C {...props} {...cProps} />
           : <Redirect
-              to={redirect === "" || redirect === null ? "/dashboard" : redirect}
+              to={redirect === "" || redirect === null ? "/dashboard/welcome" : redirect}
             />}
     />
   );

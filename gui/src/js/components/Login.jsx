@@ -1,18 +1,16 @@
 import React, { Component } from "react";
 import axios from 'axios';
-import {H1, Wrapper, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton, A_center} from './Styling.jsx'
+import {H1, Wrapper, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton, A_center} from '../constants/utils/Styling.jsx'
 // import {login} from './utils'
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 import { Button} from "react-bootstrap";
 import { Link, withRouter} from "react-router-dom";
-import { login } from "./utils/index.js";
+import { login } from "../constants/utils/index.js";
 
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    console.log('in login constructor', this.props.handleLogin)
-
     
     this.state = {
       isLoading: false, 
@@ -42,7 +40,6 @@ class Login extends Component {
             "password": this.state.password, 
         }) 
         .then(response => {
-          console.log(response)
           if (response.data.message==="login successful") {
             this.props.handleLogin(response.data.user);
           } 

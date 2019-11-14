@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from "styled-components"
 import axios from 'axios'
-import {H1, Wrapper, FormWrapper, Error, Form, Input, CreateButton, A} from '../Styling.jsx'
+import {H1, Wrapper, FormWrapper, Error, Form, Input, CreateButton, A} from '../../constants/utils/Styling.jsx'
 
 
 
@@ -46,9 +46,7 @@ export default class PasswordForgot extends Component {
               email,
             },
           );
-          console.log(response.data);
           if (response.data === 'recovery email sent') {
-            console.log(this.state.messageFromServer === "recovery email sent")
             this.setState({
               showError: false,
               messageFromServer: 'recovery email sent',

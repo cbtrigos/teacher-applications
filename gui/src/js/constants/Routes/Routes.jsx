@@ -1,20 +1,20 @@
 import React from 'react';
 import { Route, Switch } from "react-router-dom";
 
-import Modules from "../components/FrontModules.jsx";
-import Faq from "../components/Faq.jsx";
-import Login from "../components/Login.jsx";
-import Contact from "../components/Contact.jsx";
-import Register from "../components/Registration/Register.jsx"
-import PasswordForgot from "../components/Registration/PasswordForgot.jsx"
-import ResetPassword from "../components/Registration/ResetPassword.jsx"
-import ApplicantDash from "../components/ApplicantDashboard/ApplicantDash.jsx"
-import NotFound from "../components/NotFound.jsx"
-
-
+import Modules from "../../components/PublicPages/FrontModules.jsx";
+import Faq from "../../components/PublicPages/Faq.jsx";
+import Login from "../../components/Login.jsx";
+import Contact from "../../components/PublicPages/Contact.jsx";
+import Register from "../../components/Registration/Register.jsx"
+import PasswordForgot from "../../components/Registration/PasswordForgot.jsx"
+import ResetPassword from "../../components/Registration/ResetPassword.jsx"
+import NotFound from "../../components/NotFound.jsx"
+import Welcome from "../../components/ApplicantDashboard/Welcome.jsx"
+import Application from "../../components/ApplicantDashboard/Application.jsx"
 import AppliedRoute from "./AppliedRoute.jsx"
 import UnauthenticatedRoute from "./UnauthenticatedRoute.jsx"
 import AuthenticatedRoute from "./AuthenticatedRoute.jsx"
+import MyApps from "../../components/ApplicantDashboard/MyApps.jsx"
 
 // AuthenticatedRoute let's you go to the given component if you're logged in --> else takes you to /login 
 // UnauthenticatedRoute let's you go to the given component if you're NOT logged in --> else you go to /dashboard
@@ -57,13 +57,36 @@ import AuthenticatedRoute from "./AuthenticatedRoute.jsx"
               props={childProps}
             /> 
 
-            <AuthenticatedRoute 
-              path='/dashboard' 
-              component = {ApplicantDash} 
-              props={childProps}/>
-              
+            {/* <AuthenticatedRoute
+              path="/dashboard"
+              exact
+              component={Welcome}
+              props={childProps}
+            />  */}
+            <AuthenticatedRoute
+              path="/dashboard/welcome"
+              exact
+              component={Welcome}
+              props={childProps}
+            /> 
+            <AuthenticatedRoute
+              path="/dashboard/my-applications"
+              exact
+              component={MyApps}
+              props={childProps}
+            /> 
+            <AuthenticatedRoute
+              path="/dashboard/my-applications/new"
+              exact
+              component={Application}
+              props={childProps}
+            /> 
+
+
              {/* <UnauthenticatedRoute path='/login/reset'  component ={ResetPassword} props={childProps}/> */}
 
             <Route component={NotFound} /> 
     </Switch>
     );
+
+

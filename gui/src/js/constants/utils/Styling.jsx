@@ -10,13 +10,13 @@ export const H1 = styled.h1`
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;`
 
 export const Wrapper = styled.div`
-    height: 100vh;
+    height: 150vh;
+    margin-top: -25px;
     width: 100%;
     display: -webkit-flex;
     flex-direction: column;
-    padding-top: 5%;
+    padding-top: 8%;
     align-items: center;
-    background: rgb(37,142,160);
     background: linear-gradient(0deg, rgba(37,142,160,1) 35%, rgba(129,121,144,1) 100%);`
 
 export const FormWrapper= styled.div`
@@ -24,11 +24,10 @@ export const FormWrapper= styled.div`
     min-width: 300px;
     max-width: 600px;
     flex-direction: column;
-    padding: 20px 40px;
-    border-radius: 8 px;
+    padding: 10px 25px 25px 25px;
     box-shadow: 0px 10px 50px #555;
     background-color: #ffffff;
-    margin-bottom: 15px;`
+    `
 
 export const Form = styled.form`
     width: 100%;
@@ -69,6 +68,13 @@ export const Input = styled.input`
         font-weight: light;
         color: #999;
     }
+    ${props =>
+        props.disabled ?
+        `
+        background: #F0F0F0;
+        `: `
+        ''
+        `};
     `
 
 export const Button = styled.button`
@@ -93,11 +99,11 @@ export const CreateButton = styled.button`
     font-weight: lighter;
     display: block;
     letter-spacing: 1px;
-    :& hover {
-        color: #519e8a;
-        background-color: #fff;
+    &:hover {
+        // color: #519e8a;
+        // background-color: #fff;
         border: 2px solid #519e8a;}
-    :& small {
+    &:small {
         color: #999;
         font-weight: lighter;}
         ${props =>
@@ -149,9 +155,13 @@ export const Left = styled.div`
 export const Tool = styled.section`
     background: #817990;
     color: white;
-    `
-    
-    
+    display: -webkit-flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+`   
+   
+   
 export const MenuButton=styled.button`
     background: inherit;
     border: none;
@@ -165,3 +175,93 @@ export const MenuButton=styled.button`
 
 export const TextArea = styled.textarea`
 width: 100%;`
+
+export const WideButton = styled.input`
+width: 100%;
+display: inline-block;
+background-color: lightgrey;
+padding: .5em;
+margin: 3px;
+color: black;
+
+font: inherit;
+&:hover {
+    background-color: rgba(55, 174, 195, 1);
+};
+${props =>
+    props.chosen ?
+    `
+    background-color: rgba(55, 174, 195, 1);
+    `: `
+    `}
+
+cursor: pointer;
+-webkit-transition-duration: 0.2s; 
+transition-duration: 0.2s;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;`
+
+
+
+export const Checkbox = styled.div`
+  display: inline-block;
+  > input {
+    opacity: 0;
+  }
+  > input + label {
+    position: relative; /* permet de positionner les pseudo-éléments */
+    padding-left: 25px; /* fait un peu d'espace pour notre case à venir */
+    cursor: pointer;    /* affiche un curseur adapté */
+    &:before {
+      content: '';
+      position: absolute;
+      left:0; top: 1px;
+      width: 17px; height: 17px; /* dim. de la case */
+      border: 1px solid #aaa;
+      background: #f8f8f8;
+      border-radius: 3px; /* angles arrondis */
+      box-shadow: inset 0 1px 3px rgba(0,0,0,.3) /* légère ombre interne */
+    }
+    &:after {
+      content: '✔';
+      position: absolute;
+      top: -1px; left: 2px;
+      font-size: 16px;
+      color: #09ad7e;
+      transition: all .2s; /* on prévoit une animation */
+    }
+  }
+  > input:not(:checked) + label {
+      &:after {
+        opacity: 0; /* coche invisible */
+        transform: scale(0); /* mise à l'échelle à 0 */
+      }
+  }
+  > input:disabled:not(:checked) + label {
+      &:before {
+        box-shadow: none;
+        border-color: #bbb;
+        background-color: #ddd;
+      }
+  }
+  > input:checked + label {
+    &:after {
+      opacity: 1; /* coche opaque */
+      transform: scale(1); /* mise à l'échelle 1:1 */
+    }
+  }
+  > input:disabled:checked + label {
+    &:after {
+      color: #999;
+    }
+  }
+  > input:disabled + label {
+    color: #aaa;
+  }
+  > input:checked:focus + label, input:not(:checked):focus + label {
+    &:before {
+      border: 1px dotted blue;
+    }
+  }
+`;
+//rgba(37,142,160,1)

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {H1, Wrapper, Buttons, Button, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../Styling.jsx'
+import {H1, Wrapper, Buttons, Button, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
 
 
@@ -7,7 +7,6 @@ import styled from 'styled-components'
 export class FormUserDetails extends Component {
   render() {
     const { values, handleChangeSave, submit, validateForm } = this.props;
-    console.log(values)
         return (
             <Wrapper>
             <FormWrapper>
@@ -65,8 +64,8 @@ export class FormUserDetails extends Component {
                   <RadioButton
                     type="radio"
                     name="radio"
-                    value="female"
-                    checked={values.gender === "female"}
+                    value="Female"
+                    checked={values.gender === "Female"}
                     onChange={handleChangeSave('gender')}/>
                   <Label gender>Female</Label>
                 </FlexContainer>
@@ -75,8 +74,8 @@ export class FormUserDetails extends Component {
                   <RadioButton
                     type="radio"
                     name="radio"
-                    value="male"
-                    checked={values.gender === "male"}
+                    value="Male"
+                    checked={values.gender === "Male"}
                     onChange={handleChangeSave('gender')}/>
                   <Label gender>Male</Label>
                 </FlexContainer>
@@ -85,8 +84,8 @@ export class FormUserDetails extends Component {
                   <RadioButton
                     type="radio"
                     name="radio"
-                    value="nonbinary"
-                    checked={values.gender === "nonbinary"}
+                    value="Nonbinary"
+                    checked={values.gender === "Nonbinary"}
                     onChange={handleChangeSave('gender')}/>
                   <Label gender>Nonbinary</Label>
                 </FlexContainer>

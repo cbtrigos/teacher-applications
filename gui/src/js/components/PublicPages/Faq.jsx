@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Collapsible from 'react-collapsible';
-import {H1, Wrapper, FormWrapper, A} from './Styling.jsx'
+import {H1, Wrapper, FormWrapper, A} from '../../constants/utils/Styling.jsx'
 import styled from "styled-components";
 
 
@@ -13,6 +13,7 @@ export default class FAQ extends Component {
     return (
       <Wrapper>
         <FormWrapper>
+          <H1>Frequently Asked Questions</H1>
 
          <Collapse  trigger="What do I need in order to fill out a teacher application?" overflowWhenOpen="visible" easing={'cubic-bezier(0.175, 0.885, 0.32, 2.275)'}>
             <p>The applications are all the same for primary, secondary, and vocational applications.</p>

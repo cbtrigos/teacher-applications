@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios'
 
 import {FormUserDetails, Submit} from "./RegistrationInfo.jsx"
-import { login } from '../utils';
+import { login } from '../../constants/utils';
 
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
@@ -70,13 +70,8 @@ export default class UserForm extends React.Component {
         }) 
         .then(response => {
           if (response.data.message==="user registered sucessfully") {
-            console.log('registered successfully')
             this.props.handleLogin(response.data.user)
-            
-          } else if (response.data==='email already used'){
-            console.log('email already used')
-          }
-          else {console.log(response.data)}
+          } 
         })
 
 
@@ -84,7 +79,6 @@ export default class UserForm extends React.Component {
   }
 
   handleChangeSave = input => e => {
-    // event.preventDefault();
     this.setState({ [input]: e.target.value });
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
@@ -121,8 +115,6 @@ export default class UserForm extends React.Component {
         break;
   }
   this.setState({ formErrors, [name]: value });
-  console.log(this.state)
-  console.log('valid form? ', this.validateForm())
 
   }
 

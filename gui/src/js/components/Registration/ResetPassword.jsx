@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {H1, Wrapper, FormWrapper, Form, Input, CreateButton, A} from '../Styling.jsx'
+import {H1, Wrapper, FormWrapper, Form, Input, CreateButton, A} from '../../constants/utils/Styling.jsx'
 
 const loading = {
     margin: '1em',
@@ -42,7 +42,6 @@ export default class ResetPassword extends Component {
         });
       }
     } catch (error) {
-      console.log(error.response.data);
       this.setState({
         updated: false,
         isLoading: false,
@@ -72,14 +71,12 @@ export default class ResetPassword extends Component {
           id: token,
         },
       );   if (response.data === 'recovery email sent') {
-            console.log(this.state.messageFromServer === "recovery email sent")
             this.setState({
               showError: false,
               messageFromServer: 'recovery email sent',
               showNullError: false,
             });
           }
-      console.log(response.data);
       if (response.data === 'password updated') {
         this.setState({
           updated: true,
