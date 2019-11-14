@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios'
 
 import {FormUserDetails, Submit} from "./RegistrationInfo.jsx"
-import { login } from '../utils';
+import { login } from '../../constants/utils';
 
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);

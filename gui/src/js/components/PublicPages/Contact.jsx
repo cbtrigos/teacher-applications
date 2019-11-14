@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {FormWrapper, Wrapper, H1} from "./Styling.jsx"
+import {FormWrapper, Wrapper, H1} from "../../constants/utils/Styling.jsx"
 
 export default class Contact extends Component {
   render() {

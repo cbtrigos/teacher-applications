@@ -1,18 +1,71 @@
 import React, { Component } from "react";
-import {H1, TextArea, Wrapper, Buttons, Button, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton, A_center} from '../Styling.jsx'
+import {H1, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
+import Checkbox from './Checkbox'
 
 
-// The "Personal Details" page is the 1st panel of the registration 
+// The "App Type" page is the 0th panel of registration 
+export class AppType extends Component {
+  render() {
+    
+    const { values, handleChangeSave, nextStep} = this.props;
+        return ( 
+            <Wrapper>
+             <FormWrapper>
+             <H1>Teacher Application</H1>
+             <H2>What type of school would you like to apply to?</H2>
+             
+              <WideButton
+                type = "button"
+                value='Primary'
+                id='primary'
+                chosen={values.application_type==='Primary'}
+                noValidate
+                onClick={handleChangeSave('application_type')}
+                />
+
+             <WideButton 
+                type = "button"
+                value='Secondary'
+                chosen={values.application_type==='Secondary'}
+                id='secondary'
+                onClick={handleChangeSave('application_type')}
+             />
+
+              <WideButton 
+                type = "button"
+                chosen={values.application_type==='Vocational'}
+                value='Vocational'
+                id='vocational'
+                onClick={handleChangeSave('application_type')}
+               />
+
+
+             
+                <br/> <br/> 
+                <CreateButton
+                color="primary"
+                variant="contained"
+                onClick={nextStep}
+                disabled={values.application_type===null}
+              >Begin Application</CreateButton> 
+            </FormWrapper>
+            </Wrapper>
+
+            );
+
+    };
+};
 export class PersonalInfo extends Component {
   render() {
-    const { values, handleChangeSave, nextStep, checkForm } = this.props;
+    const { values, handleChangeSave, nextStep } = this.props;
         return (
             <Wrapper>
              <FormWrapper>
              <H1>Teacher Application</H1>
-              <H2>{values.application_type} School </H2>
-              <H2>Personal Information: Part 1/4</H2>
+              <H2>{values.application_type} School <br/><br/>
+             Personal Information: Part 1/5</H2><br/>        
+
                 <Buttons> 
                 <Left>
                     <Label htmlFor="firstName"> First Name</Label>
@@ -22,12 +75,11 @@ export class PersonalInfo extends Component {
                             placeholder="First Name"
                             name='first_name'
                             noValidate 
+                            disabled={true}
                             onChange={handleChangeSave('first_name') }
                             defaultValue={values.first_name} />
                            
-                        {/* {values.formErrors.firstName.length > 0 && (
-               <ErrorMessage>{values.formErrors.firstName}</ErrorMessage>
-               )}  */}
+
                 </Left>
                 <New>
                     <Label htmlFor="lastName">Last Name</Label>
@@ -37,13 +89,12 @@ export class PersonalInfo extends Component {
                         placeholder="Last Name"
                         name='last_name'
                         noValidate
+                        disabled={true}
                         onChange={handleChangeSave('last_name') }
                         defaultValue={values.last_name}
 
                         />
-                    {/* {values.formErrors.lastName.length > 0 && (
-                    <ErrorMessage>{values.formErrors.lastName}</ErrorMessage> */}
-                {/* )} */}
+
                 </New> 
                 </Buttons>
 
@@ -58,7 +109,6 @@ export class PersonalInfo extends Component {
                             onChange={handleChangeSave('other_names')}
                             defaultValue={values.other_names}
                             />
-                {/* <ErrorMessage>{values.formErrors.other_names}</ErrorMessage> */}
                 </New>
                 <New>
                     <Label htmlFor="mobile_number"> Mobile Number</Label>
@@ -71,7 +121,6 @@ export class PersonalInfo extends Component {
                             onChange={handleChangeSave('mobile_number')}
                             defaultValue={values.mobile_number}
                             />
-                {/* <ErrorMessage>{values.formErrors.mobile_number}</ErrorMessage> */}
                 </New>
                 <New>
                     <Label htmlFor="gender"> Gender</Label>
@@ -81,10 +130,10 @@ export class PersonalInfo extends Component {
                             placeholder="Gender"
                             name='gender'
                             noValidate
-                            onChange={handleChangeSave('gender')}
-                            defaultValue={values.gender}
+                            disabled={true}
+                            onChange={handleChangeSave('sex')}
+                            defaultValue={values.sex}
                             />
-                {/* <ErrorMessage>{values.formErrors.gender}</ErrorMessage> */}
                 </New>
                 <New>
                     <Label htmlFor="nationality"> Nationality</Label>
@@ -97,7 +146,6 @@ export class PersonalInfo extends Component {
                             onChange={handleChangeSave('nationality')}
                             defaultValue={values.nationality}
                             />
-                {/* <ErrorMessage>{values.formErrors.nationality}</ErrorMessage> */}
                 </New>
 
                 <br/> <br/> 
@@ -115,13 +163,13 @@ export class PersonalInfo extends Component {
 };
 export class TeacherInfo extends Component {
     render() {
-      const { values, handleChangeSave, nextStep, prevStep, checkForm } = this.props;
+      const { values, handleChangeSave, nextStep, prevStep} = this.props;
           return (
               <Wrapper>
                <FormWrapper>
                <H1>Teacher Application</H1>
-              <H2>{values.application_type} School </H2>
-                <H2>Teacher Information: Part 2/4</H2>
+              <H2>{values.application_type} School <br/><br/>
+                Teacher Information: Part 2/5</H2><br/>
                   <Buttons> 
                 
                   </Buttons>
@@ -158,7 +206,7 @@ export class TeacherInfo extends Component {
                               placeholder="Nassit Number"
                               name='nassit_number'
                               noValidate
-                              onChange={handleChangeSave('nassit_number')}
+                              onChange={handleChangeSave('nassit')}
                               defaultValue={values.school_name}
                               />
                   {/* <ErrorMessage>{values.formErrors.school_name}</ErrorMessage> */}
@@ -199,16 +247,16 @@ export class TeacherInfo extends Component {
               );
   
       };
-  };
+};
 export class ShortAnswer extends Component {
   render() {
-    const { values, handleChangeSave, nextStep, prevStep, checkForm } = this.props;
+    const { values, handleChangeSave, nextStep, prevStep } = this.props;
         return (
             <Wrapper>
               <FormWrapper>
               <H1>Teacher Application</H1>
-              <H2>{values.application_type} School </H2>
-              <H2>Short Answer: Part 3/4</H2>
+              <H2>{values.application_type} School <br/><br/>
+              Short Answer: Part 3/5</H2><br/>
                 <New>
                     <Label htmlFor="nassit_number"> Qualifications (if any)</Label>
 
@@ -257,17 +305,105 @@ export class ShortAnswer extends Component {
     };
 };
 
-// The "Submit" page is the 4th panel of the registration 
-export class Submit extends Component {
+export class Attachments extends Component {
   render() {
-    const { values, handleChangeSave, nextStep, prevStep, submit } = this.props;
+    const { values, handleChangeSave, nextStep, prevStep } = this.props;
+        return (
+            <Wrapper>
+              <FormWrapper>
+              <H1>Teacher Application</H1>
+              <H2>{values.application_type} School <br/><br/>
+             Attachments: Part 4/5</H2><br/>
+               ***** 
+              <Buttons>
+                <Left> 
+                  <CreateButton
+                    color="primary"
+                    variant="contained"
+                    onClick={prevStep}
+                  >Save and Go Back</CreateButton> 
+                </Left>
+                <CreateButton
+                  color="primary"
+                  variant="contained"
+                  onClick={nextStep}
+                >Save and Continue</CreateButton>
+              </Buttons>
+            </FormWrapper>
+            </Wrapper>
 
+            );
+
+    };
+};
+
+export class Submit extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      submitOkay:false,
+      checked: false,
+      errorMessage: null
+    };
+    this.empty = this.empty.bind(this)
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
+
+  }
+  async componentDidMount() {
+    const {mobile_number, other_names, pin_code, nassit, qualifications, special_skills} = this.props.values
+    const list = [{val:mobile_number, name:'a mobile number'}, {val:other_names, name:'any other names'}, {val:pin_code, name:'a pin code'}, {val:nassit, name:'a NASSIT numer'}, {val:qualifications, name:'any qualifications'}, {val:special_skills, name:'any special skills'}]
+  
+    const user = this.props
+    let valid = true 
+    {(this.state.checked===false || this.empty(user.nationality) || this.empty(user.employing_authority)) && (valid=false)}
+   
+    const emptyFields = []
+    list.forEach(
+      (i) => 
+      this.empty(i['val']) && (emptyFields.push(i['name']))
+      )
+    const errorString = emptyFields.join(', ')
+    let errorMess = null
+
+    if (this.empty(this.state.nationality) && this.empty(this.state.employing_authority)) {
+      errorMess ='Both the nationality and the employing authority fields are required. Please return and provide them.'
+    } else if (this.empty(this.state.nationality) ) {
+      errorMess ='The nationality field is required. Please return to provide it before proceeding.'}
+      else if (this.empty(this.state.employing_authority)) {
+       const errorMess ='The employing authority field is required. Please return and provide it before proceeding.'}
+
+    this.setState({ 
+      submitOkay: valid,
+      errors: errorString,
+      errorMessage: errorMess
+      });
+
+      }
+
+    empty = input => e => {
+      console.log(input)
+      if (input===null || input.length==='') {
+        return true
+      } return false}
+
+    handleCheckboxChange = name => event => {
+      this.setState({ [name]: event.target.checked })
+      console.log(this.state)
+    }
+
+
+
+  render() {
+    const { values, prevStep, submit } = this.props;
+    
     return (
           <Wrapper>
             <FormWrapper>
               <H1>Application</H1>
-                <H2>4/4: Confirm Application Details</H2>
-           <br />
+                <H2>{values.application_type} School <br/><br/>
+                5/5: Confirm Application Details</H2><br/>
+           <H2>
+            {this.state.errorMessage!==null && <ErrorMessage>{this.state.errorMessage}</ErrorMessage>}
             <Div>
               <Category> First Name: </Category> <It> {values.first_name} </It>
             </Div>
@@ -281,8 +417,13 @@ export class Submit extends Component {
             <Category> Mobile Number: </Category><It> {values.mobile_number} </It>
             </Div>
             <Div>
-            <Category> Gender: </Category><It> {values.gender} </It>
+            <Category> Gender: </Category><It> {values.sex} </It>
             </Div>
+
+            <Div>
+            <Category> Nationality: </Category><It> {values.nationality} </It>
+            </Div>
+
             <Div>
             <Category> Employing Authority: </Category><It> {values.employing_authority} </It>
             </Div>
@@ -298,9 +439,19 @@ export class Submit extends Component {
             <Div>
             <Category> Special Skills: </Category><It> {values.special_skills} </It>
             </Div>
-            <Div>
-            </Div> 
           <br />
+        {this.state.errors!='' &&
+          <H2>
+          <Input 
+          type="checkbox"
+          checked={this.state.checked}
+          id='checked'
+          onChange={this.handleCheckboxChange('checked')}
+          />
+          I verify that I purposefully did not provide the following: {this.state.errors}.
+          
+          </H2>}
+     
         <Buttons>
           <Left> 
           <CreateButton
@@ -312,10 +463,11 @@ export class Submit extends Component {
           <CreateButton
             color="primary"
             variant="contained"
+            disabled={this.state.submitOkay}
             onClick={submit}
           >Submit</CreateButton>
           </Buttons>
-
+          </H2>
           </FormWrapper>
           </Wrapper>
     );
@@ -335,6 +487,7 @@ margin: 13px;`
 
 const Category= styled.div`
 background-color: lightgrey;
+text-align: center;
 font: inherit;`
 
 const It= styled.h2`
@@ -343,3 +496,16 @@ text-style: italic`
 
 const H2 = styled(H1)`
 font-size: 12pt;`
+
+
+const Lab = styled.label`
+  background: red;
+  display: block;
+  padding: 1rem;
+`;
+
+const Inp = styled.input`
+  &:checked + ${Label} {
+    background: blue;
+  }
+`;

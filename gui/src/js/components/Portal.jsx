@@ -1,22 +1,16 @@
 import ReactDOM from "react-dom";
 import React, { Component, Fragment } from "react";
-import { Link, withRouter } from "react-router-dom";
-import { LinkContainer } from "react-router-bootstrap";
-import { Navbar, Nav, NavItem } from "react-bootstrap";
-import Routes from "../constants/Routes.jsx"
-
-// import NavBar from "./NavBar.jsx";
+import {withRouter } from "react-router-dom";
+import Routes from "../constants/Routes/Routes.jsx"
 import { BrowserRouter as Router} from 'react-router-dom';
-import {logout, isLogin, login, getUser} from './utils'
-import {Tool, MenuButton, Right, Left} from './Styling.jsx'
+import {logout, isLogin, login, getUser} from '../constants/utils'
+import NavBar from "./NavBar.jsx";
 
-
-
+// this is the top-most component
 
 class Portal extends Component {
     constructor(props) {
       super(props);
-      
       this.state = {
         isAuthenticated: false,
         isAuthenticating: true, 
@@ -31,10 +25,9 @@ class Portal extends Component {
           const userInfo = getUser()
           this.setState({ 
             isAuthenticated: true,
-            user:userInfo
+            user:userInfo,
            });
-        }
-      }
+        }}
       catch(e) {
         if (e !== 'No current user') {
           alert(e);
@@ -52,7 +45,6 @@ class Portal extends Component {
        });
     }
 
-
       handleLogout = async event => {
         await logout();
         this.setState({ 
@@ -60,8 +52,6 @@ class Portal extends Component {
           user: {}
         });
       }
-
-
 
       render() {
         const childProps = {
@@ -72,46 +62,9 @@ class Portal extends Component {
         return (
           !this.state.isAuthenticating &&
           <div> 
-    {/* <NavBar title='teacher portal' handleLogout={this.handleLogout}/>    */}
-            <Router> 
-            <Navbar fluid collapseOnSelect>
-              <Navbar.Header>
-                <Navbar.Brand>
-                  <Link to="/">Home</Link>
-                </Navbar.Brand>
-                <Navbar.Toggle />
-              </Navbar.Header>
-              <Navbar.Collapse>
-                <Nav pullRight>
-                  <LinkContainer to="/faq">
-                    <NavItem>FAQ</NavItem>
-                  </LinkContainer>
-                  <LinkContainer to="/contact">
-                    <NavItem>Contact</NavItem>
-                  </LinkContainer>        
-                  {this.state.isAuthenticated
-                    ? <Fragment>
-                    <LinkContainer to="/dashboard">
-                      <NavItem>Dashboard</NavItem>
-                    </LinkContainer>
-                    <NavItem onClick={this.handleLogout}>Logout</NavItem>
-
-                    </Fragment>
-                    : <Fragment>
-                        <LinkContainer to="/register">
-                          <NavItem>Signup</NavItem>
-                        </LinkContainer>
-                        <LinkContainer to="/login" >
-                          <NavItem>Login</NavItem>
-                        </LinkContainer>
-                        </Fragment>
-                  }   
-    
-
-                </Nav>
-              </Navbar.Collapse>
-          </Navbar> 
-          <Routes childProps={childProps} />
+          <Router> 
+              <NavBar handleLogout={this.handleLogout} isAuthenticated={this.state.isAuthenticated} />
+              <Routes childProps={childProps} /> 
           </Router >
           </div>
     );

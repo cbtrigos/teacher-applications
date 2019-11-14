@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from "styled-components"
 import axios from 'axios'
-import {H1, Wrapper, FormWrapper, Error, Form, Input, CreateButton, A} from '../Styling.jsx'
+import {H1, Wrapper, FormWrapper, Error, Form, Input, CreateButton, A} from '../../constants/utils/Styling.jsx'
 
 
 

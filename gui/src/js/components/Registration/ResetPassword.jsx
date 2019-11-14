@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {H1, Wrapper, FormWrapper, Form, Input, CreateButton, A} from '../Styling.jsx'
+import {H1, Wrapper, FormWrapper, Form, Input, CreateButton, A} from '../../constants/utils/Styling.jsx'
 
 const loading = {
     margin: '1em',
