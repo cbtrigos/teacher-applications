@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {H1, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
-import Checkbox from './Checkbox'
 
 
 // The "App Type" page is the 0th panel of registration 
