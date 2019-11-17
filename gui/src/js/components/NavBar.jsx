@@ -36,7 +36,7 @@ export default class NavBar extends Component {
                   <LinkContainer to="/dashboard/my-applications">
                     <NavItem>My Applications</NavItem>
                   </LinkContainer>
-                  <LinkContainer to="/dashboard/my-applications/new">
+                  <LinkContainer to="/dashboard/new-application">
                     <NavItem>Start New Application</NavItem>
                   </LinkContainer>
                 </NavDropdown>  

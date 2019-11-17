@@ -24,8 +24,10 @@ router.post('/password-forgot', passchange.forgotpassword)
 router.post('/reset-valid', passchange.reset_valid)
 router.post('/reset-password', passchange.reset_password)
 router.post('/authenticate', login.authenticate)
+router.post('/begin-application', application.begin)
 router.post('/save-application', application.save)
 router.post('/submit-application', application.submit)
+router.post('/my-applications', application.get)
 app.use('/api', router);
 
 app.listen(5000);

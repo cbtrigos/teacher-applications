@@ -76,14 +76,13 @@ import MyApps from "../../components/ApplicantDashboard/MyApps.jsx"
               props={childProps}
             /> 
             <AuthenticatedRoute
-              path="/dashboard/my-applications/new"
+              path="/dashboard/new-application"
               exact
               component={Application}
               props={childProps}
             /> 
 
 
-             {/* <UnauthenticatedRoute path='/login/reset'  component ={ResetPassword} props={childProps}/> */}
 
             <Route component={NotFound} /> 
     </Switch>
