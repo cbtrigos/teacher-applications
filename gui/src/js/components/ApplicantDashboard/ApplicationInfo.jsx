@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {H1, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
+import {H1, H2, It, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
 
 
@@ -7,7 +7,7 @@ import styled from 'styled-components'
 export class AppType extends Component {
   render() {
     
-    const { values, handleChangeSave, nextStep} = this.props;
+    const { values, handleChangeSave, beginApp} = this.props;
         return ( 
             <Wrapper>
              <FormWrapper>
@@ -45,7 +45,7 @@ export class AppType extends Component {
                 <CreateButton
                 color="primary"
                 variant="contained"
-                onClick={nextStep}
+                onClick={beginApp()}
                 disabled={values.application_type===null}
               >Begin Application</CreateButton> 
             </FormWrapper>
@@ -57,7 +57,7 @@ export class AppType extends Component {
 };
 export class PersonalInfo extends Component {
   render() {
-    const { values, handleChangeSave, nextStep } = this.props;
+    const { values, handleChangeSave, step } = this.props;
         return (
             <Wrapper>
              <FormWrapper>
@@ -151,7 +151,7 @@ export class PersonalInfo extends Component {
                 <CreateButton
                 color="primary"
                 variant="contained"
-                onClick={nextStep}
+                onClick={step('next')}
               >Save and Continue</CreateButton> 
             </FormWrapper>
             </Wrapper>
@@ -162,7 +162,7 @@ export class PersonalInfo extends Component {
 };
 export class TeacherInfo extends Component {
     render() {
-      const { values, handleChangeSave, nextStep, prevStep} = this.props;
+      const { values, handleChangeSave, step} = this.props;
           return (
               <Wrapper>
                <FormWrapper>
@@ -182,7 +182,17 @@ export class TeacherInfo extends Component {
                           onChange={handleChangeSave('employing_authority')}
                           defaultValue={values.employing_authority}
                           />
-                   {/* <ErrorMessage>{values.formErrors.employing_authority}</ErrorMessage> */}
+                  </New>
+                  <New>
+                      <Label htmlFor="school_name">School Name </Label>
+                      <Input
+                          type = "text"
+                          placeholder="School Name"
+                          name="school_name"
+                          noValidate
+                          onChange={handleChangeSave('school_name')}
+                          defaultValue={values.school_name}
+                          />
                   </New>
                   <New>
                       <Label htmlFor="pin_code"> Pin Code (if any)</Label>
@@ -195,7 +205,7 @@ export class TeacherInfo extends Component {
                               onChange={handleChangeSave('pin_code')}
                               defaultValue={values.pin_code}
                               />
-                  {/* <ErrorMessage>{values.formErrors.pin_code}</ErrorMessage> */}
+                        {isNaN(values.pin_code) && <ErrorMessage> Value must be a number</ErrorMessage>}   
                   </New>
                   <New>
                       <Label htmlFor="nassit_number"> Nassit Number (if any)</Label>
@@ -206,10 +216,10 @@ export class TeacherInfo extends Component {
                               name='nassit_number'
                               noValidate
                               onChange={handleChangeSave('nassit')}
-                              defaultValue={values.school_name}
+                              defaultValue={values.nassit}
                               />
-                  {/* <ErrorMessage>{values.formErrors.school_name}</ErrorMessage> */}
-                  </New>
+                        {isNaN(values.nassit) && <ErrorMessage> Value must be a number</ErrorMessage>}   
+                 </New>
                   
                   <New>
                       <Label htmlFor="prev_appt"> Previous appointment and Employing Authority (If any)</Label>
@@ -231,13 +241,16 @@ export class TeacherInfo extends Component {
                   <CreateButton
                     color="primary"
                     variant="contained"
-                    onClick={prevStep}
+                    onClick={step('prev')}
+                    disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
                   >Save and Go Back</CreateButton> 
                 </Left>
                 <CreateButton
                   color="primary"
                   variant="contained"
-                  onClick={nextStep}
+                  onClick={step('next')}
+                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+
                 >Save and Continue</CreateButton>
               </Buttons>
               </FormWrapper>
@@ -249,7 +262,7 @@ export class TeacherInfo extends Component {
 };
 export class ShortAnswer extends Component {
   render() {
-    const { values, handleChangeSave, nextStep, prevStep } = this.props;
+    const { values, handleChangeSave, step } = this.props;
         return (
             <Wrapper>
               <FormWrapper>
@@ -287,13 +300,13 @@ export class ShortAnswer extends Component {
                   <CreateButton
                     color="primary"
                     variant="contained"
-                    onClick={prevStep}
+                    onClick={step('prev')}
                   >Save and Go Back</CreateButton> 
                 </Left>
                 <CreateButton
                   color="primary"
                   variant="contained"
-                  onClick={nextStep}
+                  onClick={step('next')}
                 >Save and Continue</CreateButton>
               </Buttons>
             </FormWrapper>
@@ -306,7 +319,7 @@ export class ShortAnswer extends Component {
 
 export class Attachments extends Component {
   render() {
-    const { values, handleChangeSave, nextStep, prevStep } = this.props;
+    const { values, handleChangeSave, step} = this.props;
         return (
             <Wrapper>
               <FormWrapper>
@@ -319,13 +332,13 @@ export class Attachments extends Component {
                   <CreateButton
                     color="primary"
                     variant="contained"
-                    onClick={prevStep}
+                    onClick={step('prev')}
                   >Save and Go Back</CreateButton> 
                 </Left>
                 <CreateButton
                   color="primary"
                   variant="contained"
-                  onClick={nextStep}
+                  onClick={step('next')}
                 >Save and Continue</CreateButton>
               </Buttons>
             </FormWrapper>
@@ -339,62 +352,37 @@ export class Attachments extends Component {
 export class Submit extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      submitOkay:false,
-      checked: false,
-      errorMessage: null
-    };
-    this.empty = this.empty.bind(this)
-    this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
-
+    this.getErrorMessage = this.getErrorMessage.bind(this);
+    this.getMissingString = this.getMissingString.bind(this);
   }
-  async componentDidMount() {
-    const {mobile_number, other_names, pin_code, nassit, qualifications, special_skills} = this.props.values
-    const list = [{val:mobile_number, name:'a mobile number'}, {val:other_names, name:'any other names'}, {val:pin_code, name:'a pin code'}, {val:nassit, name:'a NASSIT numer'}, {val:qualifications, name:'any qualifications'}, {val:special_skills, name:'any special skills'}]
+
+    getMissingString = () => {
+      const {mobile_number, other_names, school_name, pin_code, nassit, qualifications, special_skills} = this.props.values
+      const list = [{val: school_name, name: 'a school name'},{val:mobile_number, name:'a mobile number'}, {val:other_names, name:'any other names'}, {val:pin_code, name:'a pin code'}, {val:nassit, name:'a NASSIT number'}, {val:qualifications, name:'any qualifications'}, {val:special_skills, name:'any special skills'}]
   
-    const user = this.props
-    let valid = true 
-    {(this.state.checked===false || this.empty(user.nationality) || this.empty(user.employing_authority)) && (valid=false)}
-   
-    const emptyFields = []
-    list.forEach(
-      (i) => 
-      this.empty(i['val']) && (emptyFields.push(i['name']))
-      )
-    const errorString = emptyFields.join(', ')
-    let errorMess = null
-
-    if (this.empty(this.state.nationality) && this.empty(this.state.employing_authority)) {
-      errorMess ='Both the nationality and the employing authority fields are required. Please return and provide them.'
-    } else if (this.empty(this.state.nationality) ) {
-      errorMess ='The nationality field is required. Please return to provide it before proceeding.'}
-      else if (this.empty(this.state.employing_authority)) {
-       const errorMess ='The employing authority field is required. Please return and provide it before proceeding.'}
-
-    this.setState({ 
-      submitOkay: valid,
-      errors: errorString,
-      errorMessage: errorMess
-      });
-
-      }
-
-    empty = input => e => {
-      console.log(input)
-      if (input===null || input.length==='') {
-        return true
-      } return false}
-
-    handleCheckboxChange = name => event => {
-      this.setState({ [name]: event.target.checked })
-      console.log(this.state)
+      const emptyFields = []
+      list.forEach(
+        (i) => {
+        if (i['val']===null || i['val']==='') {emptyFields.push(i['name'])}
+        })
+      if (emptyFields.length!==0) {return emptyFields.join(', ')}
+      else return ''
     }
 
-
+    getErrorMessage = (nationality, employingAuth) => {
+      if ((nationality===null || nationality==='') && (employingAuth===null || employingAuth==='')) 
+        {return 'Both the nationality and the employing authority fields are required. Please return and provide them before proceeding.'}
+      else if (nationality===null || nationality==='') {
+        return 'The nationality field is required. Please return to provide it before proceeding.'}
+      else if (employingAuth===null || employingAuth==='') 
+        {return 'The employing authority field is required. Please return and provide it before proceeding.'}
+      return ''
+    }
 
   render() {
-    const { values, prevStep, submit } = this.props;
-    
+    const { values, checkmarked, step, submit, handleCheckboxChange } = this.props;
+    const errorMessage = this.getErrorMessage(values.nationality, values.employing_authority)
+    const missingString = this.getMissingString()
     return (
           <Wrapper>
             <FormWrapper>
@@ -402,7 +390,6 @@ export class Submit extends Component {
                 <H2>{values.application_type} School <br/><br/>
                 5/5: Confirm Application Details</H2><br/>
            <H2>
-            {this.state.errorMessage!==null && <ErrorMessage>{this.state.errorMessage}</ErrorMessage>}
             <Div>
               <Category> First Name: </Category> <It> {values.first_name} </It>
             </Div>
@@ -427,6 +414,9 @@ export class Submit extends Component {
             <Category> Employing Authority: </Category><It> {values.employing_authority} </It>
             </Div>
             <Div>
+            <Category> School Name: </Category><It> {values.school_name} </It>
+            </Div>
+            <Div>
             <Category> Pin Code: </Category><It> {values.pin_code} </It>
             </Div>
             <Div>
@@ -439,30 +429,31 @@ export class Submit extends Component {
             <Category> Special Skills: </Category><It> {values.special_skills} </It>
             </Div>
           <br />
-        {this.state.errors!='' &&
+        {missingString!='' &&
           <H2>
           <Input 
           type="checkbox"
-          checked={this.state.checked}
+          checked={checkmarked}
           id='checked'
-          onChange={this.handleCheckboxChange('checked')}
+          onChange={handleCheckboxChange()}
           />
-          I verify that I purposefully did not provide the following: {this.state.errors}.
-          
+          I verify that I purposefully did not provide the following: {missingString}.
           </H2>}
-     
+          {(!checkmarked) && <ErrorMessage>Please check the above box in order to submit.</ErrorMessage>}
+          {errorMessage!==null && <ErrorMessage>{errorMessage}</ErrorMessage>}
+
         <Buttons>
           <Left> 
           <CreateButton
             color="primary"
             variant="contained"
-            onClick={prevStep}
+            onClick={step('prev')}
           >Go Back to Edit</CreateButton> 
           </Left>
           <CreateButton
             color="primary"
             variant="contained"
-            disabled={this.state.submitOkay}
+            disabled={!checkmarked || errorMessage!==''}
             onClick={submit}
           >Submit</CreateButton>
           </Buttons>
@@ -488,13 +479,6 @@ const Category= styled.div`
 background-color: lightgrey;
 text-align: center;
 font: inherit;`
-
-const It= styled.h2`
-font: inherit;
-text-style: italic`
-
-const H2 = styled(H1)`
-font-size: 12pt;`
 
 
 const Lab = styled.label`

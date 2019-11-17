@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {Wrapper, FormWrapper,} from '../../constants/utils/Styling.jsx'
 import {AppType, PersonalInfo, TeacherInfo, ShortAnswer, Attachments, Submit} from "./ApplicationInfo.jsx"
 import styled from "styled-components";
+import axios from 'axios';
 
 export default class Application extends Component {
   constructor(props) {
@@ -9,6 +10,9 @@ export default class Application extends Component {
     const user = props.user
     this.state = {
       step: 0,
+      submitOkay:false, 
+      errors: '',
+      checkMark: false, 
       application_id: null,
       application_type: null,
       employing_authority:null,
@@ -27,30 +31,18 @@ export default class Application extends Component {
       email:user.email,
       sex: user.gender,
 };
-  }
+ }
 
   submit = (event) => {
     event.preventDefault();
-
-    //   axios 
-    //     .post('http://localhost:5000/api/application-submit', 
-    //       {"email": this.state.email,
-    //         "password": this.state.password1, 
-    //         "gender": this.state.gender, 
-    //         "first_name": this.state.firstName, 
-    //         "last_name": this.state.lastName, 
-    //         "birth_date": this.state.DOB
-    //     }) 
-    //     .then(response => {
-    //       if (response.data==="user registered sucessfully") {
-    //         console.log('registered successfully')
-    //       } else if (response.data==='email already used'){
-    //         console.log('email already used')
-    //       }
-    //       else {console.log(response.data)}
-    //     })
-
-    console.log('submitted!!')
+      axios 
+        .post('http://localhost:5000/api/submit-application', 
+          {"application_id": this.state.application_id
+        }) 
+        .then(response => {
+          if (response.data==="application submitted successfully") {
+          } else {console.log(response.data)}
+        })
   }
 
 
@@ -65,61 +57,108 @@ export default class Application extends Component {
       return valid;
     }
 
-    nextStep = () => {
+
+    step = val => e => {
+      let k = 0
+      if (val==='next') {k=1}
+      else if (val==='prev') {k=-1}
       const { step } = this.state;
       this.setState({
-        step: step + 1
+        step: step + k
       });
-    };
-    prevStep = () => {
-      const { step } = this.state;
-      this.setState({
-        step: step - 1
-      });
+      axios 
+      .post('http://localhost:5000/api/save-application', 
+        { "applicant_id": this.props.user.id,
+          "application_id": this.state.application_id,
+          "application_type": this.state.application_type,
+          "employing_authority":this.state.employing_authority,
+          "school_name":this.state.school_name,
+          "other_names":this.state.other_names,
+          "mobile_number":this.state.mobile_number, 
+          "nationality": this.state.nationality, 
+          "prev_appt": this.state.prev_appt,
+          "pin_code": this.state.pin_code,
+          "nassit": this.state.nassit,
+          "qualifications": this.state.qualifications,
+          "special_skills": this.state.special_skills,
+          "first_name":this.state.first_name,
+          "last_name":this.state.last_name,
+          "email": this.state.email,
+          "sex": this.state.sex,
+      }) 
+      .then(response => {
+        if (response.data==="application updated sucessfully") {
+            console.log('app updated successfully')
+          }
+        else {console.log(response.data)}
+      })
     };
 
+ 
+    handleCheckboxChange = name => event => {
+      this.setState({ checkMark: event.target.checked })
+    }
+
+    beginApp = () => e => {
+      axios 
+        .post('http://localhost:5000/api/begin-application', 
+          {"email": this.state.email,
+            "sex": this.state.sex, 
+            "first_name": this.state.first_name, 
+            "last_name": this.state.last_name, 
+            "application_type": this.state.application_type,
+            "applicant_id": this.props.user.id
+        }) 
+        .then(response => {
+          if (response.data.message==="application registered sucessfully") {
+            const { step } = this.state;
+            this.setState({
+              step: step + 1, 
+              application_id: response.data.application_id
+            });
+          }
+          else {console.log(response.data)}
+        })
+
+    };
 
   handleChangeSave = input => e => {
     this.setState({ [input]: e.target.value });
-    const { name, value } = e.target;
+
   }
 
 
   render() {
     const { prev_appt, nationality, application_type, step, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state;
-    const values = {prev_appt, nationality, application_type, step, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex};
+    const values = { prev_appt, nationality, application_type, step, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex};
     switch (step) {
       case 0: 
         return (
           <AppType 
-          nextStep={this.nextStep}
+          beginApp={this.beginApp}
           handleChangeSave={this.handleChangeSave}
-          nextStep = {this.nextStep}
           values={values}
           />
         )
       case 1:
         return (
           <PersonalInfo
-            nextStep={this.nextStep}
+            step={this.step}
             handleChangeSave={this.handleChangeSave}
-            nextStep = {this.nextStep}
             values={values}
           />
           );
       case 2:
           return (
             <TeacherInfo
-              nextStep={this.nextStep}
+              step={this.step}
               handleChangeSave={this.handleChangeSave}
-              prevStep={this.prevStep}
               values={values}
             />);
       case 3:
         return (
           <ShortAnswer
-            nextStep={this.nextStep}
-            prevStep={this.prevStep}
+            step={this.step}
             handleChangeSave={this.handleChangeSave}
             values={values}
           />
@@ -127,17 +166,18 @@ export default class Application extends Component {
       case 4:
           return (
             <Attachments
-              prevStep={this.prevStep}
-              nextStep={this.nextStep}
-              prevStep={this.prevStep}
+              step={this.step}
               values={values}
             />);    
       case 5:
         return (
           <Submit
-            prevStep={this.prevStep}
+            step={this.step}
             submit = {this.submit}
             values={values}
+            checkmarked = {this.state.checkMark}
+            handleCheckboxChange = {this.handleCheckboxChange}
+            errors = {this.state.errors}
           />);    
           
           

@@ -203,6 +203,9 @@ Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;`
 
 
 
+
+
+
 export const Checkbox = styled.div`
   display: inline-block;
   > input {
@@ -265,3 +268,18 @@ export const Checkbox = styled.div`
   }
 `;
 //rgba(37,142,160,1)
+export const H2 = styled(H1)`
+font-size: 12pt;`
+
+
+
+export const HorizSeparator = styled.div`
+width: 100%;
+text-align: center;
+border-bottom: 1px solid #000;
+line-height: 0.1em;
+margin: 10px 0 20px;`
+
+export const  It= styled(H2)`
+font: inherit;
+font-style: italic`
