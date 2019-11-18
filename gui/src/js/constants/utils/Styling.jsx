@@ -10,7 +10,7 @@ export const H1 = styled.h1`
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;`
 
 export const Wrapper = styled.div`
-    height: 150vh;
+    height: 170vh;
     margin-top: -25px;
     width: 100%;
     display: -webkit-flex;
@@ -77,6 +77,23 @@ export const Input = styled.input`
         `};
     `
 
+    export const InputLarge = styled.textarea`
+    padding: 10px 10px;
+    margin: 0 0 1.5% 0;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #cfcfcf;
+    float: right;
+    ::placeholder {
+        font-size: 1em;
+        font-weight: light;
+        color: #999;
+    }
+    `
+
 export const Button = styled.button`
     margin-right : 10px;`
 
@@ -90,31 +107,27 @@ export const ErrorMessage = styled.h1`
     font-size: 0.75em;`
 
 export const CreateButton = styled.button`
-    color: #fff;
     border: 2px solid #fff;
     margin-top: 1em;
     padding: 8px 8px;
     font-size: 1em;
     width: 100%;
-    font-weight: lighter;
+    font-weight: light;
     display: block;
     letter-spacing: 1px;
     &:hover {
-        // color: #519e8a;
-        // background-color: #fff;
-        border: 2px solid #519e8a;}
+        border: 2px solid #84C7D0;};
     &:small {
         color: #999;
-        font-weight: lighter;}
+        font-weight: lighter;};
         ${props =>
             props.disabled ?
             `
             background: lightgrey;
             `: `
-            background: #519e8a;
+            background: #84C7D0
             `};
         ` 
-    
 
 export const A_center = styled.a`
     width: 100%;
@@ -179,19 +192,20 @@ width: 100%;`
 export const WideButton = styled.input`
 width: 100%;
 display: inline-block;
-background-color: lightgrey;
+background-color: #93A3B1;
+opacity: 0.6;
 padding: .5em;
 margin: 3px;
 color: black;
 
 font: inherit;
-&:hover {
-    background-color: rgba(55, 174, 195, 1);
-};
+&: hover {
+    opacity:1
+  }
 ${props =>
     props.chosen ?
     `
-    background-color: rgba(55, 174, 195, 1);
+    opacity: 1;
     `: `
     `}
 
@@ -283,3 +297,7 @@ margin: 10px 0 20px;`
 export const  It= styled(H2)`
 font: inherit;
 font-style: italic`
+
+export const Notification = styled(H2)`
+color: red;
+font-size: 18pt;`

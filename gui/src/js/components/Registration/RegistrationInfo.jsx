@@ -17,7 +17,7 @@ export class FormUserDetails extends Component {
                         <Input
                             type = "text"
                             className=""
-                            placeholder="First Name"
+                            // placeholder="First Name"
                             name='firstName'
                             noValidate
                             onChange={handleChangeSave('firstName') }
@@ -32,7 +32,7 @@ export class FormUserDetails extends Component {
                     <Input
                         type = "text"
                         className=""
-                        placeholder="Last Name"
+                        // placeholder="Last Name"
                         name='lastName'
                         noValidate
                         onChange={handleChangeSave('lastName') }
@@ -48,7 +48,7 @@ export class FormUserDetails extends Component {
                     <Label htmlFor="email">Email </Label>
                     <Input
                         type = "text"
-                        placeholder="Email"
+                        // placeholder="Email"
                         name="email"
                         noValidate
                         onChange={handleChangeSave('email')}
@@ -113,7 +113,7 @@ export class FormUserDetails extends Component {
                     <Label htmlFor="password1"> Password</Label>
                     <Input
                         className=""
-                        placeholder="Password"
+                        // placeholder="Password"
                         type="password"
                         name="password1"
                         noValidate
@@ -127,7 +127,7 @@ export class FormUserDetails extends Component {
                     <Label htmlFor="password2"> Password Confirmation</Label>
                     <Input
                         className=""
-                        placeholder="Password"
+                        // placeholder="Password"
                         type="password"
                         name="password2"
                         noValidate

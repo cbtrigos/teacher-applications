@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import axios from 'axios';
 import {H1, Wrapper, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton, A_center} from '../constants/utils/Styling.jsx'
-// import {login} from './utils'
-const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
-import { Button} from "react-bootstrap";
-import { Link, withRouter} from "react-router-dom";
-import { login } from "../constants/utils/index.js";
+import { withRouter} from "react-router-dom";
 
+
+
+const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 
 class Login extends Component {
   constructor(props) {
@@ -63,7 +62,6 @@ class Login extends Component {
                     <Input
                         type = "text"
                         className=""
-                        placeholder="Email"
                         name="email"
                         noValidate
                         onChange={this.handleChange}
@@ -74,7 +72,6 @@ class Login extends Component {
                     <Label htmlFor="password"> Password</Label>
                     <Input
                         className=""
-                        placeholder="Password"
                         type="password"
                         name="password"
                         noValidate

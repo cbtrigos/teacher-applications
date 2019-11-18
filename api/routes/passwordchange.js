@@ -5,6 +5,8 @@ const crypto = require('crypto');
 var moment = require('moment');
 const bcrypt = require('bcrypt');
 var {db} = require('../authentication/mysql.json')
+var {emailAuth, applicationEmail} = require('../authentication/emailAuth.json')
+
 
 
 
@@ -18,21 +20,22 @@ var {db} = require('../authentication/mysql.json')
       console.error('error connecting: ' + err.stack);
     } } );
 
-//                                Making query to SQL 
-exports.forgotpassword = function(req,res){
+//                           EMAILING USER TOKEN FROM FORGOT PASSWORD
+exports.forgotPassword = function(req,res){
   var email= req.body.email;
   const token = crypto.randomBytes(64).toString('hex');
+  let isInDatabase = true 
 
   if (email === '') { 
     res.json('email required');
     res.end();
   }
 
-  connection.query('SELECT *FROM applicants WHERE email = ?',email, function (error, results, fields) {
+  connection.query('SELECT * FROM applicants WHERE email = ?',email, function (error, results, fields) {
   if(results.length == 0) { 
-        res.status(400).json('email not in db')
-        res.end();
+        isInDatabase = false 
       }
+      
   else {
     var request = {
       'id': token,
@@ -46,21 +49,11 @@ exports.forgotpassword = function(req,res){
         res.status(400).json("insertion into password_change_requests failed");
         res.end();
       }
-      else {
-        const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-              user: 'SL.teacher.applications', 
-              pass: 'Superstar31#!'
-             },
-          tls:{
-              rejectUnauthorized:false
-           }
-         });
+        const transporter = nodemailer.createTransport(emailAuth);
       
-      const mailOptions = {
-          from: 'SL.teacher.applications@gmail.com', 
-          to: email, 
+      const mailYesAccount = {
+        from: applicationEmail, 
+        to: email, 
           subject: 'Link to Reset Password', 
           text: 
             `You are receiving this because you (or someone else) have requested the reset of the password for your account. \n\n` +
@@ -69,8 +62,21 @@ exports.forgotpassword = function(req,res){
             `If you did not request this, please ignore this email and your password will remain unchanged. \n `+
             `Thank you!`
         };
+        const mailNoAccount = {
+          from: applicationEmail, 
+          to: email, 
+          subject: 'Link to Reset Password', 
+          text: 
+            `You are receiving this because you (or someone else) has requested the reset of the password for the account associated with this email. \n\n` +
+            `There is, however, no account associated with this email. \n\n` +
+            `If you did not request this, please ignore this email!\n `+
+            `Thank you!`
+        };
+
       
       let valid = true;
+      let mailOptions = mailYesAccount
+      if (!isInDatabase) {mailOptions=mailNoAccount}
       transporter.sendMail(mailOptions, function(err, info) {
          if(err) {
            valid = false; 
@@ -83,7 +89,7 @@ exports.forgotpassword = function(req,res){
           }
         
         
-      }
+
     
     }
       )
@@ -95,8 +101,9 @@ exports.forgotpassword = function(req,res){
 };
 
 
-  
-exports.reset_valid = function(req,res){
+//                           VERIFYING TOKEN FROM FORGOT PASSWORD
+
+exports.resetValid = function(req,res){
   var token= req.body.id;
   connection.query('SELECT * FROM password_change_requests WHERE id = ?',token, function (error, results, fields) {
     if(results.length >0){ 
@@ -108,8 +115,9 @@ exports.reset_valid = function(req,res){
   
   });
 }
+//                        ACTUALLY RESETING PASSWORD FROM FORGOT PASSWORD
 
-exports.reset_password = function(req,res){ 
+exports.resetPassword = function(req,res){ 
   var token = req.body.id;
   let hash_password = bcrypt.hashSync(req.body.password, 12);
 

@@ -13,6 +13,7 @@ export default class MyApps extends Component {
     this.state = {
       submittedApps: [],
       currentApps: [], 
+      chosen: ''
     };
   }
 
@@ -33,6 +34,12 @@ export default class MyApps extends Component {
           }
         })
   }
+
+  appChosen = (input) => {
+    this.setState({
+      chosen: input
+    })
+  }
     
   render() {
     const user = this.props.user
@@ -40,16 +47,19 @@ export default class MyApps extends Component {
     const submitted = this.state.submittedApps.map(item => 
           <Wide key={item.application_id}>
             <It>{item.application_type} School application<br/>
-                  Created on: {item.created},<br/>
-                  Submitted on: {item.last_edited}
+                  Created on: {item.created.slice(0,10)},<br/>
+                  For school: {item.school_name}<br/>
+                  Submitted on: {item.last_edited.slice(0,10)}
             </It>
           </Wide>
           );
     const drafts = this.state.currentApps.map(item => 
-          <Wide key={item.application_id}>
+          // <Wide key={item.application_id} onClick={() => this.appChosen(item.application_id)}>
+          <Wide key={item.application_id} >
+
             <It>{item.application_type} School application<br/> 
-            Created on: {item.created},<br/>
-            Last edited at: {item.last_edited}
+            Created on: {item.created.slice(0,10)},<br/>
+            Last edited at: {item.last_edited.slice(0,10)}
             </It>
           </Wide>);
 
@@ -57,19 +67,27 @@ export default class MyApps extends Component {
             <Wrapper>
              <FormWrapper>
              <H1>{user.first_name}'s Applications</H1>
-             <HorizSeparator/>
-              <div>
-                <H2>Unfinished Applications</H2>
-                {this.state.currentApps.length===0 && (this.state.submittedApps.length===0 ? <It>No applications to continue! Start a new application {startApp}.</It>: <It> No applications to continue!</It>)}
-                
-                {drafts}
+             {this.state.chosen==='' ?
+                <div>
+                <HorizSeparator/>
+                  <div>
+                    <H2>Unfinished Applications</H2>
+                    {this.state.currentApps.length===0 && (this.state.submittedApps.length===0 ? <It>No applications to continue! Start a new application {startApp}.</It>: <It> No applications to continue!</It>)}
+                    
+                    {drafts}
+                  </div>
+                  <div>
+                  <HorizSeparator/>
+                  <H2>Submitted Applications</H2>
+                  {this.state.submittedApps.length===0 &&  <It>No submitted applications to track! </It> }
+                    {submitted}
+                  </div>
+                  </div>
+              : 
+                <div>
+                <H2>Return to all applications <a href='my-applications'> here</a></H2>
               </div>
-              <div>
-              <HorizSeparator/>
-              <H2>Submitted Applications</H2>
-              {this.state.submittedApps.length===0 &&  <It>No submitted applications to track! </It> }
-                {submitted}
-              </div>
+            }
              </FormWrapper>
              </Wrapper>
             );

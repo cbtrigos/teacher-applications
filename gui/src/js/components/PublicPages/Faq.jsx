@@ -68,8 +68,15 @@ export default function CustomizedExpansionPanels() {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <H2>
-                <p>The applications are all the same for primary, secondary, and vocational applications.</p>
-                <p>Here's a list of everything you need.</p>
+                <p>The same application is used for primary, secondary, and vocational schools.</p>
+                <p>Here's a list of everything you need:</p>
+                <div style={{textAlign: 'left', margin:'0 0 0 2%'}}>
+                <li>Employing authority and school for which you're applying for</li>
+                <li>Pin code and NASSIT number, if available</li>
+                <li>Qualifications and applicable cretificate numbers</li>
+                <li>Special skills such as special skills, music</li>
+                <li>Previous appointment and employing authority if available</li>
+                </div>
               </H2>
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -90,7 +97,8 @@ export default function CustomizedExpansionPanels() {
             <ExpansionPanelDetails>
               <H2>
                 <p>Before this digital platform existed, the teacher application was a paper-based system that traveled all across Sierra Leone to be hand-signed by five different agencies.
-                This often took as long as 3 months. With this system, you will be able to track your application in real-time and receive a decision in around 2 weeks time. 
+                This often took as long as 3 months. <br/>
+                With this system, you will be able to track your application in real-time and receive approval notices in real time as the approving agencies review your application. 
                 </p>     
               </H2>
             </ExpansionPanelDetails>

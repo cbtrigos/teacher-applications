@@ -37,13 +37,13 @@ import MyApps from "../../components/ApplicantDashboard/MyApps.jsx"
               path='/contact' 
               exact 
               component ={Contact} 
-              props={childProps}/>  
-            <AppliedRoute 
+              props={childProps}/> 
+
+            <UnauthenticatedRoute
               path='/password-forgot' 
               exact 
               component ={PasswordForgot} 
               props={childProps}/>  
-
             <UnauthenticatedRoute
               path="/login"
               exact
@@ -64,7 +64,7 @@ import MyApps from "../../components/ApplicantDashboard/MyApps.jsx"
               props={childProps}
             />  */}
             <AuthenticatedRoute
-              path="/dashboard/welcome"
+              path="/dashboard"
               exact
               component={Welcome}
               props={childProps}

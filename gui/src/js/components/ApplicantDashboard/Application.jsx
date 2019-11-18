@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import {Wrapper, FormWrapper,} from '../../constants/utils/Styling.jsx'
-import {AppType, PersonalInfo, TeacherInfo, ShortAnswer, Attachments, Submit} from "./ApplicationInfo.jsx"
+import {AppType, PersonalInfo, TeacherInfo, ShortAnswer, Attachments, Submit, Completed} from "./ApplicationInfo.jsx"
 import styled from "styled-components";
 import axios from 'axios';
+import {format} from "react-phone-input-auto-format";
 
 export default class Application extends Component {
   constructor(props) {
@@ -34,13 +35,17 @@ export default class Application extends Component {
  }
 
   submit = (event) => {
+    const { step } = this.state;
     event.preventDefault();
       axios 
         .post('http://localhost:5000/api/submit-application', 
           {"application_id": this.state.application_id
         }) 
         .then(response => {
-          if (response.data==="application submitted successfully") {
+          if (response.data==='application submitted successfully') {
+            this.setState({
+              step: step + 1
+            });
           } else {console.log(response.data)}
         })
   }
@@ -114,14 +119,22 @@ export default class Application extends Component {
             const { step } = this.state;
             this.setState({
               step: step + 1, 
-              application_id: response.data.application_id
+              application_id: response.data.application_id,
+              created: response.data.created
             });
           }
           else {console.log(response.data)}
         })
 
     };
-
+  onChangePhone = phoneNumber => {
+      const formatted = format(phoneNumber); // (123) 456-7890
+      this.setState({
+        mobile_number: formatted
+      })
+    
+      // do something with the formatted or normalized number
+    };
   handleChangeSave = input => e => {
     this.setState({ [input]: e.target.value });
 
@@ -144,6 +157,7 @@ export default class Application extends Component {
         return (
           <PersonalInfo
             step={this.step}
+            onChangePhone = {this.onChangePhone}
             handleChangeSave={this.handleChangeSave}
             values={values}
           />
@@ -178,6 +192,11 @@ export default class Application extends Component {
             checkmarked = {this.state.checkMark}
             handleCheckboxChange = {this.handleCheckboxChange}
             errors = {this.state.errors}
+          />); 
+      case 6:
+        return (
+          <Completed
+            values={values}
           />);    
           
           

@@ -2,6 +2,7 @@ var express    = require("express");
 var login = require('./routes/loginroutes');
 var application = require('./routes/application');
 var passchange = require('./routes/passwordchange')
+var contact = require('./routes/contact')
 var bodyParser = require('body-parser');
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,14 +21,15 @@ router.get('/', function(req, res) {
 //route to handle user registration
 router.post('/register',login.register);
 router.post('/login',login.login)
-router.post('/password-forgot', passchange.forgotpassword)
-router.post('/reset-valid', passchange.reset_valid)
-router.post('/reset-password', passchange.reset_password)
+router.post('/password-forgot', passchange.forgotPassword)
+router.post('/reset-valid', passchange.resetValid)
+router.post('/reset-password', passchange.resetPassword)
 router.post('/authenticate', login.authenticate)
 router.post('/begin-application', application.begin)
 router.post('/save-application', application.save)
 router.post('/submit-application', application.submit)
 router.post('/my-applications', application.get)
+router.post('/outside-contact', contact.sendEmail)
 app.use('/api', router);
 
 app.listen(5000);

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {H1, H2, It, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
 
+import PhoneInput from "react-phone-input-auto-format";
 
 // The "App Type" page is the 0th panel of registration 
 export class AppType extends Component {
@@ -57,7 +58,7 @@ export class AppType extends Component {
 };
 export class PersonalInfo extends Component {
   render() {
-    const { values, handleChangeSave, step } = this.props;
+    const { values, handleChangeSave, onChangePhone, step } = this.props;
         return (
             <Wrapper>
              <FormWrapper>
@@ -71,7 +72,6 @@ export class PersonalInfo extends Component {
                         <Input
                             type = "text"
                             className=""
-                            placeholder="First Name"
                             name='first_name'
                             noValidate 
                             disabled={true}
@@ -85,7 +85,6 @@ export class PersonalInfo extends Component {
                     <Input
                         type = "text"
                         className=""
-                        placeholder="Last Name"
                         name='last_name'
                         noValidate
                         disabled={true}
@@ -102,7 +101,6 @@ export class PersonalInfo extends Component {
 
                         <Input
                             type = "text"
-                            placeholder="Other Names"
                             name='other_names'
                             noValidate
                             onChange={handleChangeSave('other_names')}
@@ -111,22 +109,27 @@ export class PersonalInfo extends Component {
                 </New>
                 <New>
                     <Label htmlFor="mobile_number"> Mobile Number</Label>
+                    <PhoneInput 
+                        noValidate
+                        defaultValue={values.mobile_number} 
+                        name='mobile_number' 
+                        onChange={onChangePhone} 
+                        inputComponent={Input}/>
 
-                        <Input
+                        {/* <Input
                             type = "text"
                             placeholder="Mobile Number"
                             name='mobile_number'
                             noValidate
                             onChange={handleChangeSave('mobile_number')}
                             defaultValue={values.mobile_number}
-                            />
+                            /> */}
                 </New>
                 <New>
                     <Label htmlFor="gender"> Gender</Label>
 
                         <Input
                             type = "text"
-                            placeholder="Gender"
                             name='gender'
                             noValidate
                             disabled={true}
@@ -139,7 +142,6 @@ export class PersonalInfo extends Component {
 
                         <Input
                             type = "text"
-                            placeholder="Nationality"
                             name='nationality'
                             noValidate
                             onChange={handleChangeSave('nationality')}
@@ -176,7 +178,6 @@ export class TeacherInfo extends Component {
                       <Label htmlFor="employing_authority">Employing authority </Label>
                       <Input
                           type = "text"
-                          placeholder="Employing Authority"
                           name="employing_authority"
                           noValidate
                           onChange={handleChangeSave('employing_authority')}
@@ -187,7 +188,6 @@ export class TeacherInfo extends Component {
                       <Label htmlFor="school_name">School Name </Label>
                       <Input
                           type = "text"
-                          placeholder="School Name"
                           name="school_name"
                           noValidate
                           onChange={handleChangeSave('school_name')}
@@ -199,7 +199,6 @@ export class TeacherInfo extends Component {
   
                           <Input
                               type = "text"
-                              placeholder="Pin code"
                               name='Pin Code'
                               noValidate
                               onChange={handleChangeSave('pin_code')}
@@ -212,7 +211,6 @@ export class TeacherInfo extends Component {
   
                           <Input
                               type = "text"
-                              placeholder="Nassit Number"
                               name='nassit_number'
                               noValidate
                               onChange={handleChangeSave('nassit')}
@@ -274,7 +272,6 @@ export class ShortAnswer extends Component {
 
                         <TextArea
                             type = "text"
-                            placeholder="Qualifications"
                             name='qualifications'
                             noValidate
                             onChange={handleChangeSave('qualifications')}
@@ -287,7 +284,6 @@ export class ShortAnswer extends Component {
 
                         <TextArea
                             type = "text"
-                            placeholder="Special Skills"
                             name='special_skills'
                             noValidate
                             onChange={handleChangeSave('special_skills')}
@@ -463,15 +459,40 @@ export class Submit extends Component {
     );
   }
 }
+export class Completed extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { values } = this.props;
+    return (
+          <Wrapper>
+            <FormWrapper>
+              <H1>Application</H1>
+                <H2>{values.application_type} School <br/>
+                </H2>
+           <H2>
+              Application submitted successfully! <br/>
+              You'll hear from us as soon as approval updates begin. <br/>
+              Thank you for applying to teach Sierra Leone's youth. <br/>
+          <br />
+          <Clearlink href='/dashboard/my-applications'>
+          <CreateButton
+            color="primary"
+            variant="contained"
+          >Return to Dashboard</CreateButton> </Clearlink>
+
+          </H2>
+          </FormWrapper>
+          </Wrapper>
+    );
+  }
+}
 
 
 
-const CForm = styled(Form)`
-  display: -webkit-flex;
-  justify-content: center;
-  width: 100%;
-  padding-bottom: 5px;
-`
+
 const Div = styled.div`
 margin: 13px;`
 
@@ -481,14 +502,24 @@ text-align: center;
 font: inherit;`
 
 
-const Lab = styled.label`
-  background: red;
-  display: block;
-  padding: 1rem;
-`;
 
-const Inp = styled.input`
-  &:checked + ${Label} {
-    background: blue;
-  }
-`;
+const Clearlink = styled.a`
+color: inherit;
+text-decoration: none;
+&:hover {
+  color: inherit;
+  text-decoration: none
+};
+&:active {
+  color: inherit;
+  text-decoration: none
+};
+&:visited {
+  color: inherit;
+  text-decoration: none
+}
+&:focus {
+  color: inherit;
+  text-decoration: none
+}
+`

@@ -96,8 +96,7 @@ export default class ResetPassword extends Component {
   
   render() {
     const {
- password, error, isLoading, updated 
-} = this.state;
+ password, error, isLoading, updated } = this.state;
 
     if (error) {
       return (

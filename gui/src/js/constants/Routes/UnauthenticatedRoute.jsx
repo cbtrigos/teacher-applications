@@ -27,7 +27,7 @@ export default ({ component: C, props: cProps, ...rest }) => {
                                 //else if logged in --> go to dashboard
           ? <C {...props} {...cProps} />
           : <Redirect
-              to={redirect === "" || redirect === null ? "/dashboard/welcome" : redirect}
+              to={redirect === "" || redirect === null ? "/dashboard" : redirect}
             />}
     />
   );

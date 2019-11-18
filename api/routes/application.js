@@ -1,5 +1,4 @@
 var mysql = require('mysql');
-const bcrypt = require('bcrypt');
 var {db} = require('../authentication/mysql.json')
 
   //                                 CONNECTING TO MYSQL
@@ -9,7 +8,7 @@ connection.connect(function(err) {
   if (err) {
     console.error('error connecting: ' + err.stack);
   } } );
-
+//                                  REGISTER AN APPLICATION
 exports.begin = function(req,res) {
   var now = new Date();
   var application={ //application_id
@@ -34,12 +33,14 @@ exports.begin = function(req,res) {
           if(results.length >0){ 
             res.status(201).send({
               message: "application registered sucessfully", 
-              application_id: results[0].application_id})
+              application_id: results[0].application_id,
+              created: results[0].created})
         }
     }}
     );
     }}
     );}
+//                                  UPDATE AN APPLICATION
 
 exports.save = function(req,res){
     var now = new Date();
@@ -72,20 +73,23 @@ exports.save = function(req,res){
     }}
   );
 };
+//                                  SUBMIT THE APPLICATION
 
 exports.submit = function(req,res){
     application_id = req.body.application_id
     last_edited = Date()
-    connection.query('UPDATE applications SET submitted = ? WHERE application_id = ?',[true, application_id], function (error, results, fields) {
+    connection.query('UPDATE applications SET submitted = ? WHERE application_id = ?',['true', application_id], function (error, results, fields) {
       if (error) {
+        console.log(error)
           res.status(400).send("couldn't find application")
         }else{
-          res.status(400).send('application submitted successfully')
+          res.status(200).send('application submitted successfully')
     }}
     );
 }
 
 
+//                             GET A LIST OF ALL APPLICATIONS FOR A USER
 
 exports.get = function(req,res){
   applicant_id = req.body.applicant_id

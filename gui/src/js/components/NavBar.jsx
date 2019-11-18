@@ -30,7 +30,7 @@ export default class NavBar extends Component {
             {isAuthenticated
               ? <Fragment>
                  <NavDropdown title="Dashboard" id="basic-nav-dropdown" >
-                  <LinkContainer to="/dashboard/welcome" >
+                  <LinkContainer to="/dashboard" >
                     <NavItem>My Dashboard</NavItem>
                   </LinkContainer>
                   <LinkContainer to="/dashboard/my-applications">
