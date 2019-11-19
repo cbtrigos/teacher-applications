@@ -31,7 +31,7 @@ exports.forgotPassword = function(req,res){
     res.end();
   }
 
-  connection.query('SELECT * FROM applicants WHERE email = ?',email, function (error, results, fields) {
+  connection.query('SELECT * FROM users WHERE email = ?',email, function (error, results, fields) {
   if(results.length == 0) { 
         isInDatabase = false 
       }
@@ -126,7 +126,7 @@ exports.resetPassword = function(req,res){
       var valid = moment(results[0].expires).isAfter(moment().format("YYYY-MM-DD hh:mm:ss"))
       if(valid) { 
         const applicant_id = results[0].applicant_id
-        connection.query('UPDATE applicants SET password = ? WHERE applicant_id = ?', [hash_password, applicant_id], function (error, results, fields) {
+        connection.query('UPDATE users SET password = ? WHERE applicant_id = ?', [hash_password, applicant_id], function (error, results, fields) {
         if (error) {
           res.status(500).send("couldn't update password")
         } else {

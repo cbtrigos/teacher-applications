@@ -3,34 +3,41 @@ import {Wrapper, FormWrapper,} from '../../constants/utils/Styling.jsx'
 import {AppType, PersonalInfo, TeacherInfo, ShortAnswer, Attachments, Submit, Completed} from "./ApplicationInfo.jsx"
 import styled from "styled-components";
 import axios from 'axios';
-import {format} from "react-phone-input-auto-format";
+// import {format} from "react-phone-input-auto-format";
 
 export default class Application extends Component {
   constructor(props) {
     super(props);
+    console.log('here are the props', props)
     const user = props.user
     this.state = {
       step: 0,
       submitOkay:false, 
       errors: '',
       checkMark: false, 
-      application_id: null,
-      application_type: null,
-      employing_authority:null,
-      school_name:null,
-      other_names:null,
-      mobile_number:null, 
-      nationality: null, 
-      prev_appt: null,
-      pin_code: null,
-      nassit: null,
-      qualifications: null,
-      special_skills: null,
-      created: null,
-      first_name:user.first_name,
-      last_name:user.last_name,
-      email:user.email,
-      sex: user.gender,
+      application: {
+        application_id: null,
+        application_type: null,
+        employing_authority:null,
+        school_name:null,
+        other_names:null,
+        mobile_number:null, 
+        nationality: null, 
+        prev_appt: null,
+        pin_code: null,
+        nassit: null,
+        qualifications: null,
+        special_skills: null,
+        created: null,
+        last_edited: null,
+        submitted: null,
+        first_name:user.first_name,
+        last_name:user.last_name,
+        email:user.email,
+        applicant_id: user.applicant_id,
+        sex:user.gender,
+      }
+      
 };
  }
 
@@ -39,111 +46,122 @@ export default class Application extends Component {
     event.preventDefault();
       axios 
         .post('http://localhost:5000/api/submit-application', 
-          {"application_id": this.state.application_id
+          {"application_id": this.state.application.application_id
         }) 
         .then(response => {
-          if (response.data==='application submitted successfully') {
+          if (response.data==="application submitted successfully") {
             this.setState({
-              step: step + 1
+              step: step + 1, 
             });
           } else {console.log(response.data)}
         })
+      
+  }
+
+  async componentDidMount() {
+    const app = this.props.application
+    if (this.props.application!==undefined) {
+      this.setState({
+        application: app,
+        step:1,
+      })
+      console.log('COMPONENT MOUNTING.')
+      console.log('COMPONENT props.user: ',this.props.user)
+      console.log('COMPONENT props.application: ', this.props.application)
+      console.log('now the application state is:', this.state)
+
+    }
+    else {
+      console.log('COMPONENT MOUNTING. this.props.application is undefined')
+    }
+  }
+
+  validateForm = () => {
+    let valid = true;
+    Object.values(this.state.formErrors).forEach(
+      (e) => e.length > 0 && (valid = false)
+    );
+    Object.values(this.state.application).forEach(
+      (val) => val === '' && (valid = false)
+    );
+    return valid;
   }
 
 
-    validateForm = () => {
-      let valid = true;
-      Object.values(this.state.formErrors).forEach(
-        (e) => e.length > 0 && (valid = false)
-      );
-      Object.values(this.state).forEach(
-        (val) => val === '' && (valid = false)
-      );
-      return valid;
+  step = val => e => {
+    let k = 0
+    if (val==='exit') {
+      //push to dashboard 
     }
-
-
-    step = val => e => {
-      let k = 0
+    else{
       if (val==='next') {k=1}
       else if (val==='prev') {k=-1}
       const { step } = this.state;
       this.setState({
         step: step + k
       });
-      axios 
-      .post('http://localhost:5000/api/save-application', 
-        { "applicant_id": this.props.user.id,
-          "application_id": this.state.application_id,
-          "application_type": this.state.application_type,
-          "employing_authority":this.state.employing_authority,
-          "school_name":this.state.school_name,
-          "other_names":this.state.other_names,
-          "mobile_number":this.state.mobile_number, 
-          "nationality": this.state.nationality, 
-          "prev_appt": this.state.prev_appt,
-          "pin_code": this.state.pin_code,
-          "nassit": this.state.nassit,
-          "qualifications": this.state.qualifications,
-          "special_skills": this.state.special_skills,
-          "first_name":this.state.first_name,
-          "last_name":this.state.last_name,
-          "email": this.state.email,
-          "sex": this.state.sex,
+    }
+    axios 
+    .post('http://localhost:5000/api/save-application', 
+      this.state.application) 
+    .then(response => {
+      if (response.data==="application updated sucessfully") {
+          console.log('app updated successfully')
+        }
+      else {console.log(response.data)}
+    })
+  };
+
+  handleCheckboxChange = name => event => {
+    this.setState({ checkMark: event.target.checked })
+  }
+
+  beginApp = () => e => {
+    axios 
+      .post('http://localhost:5000/api/begin-application', 
+        {"email": this.state.application.email,
+          "sex": this.state.application.sex, 
+          "first_name": this.state.application.first_name, 
+          "last_name": this.state.application.last_name, 
+          "application_type": this.state.application.application_type,
+          "applicant_id": this.props.user.id
       }) 
       .then(response => {
-        if (response.data==="application updated sucessfully") {
-            console.log('app updated successfully')
-          }
+        if (response.data.message==="application registered sucessfully") {
+          const { step } = this.state;
+          this.setState({
+            step: step + 1, 
+            application_id: response.data.application_id,
+            created: response.data.created
+          });
+        }
         else {console.log(response.data)}
       })
-    };
 
- 
-    handleCheckboxChange = name => event => {
-      this.setState({ checkMark: event.target.checked })
-    }
+  };
+  onChangePhone = phoneNumber => e =>{
+  // const formatted = format(phoneNumber); // (123) 456-7890
+    this.setState({
+      mobile_number: phoneNumber
+    })
+  };
 
-    beginApp = () => e => {
-      axios 
-        .post('http://localhost:5000/api/begin-application', 
-          {"email": this.state.email,
-            "sex": this.state.sex, 
-            "first_name": this.state.first_name, 
-            "last_name": this.state.last_name, 
-            "application_type": this.state.application_type,
-            "applicant_id": this.props.user.id
-        }) 
-        .then(response => {
-          if (response.data.message==="application registered sucessfully") {
-            const { step } = this.state;
-            this.setState({
-              step: step + 1, 
-              application_id: response.data.application_id,
-              created: response.data.created
-            });
-          }
-          else {console.log(response.data)}
-        })
-
-    };
-  onChangePhone = phoneNumber => {
-      const formatted = format(phoneNumber); // (123) 456-7890
-      this.setState({
-        mobile_number: formatted
-      })
-    
-      // do something with the formatted or normalized number
-    };
   handleChangeSave = input => e => {
-    this.setState({ [input]: e.target.value });
-
+    const value = e.target.value
+    this.setState(prevState => ({
+      application: {                 
+          ...prevState.application, 
+          [input]: value    
+      }
+  }))
+  console.log(this.state.application)
   }
 
 
   render() {
-    const { prev_appt, nationality, application_type, step, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state;
-    const values = { prev_appt, nationality, application_type, step, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex};
+    const { prev_appt, nationality, application_type, application_id, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
+    const { step } = this.state
+    const values = { prev_appt, application_id, nationality, application_type, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex};
     switch (step) {
       case 0: 
         return (

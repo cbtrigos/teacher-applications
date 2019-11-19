@@ -77,15 +77,29 @@ exports.save = function(req,res){
 
 exports.submit = function(req,res){
     application_id = req.body.application_id
-    last_edited = Date()
-    connection.query('UPDATE applications SET submitted = ? WHERE application_id = ?',['true', application_id], function (error, results, fields) {
+    last_edited = new Date()
+    connection.query('UPDATE applications SET submitted = ?, last_edited=? WHERE application_id = ?',['true', last_edited, application_id], function (error, results, fields) {
       if (error) {
         console.log(error)
           res.status(400).send("couldn't find application")
         }else{
-          res.status(200).send('application submitted successfully')
+          res.status(200).send("application submitted successfully")
     }}
     );
+}
+
+//                                  DELETE THE APPLICATION
+
+exports.delete = function(req,res){
+  application_id = req.body.application_id
+  connection.query('DELETE FROM applications WHERE application_id = ?',application_id, function (error, results, fields) {
+    if (error) {
+      console.log(error)
+        res.status(400).send("couldn't delete application")
+      }else{
+        res.status(200).send('application deleted successfully')
+  }}
+  );
 }
 
 

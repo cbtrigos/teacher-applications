@@ -40,8 +40,12 @@ export default class NavBar extends Component {
                     <NavItem>Start New Application</NavItem>
                   </LinkContainer>
                 </NavDropdown>  
-              <NavItem onClick={handleLogout}>Logout</NavItem>
-
+                <NavDropdown title="My Account" id="basic-nav-dropdown" >
+                  <LinkContainer to="/my-account">
+                    <NavItem>My Account</NavItem>
+                  </LinkContainer>
+                  <NavItem onClick={handleLogout}>Logout</NavItem>
+                </NavDropdown>  
               </Fragment>
               : <Fragment>
                   <LinkContainer to="/register">

@@ -81,7 +81,7 @@ export default class Contact extends Component {
           }) 
           .then(response => {
             this.setState({
-              serverMessage: response.data
+              serverMessage: response.data.message
             })
           })
       }
@@ -103,7 +103,6 @@ export default class Contact extends Component {
                       <Input
                           type = "text"
                           name="name"
-                          // placeholder="Name"
                           noValidate
                           onChange={this.handleChange('name')}
                           />
@@ -115,7 +114,6 @@ export default class Contact extends Component {
                           className=""
                           type="email"
                           name="email"
-                          // placeholder="Email"
                           noValidate
                           onChange={this.handleChange('email')}
                           />
@@ -127,7 +125,6 @@ export default class Contact extends Component {
                           className=""
                           type="subject"
                           name="subject"
-                          // placeholder="Subject"
                           noValidate
                           onChange={this.handleChange('subject')}
                           />
@@ -141,7 +138,6 @@ export default class Contact extends Component {
                           type="Input"
                           rows="5"
                           name="message"
-                          // placeholder="message"
                           noValidate
                           onChange={this.handleChange('message')}
                           />

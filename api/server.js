@@ -28,6 +28,7 @@ router.post('/authenticate', login.authenticate)
 router.post('/begin-application', application.begin)
 router.post('/save-application', application.save)
 router.post('/submit-application', application.submit)
+router.post('/delete-application', application.delete)
 router.post('/my-applications', application.get)
 router.post('/outside-contact', contact.sendEmail)
 app.use('/api', router);

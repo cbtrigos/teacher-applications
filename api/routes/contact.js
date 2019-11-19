@@ -23,7 +23,8 @@ exports.sendEmail = function(req,res){
   
       connection.query('INSERT INTO contact_us_emails SET ?', toSend, function (error, results, fields) {
         if (error) {
-          res.status(400).json("Error occured when sending your email");
+          res.status(400).send({
+            message: "Error occured when sending your email"});
           res.end();
         }
         else {
@@ -43,10 +44,12 @@ exports.sendEmail = function(req,res){
 
         transporter.sendMail(mailOptions, function(err, info) {
            if(err) {
-            return res.status(500).send('Failed to send email')
+            return res.status(200).send({
+              message: 'Failed to send email. Please check your connection and try again.'})
            } 
            else {
-            return res.status(200).send("Email sent! You'll receive a copy soon.");
+            return res.status(200).send({
+              message: "Email sent! You'll receive a copy soon."});
            }
         });
  

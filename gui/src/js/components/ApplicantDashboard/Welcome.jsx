@@ -9,6 +9,8 @@ export default class Welcome extends Component {
     }
       render() {
         const user = this.props.user
+        console.log(this.props)
+
         return (
             <Wrapper> 
                 <FormWrapper>

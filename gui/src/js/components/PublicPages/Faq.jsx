@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import Collapsible from 'react-collapsible';
+import React from 'react';
 import {H1, H2, Wrapper, FormWrapper, A} from '../../constants/utils/Styling.jsx'
-import styled from "styled-components";
 
 import { withStyles } from '@material-ui/core/styles';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -27,10 +25,15 @@ const ExpansionPanel = withStyles({
 
 const ExpansionPanelSummary = withStyles({
   root: {
-    backgroundColor: 'rgba(0, 0, 0, .03)',
+    // backgroundColor: 'rgba(0, 0, 0, .03)',
+    backgroundColor: '#93A3B1',
+    opacity: .7,
     borderBottom: '1px solid rgba(0, 0, 0, .125)',
     marginBottom: -1,
     minHeight: 56,
+    '&:hover': {
+      opacity: 1,
+    },
     '&$expanded': {
       minHeight: 56,
     },
@@ -105,7 +108,7 @@ export default function CustomizedExpansionPanels() {
           </ExpansionPanel>    
           <ExpansionPanel square expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
             <ExpansionPanelSummary aria-controls="panel4d-content" id="panel4d-header">
-              <H2>Can I update my appication after submission?</H2>
+              <H2>Can I update my application after submission?</H2>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <H2>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {H1, Wrapper, Buttons, Button, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
+import {H1, Wrapper, Buttons, Notification, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
 
 
@@ -11,6 +11,8 @@ export class FormUserDetails extends Component {
             <Wrapper>
             <FormWrapper>
               <H1>Registration</H1>
+              {console.log(values.serverMessage)}
+              {values.serverMessage!==null && <Notification>{values.serverMessage}</Notification>}
                 <Buttons> 
                 <Left>
                     <Label htmlFor="firstName"> First Name</Label>
@@ -90,9 +92,6 @@ export class FormUserDetails extends Component {
                   <Label gender>Nonbinary</Label>
                 </FlexContainer>
                   </Buttons>
-
-
-
                 </New>
 
                 <New>
@@ -154,53 +153,6 @@ export class FormUserDetails extends Component {
 
     };
 };
-
-
-// The "Confirm" page is the 3rd panel of the registration 
-export class Submit extends Component {
-  render() {
-    const { values, handleChangeSave, nextStep, prevStep } = this.props;
-
-    return (
-          <Wrapper>
-            <FormWrapper>
-              <H1>Registration</H1>
-                <h2>Confirm User Details</h2>
-            <br />
-            <Div>
-              <Category> First Name: </Category> <It> {values.firstName} </It>
-            </Div>
-            <Div>
-            <Category> Last Name: </Category><It> {values.lastName} </It>
-            </Div>
-            <Div>
-            <Category> Email: </Category><It> {values.email} </It>
-            </Div>
-            <Div>
-            <Category> DOB: </Category><It> {values.DOB} </It>
-            </Div>
-            <Div>
-            </Div> 
-          <br />
-        <Buttons>
-          <Left> 
-          <CreateButton
-            color="secondary"
-            variant="contained"
-            onClick={prevStep}
-          >Back</CreateButton>
-          </Left>
-          <CreateButton
-            color="primary"
-            variant="contained"
-            onClick={nextStep}
-          >Confirm & Continue</CreateButton>
-          </Buttons>
-          </FormWrapper>
-          </Wrapper>
-    );
-  }
-}
 
 
 

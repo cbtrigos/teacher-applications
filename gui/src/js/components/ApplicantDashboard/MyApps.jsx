@@ -3,7 +3,8 @@ import {H1, A, H2, It, HorizSeparator, Wrapper, FormWrapper} from '../../constan
 import axios from 'axios';
 import styled from "styled-components";
 import Application from "./Application.jsx"
-import { Route, Redirect } from "react-router-dom";
+import DraftPanels from './ApplicationPanels.jsx'
+import SubmittedPanels  from './ApplicationPanels.jsx'
 
 
 // The "App Type" page is the 0th panel of registration 
@@ -13,12 +14,13 @@ export default class MyApps extends Component {
     this.state = {
       submittedApps: [],
       currentApps: [], 
-      chosen: ''
+      chosen: null,
     };
   }
 
 
   async componentDidMount() {
+    console.log('getting all applications')
        axios 
         .post('http://localhost:5000/api/my-applications', 
           {"applicant_id": this.props.user.id
@@ -29,71 +31,82 @@ export default class MyApps extends Component {
           else {
             this.setState({ 
               submittedApps: response.data.submittedApps, 
-              currentApps: response.data.incompleteApps
+              currentApps: response.data.incompleteApps,
+              chosen: null
             });
           }
         })
   }
 
-  appChosen = (input) => {
+  updateChosen = (input) => {
+    const application = input
     this.setState({
-      chosen: input
+      chosen: application
     })
   }
-    
+  clearChosen = () => {
+    this.setState({
+      chosen: null
+    })
+    window.location.reload();
+
+  }
+  deleteApplication = (input) => {
+    axios 
+      .post('http://localhost:5000/api/delete-application', 
+        {"application_id": input
+      }) 
+      .then(response => {
+        if (response.data==='application deleted successfully') {
+          console.log(response.data)
+        } else {console.log(response.data)}
+      })
+      window.location.reload();
+  }
+
   render() {
     const user = this.props.user
     const startApp = <A href='new-application'>here</A>;
-    const submitted = this.state.submittedApps.map(item => 
-          <Wide key={item.application_id}>
-            <It>{item.application_type} School application<br/>
-                  Created on: {item.created.slice(0,10)},<br/>
-                  For school: {item.school_name}<br/>
-                  Submitted on: {item.last_edited.slice(0,10)}
-            </It>
-          </Wide>
-          );
     const drafts = this.state.currentApps.map(item => 
-          // <Wide key={item.application_id} onClick={() => this.appChosen(item.application_id)}>
-          <Wide key={item.application_id} >
-
-            <It>{item.application_type} School application<br/> 
-            Created on: {item.created.slice(0,10)},<br/>
-            Last edited at: {item.last_edited.slice(0,10)}
-            </It>
-          </Wide>);
-
+          <DraftPanels key={item.application_id} application={item} type='draft' updateChosen={this.updateChosen} deleteApplication={this.deleteApplication}/>
+          );
+    const submitted = this.state.submittedApps.map(item =>
+      <SubmittedPanels key={item.application_id} application={item} type='submitted' deleteApplication={this.deleteApplication} />
+     );
+    console.log(this.state.submittedApps)
         return (
-            <Wrapper>
-             <FormWrapper>
-             <H1>{user.first_name}'s Applications</H1>
-             {this.state.chosen==='' ?
-                <div>
-                <HorizSeparator/>
-                  <div>
-                    <H2>Unfinished Applications</H2>
-                    {this.state.currentApps.length===0 && (this.state.submittedApps.length===0 ? <It>No applications to continue! Start a new application {startApp}.</It>: <It> No applications to continue!</It>)}
-                    
-                    {drafts}
-                  </div>
-                  <div>
-                  <HorizSeparator/>
-                  <H2>Submitted Applications</H2>
-                  {this.state.submittedApps.length===0 &&  <It>No submitted applications to track! </It> }
-                    {submitted}
-                  </div>
-                  </div>
-              : 
-                <div>
-                <H2>Return to all applications <a href='my-applications'> here</a></H2>
-              </div>
-            }
-             </FormWrapper>
-             </Wrapper>
+            <>
+          {this.state.chosen===null
+            ? <Wrapper>
+                <FormWrapper>
+                <H1>{user.first_name}'s Applications</H1>
+                    <div>
+                    <HorizSeparator/>
+                      <div>
+                        <H2>Unfinished Applications</H2>
+                        {drafts}
+                        {this.state.currentApps.length===0 ? <It>No applications to continue! Start a new application {startApp}.</It>: <It> Start another application {startApp}!</It>}
+                      </div>
+                      <div>
+                      <HorizSeparator/>
+                      <H2>Submitted Applications</H2>
+                      {this.state.submittedApps.length===0 &&  <It>No submitted applications to track! </It> }
+                        {submitted}
+                      </div>
+                      </div>
+                </FormWrapper>
+                </Wrapper>
+              :
+              <>
+              <Application application={this.state.chosen} user = {this.props.user} clearChosen ={() =>this.updateChosen({})}/>
+              </> 
+              }
+            </>
             );
+          
+        }
 
     };
-};
 
 const Wide = styled.button`
 background-color: #93A3B1;

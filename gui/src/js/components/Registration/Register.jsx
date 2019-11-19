@@ -13,7 +13,6 @@ export default class UserForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 1,
       firstName: '',
       lastName: '',
       email: '',
@@ -29,20 +28,8 @@ export default class UserForm extends React.Component {
         password1: '',
         password2: '',
       },
+      serverMessage: null
     };
-  };
-  // Proceed to next step
-  nextStep = () => {
-    const { step } = this.state;
-    this.setState({
-      step: step + 1
-    });
-  };
-  prevStep = () => {
-    const { step } = this.state;
-    this.setState({
-      step: step - 1
-    });
   };
 
   validateForm = () => {
@@ -58,6 +45,9 @@ export default class UserForm extends React.Component {
   
   submit = (event) => {
     event.preventDefault();
+    this.setState({
+      serverMessage: 'loading..'
+    })
     
       axios 
         .post('http://localhost:5000/api/register', 
@@ -72,6 +62,11 @@ export default class UserForm extends React.Component {
           if (response.data.message==="user registered sucessfully") {
             this.props.handleLogin(response.data.user)
           } 
+          else {
+            this.setState({
+              serverMessage: response.data
+            })
+          }
         })
 
 
@@ -115,35 +110,19 @@ export default class UserForm extends React.Component {
         break;
   }
   this.setState({ formErrors, [name]: value });
-
   }
 
   render() {
-    const { step, firstName, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
-    const values = { firstName, lastName, email, gender,  DOB, password1, password2, formErrors};
-
-    switch (step) {
-      case 1:
+    const {firstName, serverMessage, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
+    const values = { firstName, lastName, email, gender,  DOB, password1, password2, formErrors, serverMessage};
         return (
           <FormUserDetails
-            nextStep={this.nextStep}
             handleChangeSave={this.handleChangeSave}
             submit = {this.submit}
             validateForm = {this.validateForm}
             values={values}
           />
-          );
-      case 2:
-        return (
-          <Submit
-            nextStep={this.nextStep}
-            prevStep={this.prevStep}
-            values={values}
-          />
         );
-      case 3:
-        return <Success />;
-    }
   }
 }
 

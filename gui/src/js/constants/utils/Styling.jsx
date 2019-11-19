@@ -301,3 +301,24 @@ font-style: italic`
 export const Notification = styled(H2)`
 color: red;
 font-size: 18pt;`
+
+export const Clearlink = styled.a`
+color: inherit;
+text-decoration: none;
+&:hover {
+  color: inherit;
+  text-decoration: none
+};
+&:active {
+  color: inherit;
+  text-decoration: none
+};
+&:visited {
+  color: inherit;
+  text-decoration: none
+}
+&:focus {
+  color: inherit;
+  text-decoration: none
+}
+`

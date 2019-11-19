@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import {H1, H2, It, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
+import {H1, H2, It, Clearlink, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
 
-import PhoneInput from "react-phone-input-auto-format";
+import Phone from 'react-phone-number-input'
 
-// The "App Type" page is the 0th panel of registration 
+
 export class AppType extends Component {
   render() {
     
@@ -63,8 +63,9 @@ export class PersonalInfo extends Component {
             <Wrapper>
              <FormWrapper>
              <H1>Teacher Application</H1>
-              <H2>{values.application_type} School <br/><br/>
-             Personal Information: Part 1/5</H2><br/>        
+              <H2>{values.application_type} School <br/>
+                  Application #{values.application_id}<br/><br/>
+                  Personal Information: Part 1/5</H2><br/>        
 
                 <Buttons> 
                 <Left>
@@ -109,12 +110,18 @@ export class PersonalInfo extends Component {
                 </New>
                 <New>
                     <Label htmlFor="mobile_number"> Mobile Number</Label>
-                    <PhoneInput 
+                    <Phone
+                        placeholder="Enter phone number"
+                        // inputComponent={Input}
+                        value={ values.mobile_number }
+                        onChange={ phone => onChangePhone(phone)} />
+
+                    {/* <PhoneInput 
                         noValidate
                         defaultValue={values.mobile_number} 
                         name='mobile_number' 
                         onChange={onChangePhone} 
-                        inputComponent={Input}/>
+                        inputComponent={Input}/> */}
 
                         {/* <Input
                             type = "text"
@@ -150,11 +157,24 @@ export class PersonalInfo extends Component {
                 </New>
 
                 <br/> <br/> 
+                <Buttons>
+                  <Left>
+                  <Clearlink href='my-applications'><CreateButton
+                    color="primary"
+                    variant="contained"
+                    onClick={step('exit')}
+                    disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                  >Save and Exit</CreateButton></Clearlink>
+                </Left>
                 <CreateButton
-                color="primary"
-                variant="contained"
-                onClick={step('next')}
-              >Save and Continue</CreateButton> 
+                  color="primary"
+                  variant="contained"
+                  onClick={step('next')}
+                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+
+                >Save and Continue</CreateButton>
+              </Buttons>
+
             </FormWrapper>
             </Wrapper>
 
@@ -169,7 +189,9 @@ export class TeacherInfo extends Component {
               <Wrapper>
                <FormWrapper>
                <H1>Teacher Application</H1>
-              <H2>{values.application_type} School <br/><br/>
+              <H2>{values.application_type} School <br/>
+              Application #{values.application_id}<br/><br/>
+
                 Teacher Information: Part 2/5</H2><br/>
                   <Buttons> 
                 
@@ -251,6 +273,12 @@ export class TeacherInfo extends Component {
 
                 >Save and Continue</CreateButton>
               </Buttons>
+              <Clearlink href='my-applications'><CreateButton
+                  color="primary"
+                  variant="contained"
+                  onClick={step('exit')}
+                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                >Save and Exit</CreateButton></Clearlink>
               </FormWrapper>
               </Wrapper>
   
@@ -265,7 +293,8 @@ export class ShortAnswer extends Component {
             <Wrapper>
               <FormWrapper>
               <H1>Teacher Application</H1>
-              <H2>{values.application_type} School <br/><br/>
+              <H2>{values.application_type} School <br/>
+              Application #{values.application_id}<br/><br/>
               Short Answer: Part 3/5</H2><br/>
                 <New>
                     <Label htmlFor="nassit_number"> Qualifications (if any)</Label>
@@ -305,6 +334,12 @@ export class ShortAnswer extends Component {
                   onClick={step('next')}
                 >Save and Continue</CreateButton>
               </Buttons>
+              <Clearlink href='my-applications'><CreateButton
+                  color="primary"
+                  variant="contained"
+                  onClick={step('exit')}
+                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                >Save and Exit</CreateButton></Clearlink>
             </FormWrapper>
             </Wrapper>
 
@@ -312,7 +347,6 @@ export class ShortAnswer extends Component {
 
     };
 };
-
 export class Attachments extends Component {
   render() {
     const { values, handleChangeSave, step} = this.props;
@@ -320,8 +354,9 @@ export class Attachments extends Component {
             <Wrapper>
               <FormWrapper>
               <H1>Teacher Application</H1>
-              <H2>{values.application_type} School <br/><br/>
-             Attachments: Part 4/5</H2><br/>
+              <H2>{values.application_type} School <br/>
+              Application #{values.application_id}<br/><br/>
+              Attachments: Part 4/5</H2><br/>
                ***** 
               <Buttons>
                 <Left> 
@@ -337,6 +372,12 @@ export class Attachments extends Component {
                   onClick={step('next')}
                 >Save and Continue</CreateButton>
               </Buttons>
+              <Clearlink href='my-applications'><CreateButton
+                  color="primary"
+                  variant="contained"
+                  onClick={step('exit')}
+                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                >Save and Exit</CreateButton></Clearlink>
             </FormWrapper>
             </Wrapper>
 
@@ -344,7 +385,6 @@ export class Attachments extends Component {
 
     };
 };
-
 export class Submit extends Component {
   constructor(props) {
     super(props);
@@ -383,8 +423,9 @@ export class Submit extends Component {
           <Wrapper>
             <FormWrapper>
               <H1>Application</H1>
-                <H2>{values.application_type} School <br/><br/>
-                5/5: Confirm Application Details</H2><br/>
+                <H2>{values.application_type} School <br/>
+              Application #{values.application_id}<br/><br/>
+               5/5: Confirm Application Details</H2><br/>
            <H2>
             <Div>
               <Category> First Name: </Category> <It> {values.first_name} </It>
@@ -453,12 +494,18 @@ export class Submit extends Component {
             onClick={submit}
           >Submit</CreateButton>
           </Buttons>
+          <Clearlink href='my-applications'><CreateButton
+            color="primary"
+            variant="contained"
+            onClick={step('exit')}
+            disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+          >Exit</CreateButton></Clearlink>
           </H2>
           </FormWrapper>
           </Wrapper>
     );
   }
-}
+};
 export class Completed extends Component {
   constructor(props) {
     super(props);
@@ -471,6 +518,8 @@ export class Completed extends Component {
             <FormWrapper>
               <H1>Application</H1>
                 <H2>{values.application_type} School <br/>
+                Application #{values.application_id}<br/><br/>
+  
                 </H2>
            <H2>
               Application submitted successfully! <br/>
@@ -488,7 +537,7 @@ export class Completed extends Component {
           </Wrapper>
     );
   }
-}
+};
 
 
 
@@ -503,23 +552,3 @@ font: inherit;`
 
 
 
-const Clearlink = styled.a`
-color: inherit;
-text-decoration: none;
-&:hover {
-  color: inherit;
-  text-decoration: none
-};
-&:active {
-  color: inherit;
-  text-decoration: none
-};
-&:visited {
-  color: inherit;
-  text-decoration: none
-}
-&:focus {
-  color: inherit;
-  text-decoration: none
-}
-`

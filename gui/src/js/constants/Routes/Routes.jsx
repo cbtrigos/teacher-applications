@@ -15,6 +15,7 @@ import AppliedRoute from "./AppliedRoute.jsx"
 import UnauthenticatedRoute from "./UnauthenticatedRoute.jsx"
 import AuthenticatedRoute from "./AuthenticatedRoute.jsx"
 import MyApps from "../../components/ApplicantDashboard/MyApps.jsx"
+import AcountPage from "../../components/Registration/AccountPage.jsx"
 
 // AuthenticatedRoute let's you go to the given component if you're logged in --> else takes you to /login 
 // UnauthenticatedRoute let's you go to the given component if you're NOT logged in --> else you go to /dashboard
@@ -67,6 +68,12 @@ import MyApps from "../../components/ApplicantDashboard/MyApps.jsx"
               path="/dashboard"
               exact
               component={Welcome}
+              props={childProps}
+            /> 
+            <AuthenticatedRoute
+              path="/my-account"
+              exact
+              component={AcountPage}
               props={childProps}
             /> 
             <AuthenticatedRoute
