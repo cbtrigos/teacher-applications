@@ -2,12 +2,16 @@ import styled from "styled-components";
 
 // All of the styling for the registration sliding area :) 
 export const H1 = styled.h1`
-    text-align: center;
-    width: 100%;
-    color: #111;
-    font-weight: lighter;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;`
+  width: 100%;
+  color: #111;
+  font-weight: lighter;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    ${props =>
+      props.left ?
+      ``
+      : `text-align: center;
+      `};`
 
 export const Wrapper = styled.div`
     height: 170vh;
@@ -102,21 +106,16 @@ export const New = styled.div`
     width: 100%;
     `
 
-export const ErrorMessage = styled.h1`
-    color: red;
-    font-size: 0.75em;`
-
 export const CreateButton = styled.button`
-    border: 2px solid #fff;
+    border: 2px solid white
     margin-top: 1em;
     padding: 8px 8px;
     font-size: 1em;
+    opacity: .7;
     width: 100%;
     font-weight: light;
     display: block;
     letter-spacing: 1px;
-    &:hover {
-        border: 2px solid #84C7D0;};
     &:small {
         color: #999;
         font-weight: lighter;};
@@ -126,6 +125,8 @@ export const CreateButton = styled.button`
             background: lightgrey;
             `: `
             background: #84C7D0
+            &:hover {
+              opacity: 1;};
             `};
         ` 
 
@@ -174,7 +175,6 @@ export const Tool = styled.section`
     padding: 10px;
 `   
    
-   
 export const MenuButton=styled.button`
     background: inherit;
     border: none;
@@ -214,11 +214,6 @@ cursor: pointer;
 transition-duration: 0.2s;
 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
 Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;`
-
-
-
-
-
 
 export const Checkbox = styled.div`
   display: inline-block;
@@ -285,7 +280,9 @@ export const Checkbox = styled.div`
 export const H2 = styled(H1)`
 font-size: 12pt;`
 
-
+export const ErrorMessage = styled(H2)`
+  color: red;
+  font-size: 1em;`
 
 export const HorizSeparator = styled.div`
 width: 100%;
@@ -294,8 +291,9 @@ border-bottom: 1px solid #000;
 line-height: 0.1em;
 margin: 10px 0 20px;`
 
-export const  It= styled(H2)`
+export const  It= styled.div`
 font: inherit;
+text-align: center;
 font-style: italic`
 
 export const Notification = styled(H2)`

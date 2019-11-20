@@ -10,45 +10,44 @@ const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\
 class Login extends Component {
   constructor(props) {
     super(props);
-    
     this.state = {
-      isLoading: false, 
       email: "",
       password: "",
+      error: ""
     };
-      this.handleSubmit=this.handleSubmit.bind(this);
-      this.handleChange=this.handleChange.bind(this);
   }
-      formValid = () => {
-        return emailRegex.test(this.state.email) > 0 && this.state.password.length > 6;
-      };
+    formValid = () => {
+      return emailRegex.test(this.state.email) > 0 && this.state.password.length > 6;
+    };
 
-      handleChange = e => {
-        const { name, value } = e.target;
-        this.setState({[name]: value });
-      };
+    handleChange = e => {
+      const { name, value } = e.target;
+      this.setState({[name]: value });
+    };
 
 
-      handleSubmit = async e => {
-        e.preventDefault();
-        this.setState({ isLoading: true });
-
-        axios 
-        .post('http://localhost:5000/api/login', 
-          {"email": this.state.email,
-            "password": this.state.password, 
-        }) 
-        .then(response => {
-          if (response.data.message==="login successful") {
-            this.props.handleLogin(response.data.user);
-          } 
-          else if (response.data==='email does not exist'){
-            alert(response.data)
-          } else if (response.data==="email and password do not match"){
-            alert(response.data)
-          } else  alert('no can do')
-        })
-      };
+    handleSubmit = async e => {
+      e.preventDefault();
+      this.setState({
+        error: 'loading..'
+      })
+      axios 
+      .post('http://localhost:5000/api/login', 
+        {"email": this.state.email,
+          "password": this.state.password, 
+      }) 
+      .then(response => {
+        if (response.data.message==="login successful") {
+          this.props.handleLogin(response.data.user);
+        } 
+        else {
+          console.log(response.data)
+          this.setState({
+            error: response.data.message
+          })
+        } 
+      })
+    };
 
 
   render() {
@@ -56,6 +55,8 @@ class Login extends Component {
             <Wrapper>
             <FormWrapper>
                 <H1>Login</H1>
+                {console.log('heres the state',this.state)}
+                {this.state.error!=="" && <ErrorMessage>{this.state.error}</ErrorMessage>}
                 <Form onSubmit = {this.handleSubmit} noValidate>
                 <New>
                     <Label htmlFor="email">Email </Label>

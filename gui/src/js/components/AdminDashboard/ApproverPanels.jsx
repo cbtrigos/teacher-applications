@@ -1,9 +1,9 @@
 import React from "react";
-import {H2, CreateButton, Buttons, Left} from '../../constants/utils/Styling.jsx'
+import {A, H2, CreateButton, Buttons, Left} from '../../constants/utils/Styling.jsx'
 import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails} from '../../constants/utils/ExpandingPanels.jsx'
 
 
-export default function DraftPanels(props) {
+export default function ApproverPanels(props) {
 const {application, type, updateChosen, deleteApplication} = props
 const [expanded, setExpanded] = React.useState('panel1');
 const handleChange = panel => (event, newExpanded) => {

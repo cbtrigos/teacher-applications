@@ -12,7 +12,7 @@ connection.connect(function(err) {
 exports.begin = function(req,res) {
   var now = new Date();
   var application={ //application_id
-    "applicant_id":req.body.applicant_id,
+    "user_id":req.body.user_id,
     "application_type":req.body.application_type,
     "created": now,
     "last_edited": now,
@@ -26,7 +26,7 @@ exports.begin = function(req,res) {
         res.status(400).send("error occured")
 
     }else{
-      connection.query('SELECT * FROM applications WHERE applicant_id = ? and application_type = ?',[application.applicant_id, application.application_type], function (error, results, fields) {
+      connection.query('SELECT * FROM applications WHERE user_id = ? and application_type = ?',[application.user_id, application.application_type], function (error, results, fields) {
         if (error) {
           res.status(400).send("couldn't find application")
         }else{
@@ -46,7 +46,7 @@ exports.save = function(req,res){
     var now = new Date();
     var application={ //application_id
         "application_id": req.body.application_id,
-        "applicant_id":req.body.applicant_id,
+        "user_id":req.body.user_id,
         "application_type":req.body.application_type,
         "employing_authority":req.body.employing_authority,
         "school_name":req.body.school_name,
@@ -106,10 +106,11 @@ exports.delete = function(req,res){
 //                             GET A LIST OF ALL APPLICATIONS FOR A USER
 
 exports.get = function(req,res){
-  applicant_id = req.body.applicant_id
+  user_id = req.body.user_id
   last_edited = Date()
-  connection.query('SELECT * FROM applications WHERE applicant_id = ?',applicant_id, function (error, results, fields) {
+  connection.query('SELECT * FROM applications WHERE user_id = ?',user_id, function (error, results, fields) {
       if (error) {
+        console.log(error)
         res.status(400).send("error in getting applications")
       }else{
          var submitted = []

@@ -50,7 +50,7 @@ connection.connect(function(err) {
                     res.status(200).send(
                       {message:'user registered sucessfully', 
                       user: {
-                        id: results[0].applicant_id, 
+                        user_id: results[0].user_id, 
                         first_name: results[0].first_name, 
                         last_name: results[0].last_name, 
                         email: results[0].email, 
@@ -78,31 +78,34 @@ connection.connect(function(err) {
     var email= req.body.email;
     var password = req.body.password;
     connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
-    if (error) {
-      res.status(400).send('error occured')
-    }else{
-      if(results.length >0){ 
-        if(bcrypt.compareSync(password, results[0].password)) {
-          res.status(200).send(
-            {message:'login successful', 
-            user: {
-              id: results[0].applicant_id, 
-              first_name: results[0].first_name, 
-              last_name: results[0].last_name, 
-              email: results[0].email, 
-              birth_date: results[0].birth_date, 
-              gender: results[0].gender, 
-              created: results[0].created,
-              user_type: results[0].user_type 
-            }})
-         } else {
-          res.status(204).send('email and password do not match')
-         }
+      if (error) {
+        res.status(200).send({
+          message: 'Error occured. Please refresh and try again.'})
       }
       else{
-        res.status(404).send("email does not exist")
+        if(results.length >0){ 
+          if(bcrypt.compareSync(password, results[0].password)) {
+            res.status(200).send(
+              {message:'login successful', 
+              user: {
+                user_id: results[0].user_id, 
+                first_name: results[0].first_name, 
+                last_name: results[0].last_name, 
+                email: results[0].email, 
+                birth_date: results[0].birth_date, 
+                gender: results[0].gender, 
+                created: results[0].created,
+                user_type: results[0].user_type 
+              }})
+          } else {
+            res.status(204).send({
+              message: 'Incorrect. Please try again.'})
+          }
+        }
+        else{
+          res.status(204).send({
+            message: 'Incorrect. Please try again.'})      }
       }
-    }
     });
   }
 

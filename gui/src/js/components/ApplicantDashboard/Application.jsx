@@ -3,12 +3,10 @@ import {Wrapper, FormWrapper,} from '../../constants/utils/Styling.jsx'
 import {AppType, PersonalInfo, TeacherInfo, ShortAnswer, Attachments, Submit, Completed} from "./ApplicationInfo.jsx"
 import styled from "styled-components";
 import axios from 'axios';
-// import {format} from "react-phone-input-auto-format";
 
 export default class Application extends Component {
   constructor(props) {
     super(props);
-    console.log('here are the props', props)
     const user = props.user
     this.state = {
       step: 0,
@@ -34,7 +32,7 @@ export default class Application extends Component {
         first_name:user.first_name,
         last_name:user.last_name,
         email:user.email,
-        applicant_id: user.applicant_id,
+        user_id: user.user_id,
         sex:user.gender,
       }
       
@@ -117,6 +115,7 @@ export default class Application extends Component {
   }
 
   beginApp = () => e => {
+
     axios 
       .post('http://localhost:5000/api/begin-application', 
         {"email": this.state.application.email,
@@ -124,30 +123,43 @@ export default class Application extends Component {
           "first_name": this.state.application.first_name, 
           "last_name": this.state.application.last_name, 
           "application_type": this.state.application.application_type,
-          "applicant_id": this.props.user.id
+          "user_id": this.props.user.user_id
       }) 
       .then(response => {
         if (response.data.message==="application registered sucessfully") {
+          console.log(response.data.application_id)
           const { step } = this.state;
-          this.setState({
+          this.setState(prevState => ({
             step: step + 1, 
-            application_id: response.data.application_id,
-            created: response.data.created
-          });
+            application: {
+              ...prevState.application,
+              application_id: response.data.application_id,
+              created: response.data.created
+          }
+        })
+        );
         }
         else {console.log(response.data)}
       })
 
   };
-  onChangePhone = phoneNumber => e =>{
-  // const formatted = format(phoneNumber); // (123) 456-7890
-    this.setState({
-      mobile_number: phoneNumber
-    })
-  };
+
+ 
+  handleNationalityChange = val =>  {
+      this.setState(prevState => ({
+        application: {                 
+            ...prevState.application, 
+            nationality: val  
+        }
+    }))
+    console.log(this.state.application)
+    };
+
 
   handleChangeSave = input => e => {
+    // console.log(input, e)
     const value = e.target.value
+    console.log('RFFFFH',value)
     this.setState(prevState => ({
       application: {                 
           ...prevState.application, 
@@ -162,6 +174,7 @@ export default class Application extends Component {
     const { prev_appt, nationality, application_type, application_id, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
     const { step } = this.state
     const values = { prev_appt, application_id, nationality, application_type, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex};
+    console.log('when passing it through to the switches: values= ',values)
     switch (step) {
       case 0: 
         return (
@@ -175,7 +188,7 @@ export default class Application extends Component {
         return (
           <PersonalInfo
             step={this.step}
-            onChangePhone = {this.onChangePhone}
+            handleNationalityChange = {this.handleNationalityChange}
             handleChangeSave={this.handleChangeSave}
             values={values}
           />

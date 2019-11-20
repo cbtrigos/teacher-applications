@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import {H1, H2, It, Clearlink, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
+import {H1, H2, It, Clearlink, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
-
-import Phone from 'react-phone-number-input'
+import { CountryDropdown } from 'react-country-region-selector';
+import NumberFormat from 'react-number-format';
 
 
 export class AppType extends Component {
@@ -58,7 +58,8 @@ export class AppType extends Component {
 };
 export class PersonalInfo extends Component {
   render() {
-    const { values, handleChangeSave, onChangePhone, step } = this.props;
+    const { values, handleChangeSave, handleNationalityChange, step } = this.props;
+
         return (
             <Wrapper>
              <FormWrapper>
@@ -110,27 +111,13 @@ export class PersonalInfo extends Component {
                 </New>
                 <New>
                     <Label htmlFor="mobile_number"> Mobile Number</Label>
-                    <Phone
-                        placeholder="Enter phone number"
-                        // inputComponent={Input}
-                        value={ values.mobile_number }
-                        onChange={ phone => onChangePhone(phone)} />
-
-                    {/* <PhoneInput 
-                        noValidate
-                        defaultValue={values.mobile_number} 
-                        name='mobile_number' 
-                        onChange={onChangePhone} 
-                        inputComponent={Input}/> */}
-
-                        {/* <Input
-                            type = "text"
-                            placeholder="Mobile Number"
-                            name='mobile_number'
-                            noValidate
-                            onChange={handleChangeSave('mobile_number')}
-                            defaultValue={values.mobile_number}
-                            /> */}
+                      <NumberFormat 
+                          customInput={Input} 
+                          format="+232 ## ######" 
+                          mask="*"
+                          value={values.mobile_number} 
+                          onChange={handleChangeSave('mobile_number')}
+                          />
                 </New>
                 <New>
                     <Label htmlFor="gender"> Gender</Label>
@@ -147,13 +134,21 @@ export class PersonalInfo extends Component {
                 <New>
                     <Label htmlFor="nationality"> Nationality</Label>
 
-                        <Input
-                            type = "text"
-                            name='nationality'
-                            noValidate
-                            onChange={handleChangeSave('nationality')}
-                            defaultValue={values.nationality}
-                            />
+                    <CountryDropdown
+                        country={values.nationality}
+                        value={values.nationality}
+                        priorityOptions={['SL', 'US']}
+                        onChange={(val) => handleNationalityChange(val)}
+                        style={{padding: '10px 10px',
+                                margin: '0 0 1.5% 0',
+                                width: '100%',
+                                borderRadius: '5px',
+                                outline: 'none',
+                                border: '1px solid #cfcfcf',
+                                height: '3em'
+                        }}
+                        tabIndex={100}
+                       />
                 </New>
 
                 <br/> <br/> 
@@ -467,15 +462,20 @@ export class Submit extends Component {
             </Div>
           <br />
         {missingString!='' &&
-          <H2>
-          <Input 
-          type="checkbox"
-          checked={checkmarked}
-          id='checked'
-          onChange={handleCheckboxChange()}
-          />
+          <Buttons>
+            <Left style={{minWidth: '2%', width: '4%', marginRight:'-1%'}}>
+              <Input 
+              type="checkbox"
+              checked={checkmarked}
+              id='checked'
+              onChange={handleCheckboxChange()}
+              />
+            </Left>
+            <New >
           I verify that I purposefully did not provide the following: {missingString}.
-          </H2>}
+          </New></Buttons>
+          }
+          </H2>
           {(!checkmarked) && <ErrorMessage>Please check the above box in order to submit.</ErrorMessage>}
           {errorMessage!==null && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
@@ -500,7 +500,7 @@ export class Submit extends Component {
             onClick={step('exit')}
             disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
           >Exit</CreateButton></Clearlink>
-          </H2>
+          
           </FormWrapper>
           </Wrapper>
     );
@@ -551,4 +551,21 @@ text-align: center;
 font: inherit;`
 
 
+const SLeft = styled(Left)`
+width: 10px`
 
+
+const Phoneinput = styled.input`
+    padding: 10px 10px;
+    margin: 0 0 1.5% 0;
+    width: 100%;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #cfcfcf;
+    float: right;
+    ::placeholder {
+        font-size: 1em;
+        font-weight: light;
+        color: #999;
+    };
+    `

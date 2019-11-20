@@ -45,7 +45,7 @@ export default function Modules(props) {
       <Wrapper> 
         <Gri >
             {posts.map(post => (
-             <Post key={post.itemid} > 
+             <Post key={post.title} > 
 
                   <CardActionArea>
                     <CardMedia

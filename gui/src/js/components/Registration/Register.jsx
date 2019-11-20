@@ -1,9 +1,6 @@
 import React from 'react';
-import axios from 'axios'
-
-import {FormUserDetails, Submit} from "./RegistrationInfo.jsx"
-import { login } from '../../constants/utils';
-
+import axios from 'axios';
+import {FormUserDetails} from "./RegistrationInfo.jsx";
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 const passwordRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})");
@@ -80,11 +77,11 @@ export default class UserForm extends React.Component {
       switch (input) {
         case "firstName":
           formErrors.firstName =
-          value.length < 3 ? "minimum 3 characters required" : "";
+          value.length < 2 ? "minimum 2 characters required" : "";
         break;
         case "lastName":
           formErrors.lastName =
-          value.length < 3 ? "minimum 3 characters required" : "";
+          value.length < 2 ? "minimum 2 characters required" : "";
         break;
         case "email":
           formErrors.email =
