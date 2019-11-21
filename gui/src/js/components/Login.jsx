@@ -37,11 +37,10 @@ class Login extends Component {
           "password": this.state.password, 
       }) 
       .then(response => {
-        if (response.data.message==="login successful") {
+        if (response.data.message==='login successful') { 
           this.props.handleLogin(response.data.user);
         } 
-        else {
-          console.log(response.data)
+        else { 
           this.setState({
             error: response.data.message
           })
@@ -55,7 +54,6 @@ class Login extends Component {
             <Wrapper>
             <FormWrapper>
                 <H1>Login</H1>
-                {console.log('heres the state',this.state)}
                 {this.state.error!=="" && <ErrorMessage>{this.state.error}</ErrorMessage>}
                 <Form onSubmit = {this.handleSubmit} noValidate>
                 <New>

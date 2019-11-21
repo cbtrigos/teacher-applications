@@ -4,7 +4,7 @@ const crypto = require('crypto');
 var moment = require('moment');
 const bcrypt = require('bcrypt');
 var {db} = require('../authentication/mysql.json')
-var {emailAuth, applicationEmail} = require('../authentication/emailAuth.json')
+var {emailAuth} = require('../authentication/emailAuth.json')
 
 
 
@@ -48,10 +48,10 @@ exports.forgotPassword = function(req,res){
         res.status(400).json("insertion into password_change_requests failed");
         res.end();
       }
-        const transporter = nodemailer.createTransport(emailAuth);
+        const transporter = nodemailer.createTransport(emailAuth.authentication);
       
       const mailYesAccount = {
-        from: applicationEmail, 
+        from: emailAuth.applicationEmail, 
         to: email, 
           subject: 'Link to Reset Password', 
           text: 
@@ -62,7 +62,7 @@ exports.forgotPassword = function(req,res){
             `Thank you!`
         };
         const mailNoAccount = {
-          from: applicationEmail, 
+          from: emailAuth.applicationEmail, 
           to: email, 
           subject: 'Link to Reset Password', 
           text: 
@@ -140,10 +140,6 @@ exports.resetPassword = function(req,res){
   });
 }
 
-
-
-
-
 //   //                                 CHANGE NAME 
 exports.changeName = function(req,res){
   var changeName = {
@@ -220,7 +216,7 @@ exports.changeEmail = function(req,res){
         let valid = moment(app.expires).isBefore(today) 
         if(!valid) {
           res.status(200).send(
-            {message: 'Name changed within the last 60 days. Please wait the full 60 days before attempting to change again.'
+            {message: 'Email changed within the last 60 days. Please wait the full 60 days before attempting to change again.'
           })}
         else {
           connection.query('INSERT INTO email_change_requests SET ?', changeEmail, function (error, results, fields) {
@@ -237,7 +233,6 @@ exports.changeEmail = function(req,res){
                   })
                 }
               })
-      
         }
          })}
     else {
@@ -260,7 +255,67 @@ exports.changeEmail = function(req,res){
     })
   }
 
-//                        CHANGE EMAIL
+//   //                                 CHANGE EMAIL
+exports.changeMobile = function(req,res){
+  console.log(req.body)
+  var changeMobile = {
+    prev_mobile_number: req.body.prev_mobile_number,
+    mobile_number:req.body.mobile_number, 
+    expires: moment().add(30, 'days').format("YYYY-MM-DD hh:mm:ss"), 
+    user_id:req.body.user_id  
+  }
+
+
+  connection.query('SELECT * FROM mobile_change_requests WHERE user_id = ?',changeMobile.user_id, function (error, results, fields) {
+    if (error) {console.log(error)}
+    else if (results.length!==0) {
+      var today = moment().format("YYYY-MM-DD hh:mm:ss")
+      results.forEach(app => {
+        let valid = moment(app.expires).isBefore(today) 
+        if(!valid) {
+          res.status(200).send(
+            {message: 'Mobile changed within the last 30 days. Please wait the full 30 days before attempting to change again.'
+          })}
+        else {
+          connection.query('INSERT INTO mobile_change_requests SET ?', changeMobile, function (error, results, fields) {
+            if (error) { 
+              res.status(200).send({message:"Failed to update mobile. Please refresh and try again."})
+            } 
+            else { 
+                connection.query('UPDATE users SET mobile_number = ? WHERE user_id = ?', [changeMobile.mobile_number, changeMobile.user_id], function (error, results, fields) {
+                  if (error) {
+                    res.status(200).send({message:"Failed to update mobile number. Please refresh and try again."})
+                  } else {
+                    res.status(200).send({message: "Mobile number updated sucessfully. Please log out and back in to reflect updates."})
+                  }
+                  })
+                }
+              })
+        }
+         })}
+    else {
+      connection.query('INSERT INTO mobile_change_requests SET ?', changeMobile, function (error, results, fields) {
+        if (error) { 
+          console.log(error)
+
+          res.status(200).send({message:"Failed to update mobile number. Please refresh and try again."})
+        } 
+        else { 
+            connection.query('UPDATE users SET mobile_number = ? WHERE user_id = ?', [changeMobile.mobile_number, changeMobile.user_id], function (error, results, fields) {
+              if (error) {
+                res.status(200).send({message:"Failed to update mobile number. Please refresh and try again."})
+              } else {
+                res.status(200).send({message: "Mobile number updated sucessfully. Please log out and back in to reflect updates."})
+              }
+              })
+            }
+          })
+  
+    }
+    })
+  }
+
+//                        CHANGE PASSWORD
 
 exports.changePassword = function(req,res){ 
 

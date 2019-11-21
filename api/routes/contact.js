@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var {db} = require('../authentication/mysql.json')
-var {emailAuth, applicationEmail} = require('../authentication/emailAuth.json')
+var {emailAuth } = require('../authentication/emailAuth.json')
 const nodemailer = require('nodemailer');
 
   //                                 CONNECTING TO MYSQL
@@ -28,10 +28,10 @@ exports.sendEmail = function(req,res){
           res.end();
         }
         else {
-        const transporter = nodemailer.createTransport(emailAuth);
+        const transporter = nodemailer.createTransport(emailAuth.authentication);
         const mailOptions = {
-            from: applicationEmail, 
-            to: applicationEmail, 
+            from: emailAuth.applicationEmail, 
+            to: emailAuth.applicationEmail, 
             cc: toSend.email,
             subject: toSend.subject, 
             text: toSend.message +

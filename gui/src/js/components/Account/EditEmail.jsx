@@ -66,16 +66,15 @@ export default class EditEmail extends React.Component {
       return (
         <>
         {this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
-        <H2>Do you need to update your email?</H2>
-        <H2 left>Email</H2>
-          <Input 
+        <H2>Do you need to update your email?</H2> <br/>
+          <Input small
             defaultValue= {this.state.email}
             onChange={this.handleChange('email')}
             type='text'
           />
           
         <br/><br/><br/><br/>
-        <It> Please note: updating your account will disable you from changing it for the next 60 days. <br/>
+        <It> Please note: updating your email will disable you from changing it for the next 60 days. <br/>
         Your email is where you will receive all application updates. </It>
         <br/><br/>
   

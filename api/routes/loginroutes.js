@@ -30,7 +30,8 @@ connection.connect(function(err) {
       "created":today,
       "modified":today, 
       "birth_date": req.body.birth_date, 
-      "gender": req.body.gender
+      "gender": req.body.gender,
+      "mobile_number": req.body.mobile_number
     }
     connection.query('SELECT * FROM users WHERE email = ?',[applicants['email']], function (error, results, fields) {
     if(results.length >0) {
@@ -57,6 +58,7 @@ connection.connect(function(err) {
                         birth_date: results[0].birth_date, 
                         gender: results[0].gender, 
                         created: results[0].created,
+                        mobile_number: results[0].mobile_number,
                         user_type: results[0].user_type 
                       }})
                   } 
@@ -68,12 +70,7 @@ connection.connect(function(err) {
 };
    
 
-
   //                                 LOGIN
-
-  // When a user logs in with their email and password, we do the following: 
-  // (1) make a mysql request to get any users with that email --> if no send email d.n.e error, else continue
-  // (2) check the passwords against each other --> if no send error, else return login successful
   exports.login = function(req,res){
     var email= req.body.email;
     var password = req.body.password;
@@ -83,7 +80,7 @@ connection.connect(function(err) {
           message: 'Error occured. Please refresh and try again.'})
       }
       else{
-        if(results.length >0){ 
+        if(results.length >0){
           if(bcrypt.compareSync(password, results[0].password)) {
             res.status(200).send(
               {message:'login successful', 
@@ -93,27 +90,23 @@ connection.connect(function(err) {
                 last_name: results[0].last_name, 
                 email: results[0].email, 
                 birth_date: results[0].birth_date, 
+                mobile_number: results[0].mobile_number,
                 gender: results[0].gender, 
                 created: results[0].created,
                 user_type: results[0].user_type 
               }})
           } else {
-            res.status(204).send({
+            res.status(200).send({
               message: 'Incorrect. Please try again.'})
           }
         }
         else{
-          res.status(204).send({
-            message: 'Incorrect. Please try again.'})      }
+          res.status(200).send({
+            message: 'Incorrect. Please try again.'}) 
+          }
       }
     });
   }
 
-
-
-  // authenticate 
-  exports.authenticate = function(req,res){
-    res.status(666).send('user')
-  }
 
   connection.on('error', function() {});

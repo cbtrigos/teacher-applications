@@ -63,7 +63,6 @@ export default class ResetPassword extends Component {
         params: { token },
       },
     } = this.props;
-    try {
       const response = await axios.put(
         'http://localhost:5000/api/reset_password',
         {
@@ -88,9 +87,6 @@ export default class ResetPassword extends Component {
           error: true,
         });
       }
-    } catch (error) {
-      console.log(error.response.data);
-    }
   };
 
   

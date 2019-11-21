@@ -25,8 +25,8 @@ export const Wrapper = styled.div`
 
 export const FormWrapper= styled.div`
     width: 90%;
-    min-width: 300px;
-    max-width: 600px;
+    min-width: 30%;
+    max-width: 800px;
     flex-direction: column;
     padding: 10px 25px 25px 25px;
     box-shadow: 0px 10px 50px #555;
@@ -66,7 +66,7 @@ export const Input = styled.input`
     border-radius: 5px;
     outline: none;
     border: 1px solid #cfcfcf;
-    float: right;
+    // float: right;
     ::placeholder {
         font-size: 1em;
         font-weight: light;
@@ -79,6 +79,19 @@ export const Input = styled.input`
         `: `
         ''
         `};
+    ${props =>
+      props.small ?
+      `
+      width: 40%;
+      min-width: 200px;
+      float: center;
+      text-align: center;
+      margin: auto;
+      display: block;
+
+      `: `
+      ''
+      `};
     `
 
     export const InputLarge = styled.textarea`

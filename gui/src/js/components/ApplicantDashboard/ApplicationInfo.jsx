@@ -59,7 +59,7 @@ export class AppType extends Component {
 export class PersonalInfo extends Component {
   render() {
     const { values, handleChangeSave, handleNationalityChange, step } = this.props;
-
+    console.log(values)
         return (
             <Wrapper>
              <FormWrapper>
@@ -112,6 +112,7 @@ export class PersonalInfo extends Component {
                 <New>
                     <Label htmlFor="mobile_number"> Mobile Number</Label>
                       <NumberFormat 
+                          disabled={true}
                           customInput={Input} 
                           format="+232 ## ######" 
                           mask="*"
@@ -397,7 +398,8 @@ export class Submit extends Component {
         if (i['val']===null || i['val']==='') {emptyFields.push(i['name'])}
         })
       if (emptyFields.length!==0) {return emptyFields.join(', ')}
-      else return ''
+      else {
+        return ''}
     }
 
     getErrorMessage = (nationality, employingAuth) => {
@@ -476,7 +478,7 @@ export class Submit extends Component {
           </New></Buttons>
           }
           </H2>
-          {(!checkmarked) && <ErrorMessage>Please check the above box in order to submit.</ErrorMessage>}
+          {missingString!='' && !checkmarked && <ErrorMessage>Please check the above box in order to submit.</ErrorMessage>}
           {errorMessage!==null && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
         <Buttons>
@@ -490,7 +492,7 @@ export class Submit extends Component {
           <CreateButton
             color="primary"
             variant="contained"
-            disabled={!checkmarked || errorMessage!==''}
+            disabled={(missingString!='' && !checkmarked) || errorMessage!==''}
             onClick={submit}
           >Submit</CreateButton>
           </Buttons>

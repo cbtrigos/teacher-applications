@@ -75,14 +75,14 @@ export default class EditName extends React.Component {
         <>
         {this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
         <H2>Do you need to update your name?</H2>
-        <H2 left>First name</H2>
-          <Input 
+        <H2>First name</H2> 
+          <Input small
             defaultValue= {this.state.first_name}
             onChange={this.handleChange('first_name')}
             type='text'
-          />
-        <H2 left>Last name</H2>
-          <Input 
+          /><br/>
+        <H2>Last name</H2>
+          <Input small
             defaultValue= {this.state.last_name}
             onChange={this.handleChange('last_name')}
             type='text'

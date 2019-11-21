@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EditName from './EditName.jsx'
 import EditEmail from './EditEmail.jsx'
+import EditMobile from './EditMobile.jsx'
 import ChangePassword from './ChangePassword.jsx'
 
 const useStyles = makeStyles(theme => ({
@@ -61,6 +62,7 @@ export default function MyAccount(props) {
               <Typography className={classes.heading}><H2 left>Email</H2></Typography>
               <Typography className={classes.secondaryHeading}>
                 <H2 left>
+                {/* {(props.user.email).slice(0,15).concat('..')} */}
                 {props.user.email}
                 </H2>
               </Typography>
@@ -68,7 +70,25 @@ export default function MyAccount(props) {
             <ExpansionPanelDetails>
               <H2 left>
               <EditEmail user={props.user}/>
-
+              </H2>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <ExpansionPanel expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel5bh-content"
+              id="panel5bh-header"
+            >
+              <Typography className={classes.heading}><H2 left>Phone Number</H2></Typography>
+              <Typography className={classes.secondaryHeading}>
+                <H2 left>
+                {props.user.mobile_number}
+                </H2>
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <H2 left>
+              <EditMobile user={props.user}/>
               </H2>
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -80,12 +100,10 @@ export default function MyAccount(props) {
             >
               <Typography className={classes.heading}><H2 left>Password</H2></Typography>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails disabled={true}>
-              <Typography>
+            <ExpansionPanelDetails>
               <H2 left>
                 <ChangePassword user={props.user}/>
               </H2>
-              </Typography>
             </ExpansionPanelDetails>
           </ExpansionPanel>
           <ExpansionPanel expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>

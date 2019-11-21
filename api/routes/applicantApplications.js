@@ -103,9 +103,9 @@ exports.delete = function(req,res){
 }
 
 
-//                             GET A LIST OF ALL APPLICATIONS FOR A USER
+//                             GET A LIST OF ALL APPLICATIONS FOR AN APPLICANT (user type=1)
 
-exports.get = function(req,res){
+exports.getApplicantApplications = function(req,res){
   user_id = req.body.user_id
   last_edited = Date()
   connection.query('SELECT * FROM applications WHERE user_id = ?',user_id, function (error, results, fields) {
@@ -113,17 +113,18 @@ exports.get = function(req,res){
         console.log(error)
         res.status(400).send("error in getting applications")
       }else{
-         var submitted = []
-         var drafts = []
+         var incompleteApps = []
+         var submittedApps = []
          results.forEach(app =>{
            if (app.submitted==="true") {
-             submitted.push(app)}
-             else drafts.push(app)
+            submittedApps.push(app)}
+             else incompleteApps.push(app)
             })
             res.status(200).send({
-              'submittedApps': submitted,
-              'incompleteApps': drafts
+              'incompleteApps': incompleteApps,
+              'submittedApps': submittedApps
             })
          }}
   );
 }
+

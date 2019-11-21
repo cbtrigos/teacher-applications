@@ -8,7 +8,6 @@ import DraftPanels from './ApplicationPanels.jsx'
 // The "App Type" page is the 0th panel of registration 
 export default class MyApps extends Component {
   constructor(props) {
-    console.log(props)
     super(props);
     this.state = {
       submittedApps: [],
@@ -19,9 +18,8 @@ export default class MyApps extends Component {
 
 
   async componentDidMount() {
-    console.log('getting all applications')
        axios 
-        .post('http://localhost:5000/api/my-applications', 
+        .post('http://localhost:5000/api/get-user-applications', 
           {"user_id": this.props.user.user_id
         }) 
         .then(response => {
@@ -53,7 +51,6 @@ export default class MyApps extends Component {
 
   confirmDelete = (application_id) => {
      if (window.confirm('Are you sure you wish to delete application #'+ application_id +'? Press ok to delete.')) {
-       console.log('yeet it')
        this.deleteApplication(application_id)
      }
 
@@ -67,8 +64,7 @@ export default class MyApps extends Component {
       }) 
       .then(response => {
         if (response.data==='application deleted successfully') {
-          console.log(response.data)
-        } else {console.log(response.data)}
+        }
       })
       window.location.reload();
   }
@@ -82,7 +78,6 @@ export default class MyApps extends Component {
     const submitted = this.state.submittedApps.map(item =>
       <DraftPanels key={item.application_id} application={item} type='submitted' deleteApplication={this.deleteApplication} />
      );
-    console.log(this.state.submittedApps)
         return (
             <>
           {this.state.chosen===null

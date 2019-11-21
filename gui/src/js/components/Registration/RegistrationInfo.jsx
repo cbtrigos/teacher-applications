@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {H1, Wrapper, Buttons, Notification, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
+import NumberFormat from 'react-number-format';
 
 
 // The "Personal Details" page is the 1st panel of the registration 
@@ -11,7 +12,6 @@ export class FormUserDetails extends Component {
             <Wrapper>
             <FormWrapper>
               <H1>Registration</H1>
-              {console.log(values.serverMessage)}
               {values.serverMessage!==null && <Notification>{values.serverMessage}</Notification>}
                 <Buttons> 
                 <Left>
@@ -50,13 +50,25 @@ export class FormUserDetails extends Component {
                     <Label htmlFor="email">Email </Label>
                     <Input
                         type = "text"
-                        // placeholder="Email"
                         name="email"
                         noValidate
                         onChange={handleChangeSave('email')}
                         defaultValue={values.email}
                         />
                  <ErrorMessage>{values.formErrors.email}</ErrorMessage>
+                </New>
+                <New>
+                    <Label htmlFor="mobile_number"> Mobile Number</Label>
+                      <NumberFormat 
+                          customInput={Input} 
+                          format="+232 ## ######" 
+                          name="mobile_number"
+                          mask="*"
+                          value={values.mobile_number} 
+                          onChange={handleChangeSave('mobile_number')}
+                          />
+                  <ErrorMessage>{values.formErrors.mobile_number}</ErrorMessage>
+
                 </New>
 
                 <New> 

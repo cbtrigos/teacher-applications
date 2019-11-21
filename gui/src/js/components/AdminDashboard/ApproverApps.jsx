@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import {H1, A, H2, It, HorizSeparator, Wrapper, FormWrapper} from '../../constants/utils/Styling.jsx'
+import {H1,  H2, It, HorizSeparator, Wrapper, FormWrapper} from '../../constants/utils/Styling.jsx'
 import axios from 'axios';
 import styled from "styled-components";
-import Application from "./Application.jsx"
-import DraftPanels from './ApplicationPanels.jsx'
-import SubmittedPanels  from './ApplicationPanels.jsx'
+import ApproverPanels from './ApproverPanels.jsx'
 
 
 // The "App Type" page is the 0th panel of registration 
@@ -13,73 +11,81 @@ export default class ApproverApps extends Component {
     super(props);
     this.state = {
       toApprove: [],
-      approved: [], 
+      alreadyApproved: [], 
     };
   }
 
 
   async componentDidMount() {
-    console.log('getting all applications')
        axios 
-        .post('http://localhost:5000/api/approver-applications', 
+        .post('http://localhost:5000/api/get-approver-applications-'+this.props.user.user_type, 
           {"user_id": this.props.user.user_id, 
           "user_type": this.props.user.user_type
         }) 
         .then(response => {
+          console.log(response)
           if (response.data==="error in getting applications") {
            throw new Error("Error in pulling application information") } 
           else {
+            console.log(response)
             this.setState({ 
               toApprove: response.data.toApprove, 
-              alreadyApproved: response.data.approved,
-              chosen: null
+              alreadyApproved: response.data.alreadyApproved,
             });
           }
         })
   }
 
-  // rejectApplication = (input) => {
-  //   axios 
-  //     .post('http://localhost:5000/api/delete-application', 
-  //       {"application_id": input,
-  //     }) 
-  //     .then(response => {
-  //       if (response.data==='application deleted successfully') {
-  //         console.log(response.data)
-  //       } else {console.log(response.data)}
-  //     })
-  //     window.location.reload();
-  // }
+  approveApplication = (input) => {
+
+    // confirm all the information needed has been collected then head here 
+    // first input row into approver_? with all the info + approved='true'
+    // second change in applications approver_? to 'true'
+    // verifies all previous approvals have been made 
+
+  };
+
+ confirmApplication = (input) => {
+
+    // confirm all the information needed has been collected then head here 
+    // then call approveApplication 
+    this.approveApplication(input)
+
+  }
+
+  rejectApplication = (input) => {
+    // update applications with rejection reason + approved = 'false'
+    // create row in approver_? that the application was rejected 
+    // email the applicant that it has been rejected 
+  }
 
   render() {
+    {console.log(this.state)}
     const user = this.props.user
-    const toDos = this.state.currentApps.map(item => 
-          <DraftPanels key={item.application_id} application={item} type='toApprove' />
+    const toDos = this.state.toApprove.map(item => 
+          <ApproverPanels key={item.application_id} application={item} type='toApprove' />
           );
-    const history = this.state.submittedApps.map(item =>
-      <SubmittedPanels key={item.application_id} application={item} type='approved'  />
+    const history = this.state.alreadyApproved.map(item =>
+      <ApproverPanels key={item.application_id} application={item} type='alreadyApproved'  />
      );
-    console.log(this.state.submittedApps)
         return (
-         <Wrapper>
                 <FormWrapper>
                 <H1>{user.first_name}'s Applications</H1>
                     <div>
                     <HorizSeparator/>
                       <div>
-                        <H2>Unfinished Applications</H2>
+                        <H2>Applications to Approve</H2>
                         {toDos}
                         {this.state.toApprove.length===0 && <It> No applications to approve. All done!</It>}
                       </div>
                       <div>
                       <HorizSeparator/>
-                      <H2>Submitted Applications</H2>
-                      {this.state.submitted.length===0 &&  <It>You haven't approved any applications yet! </It> }
+                      <H2>Applications already Approved</H2>
+                      {this.state.alreadyApproved.length===0 &&  <It>You haven't approved any applications yet! </It> }
                         {history}
                       </div>
                       </div>
                 </FormWrapper>
-                </Wrapper>
             );
           
         }

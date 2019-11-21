@@ -25,22 +25,18 @@ return ( <div>
                         Nationality: {application.nationality} <br/>
 
 
-                        {type==='draft' 
+                        {type==='toApprove' 
                             ? <>Last Edited: {application.last_edited.slice(0,10)}<br/><br/>
                                 <Buttons>
                                     <Left>
-                                      <CreateButton onClick={() => updateChosen(application)}>Continue application</CreateButton>
+                                      <CreateButton onClick={() => updateChosen(application)}>Review Application</CreateButton>
                                     </Left>
                                       <CreateButton onClick={() => deleteApplication(application.application_id)}>Delete this application</CreateButton>
                                 </Buttons>
                             </>
-                            : <>Submitted: {application.last_edited.slice(0,10)}<br/><br/>
-                                <Buttons>
-                                    <Left>
-                                      <CreateButton>Track application</CreateButton>
-                                    </Left>
-                                      <CreateButton onClick={() => deleteApplication(application.application_id)}>Delete this application</CreateButton>
-                                </Buttons>
+                            : <>Application approved/rejected on blah blah date :<br/>
+                                <br/>
+                                <CreateButton>Track application</CreateButton>
                             </>}
 
                     </H2>

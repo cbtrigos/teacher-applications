@@ -19,7 +19,6 @@ export default class Application extends Component {
         employing_authority:null,
         school_name:null,
         other_names:null,
-        mobile_number:null, 
         nationality: null, 
         prev_appt: null,
         pin_code: null,
@@ -29,11 +28,12 @@ export default class Application extends Component {
         created: null,
         last_edited: null,
         submitted: null,
-        first_name:user.first_name,
-        last_name:user.last_name,
-        email:user.email,
+        mobile_number: user.mobile_number, 
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
         user_id: user.user_id,
-        sex:user.gender,
+        sex: user.gender,
       }
       
 };
@@ -63,28 +63,8 @@ export default class Application extends Component {
         application: app,
         step:1,
       })
-      console.log('COMPONENT MOUNTING.')
-      console.log('COMPONENT props.user: ',this.props.user)
-      console.log('COMPONENT props.application: ', this.props.application)
-      console.log('now the application state is:', this.state)
-
-    }
-    else {
-      console.log('COMPONENT MOUNTING. this.props.application is undefined')
     }
   }
-
-  validateForm = () => {
-    let valid = true;
-    Object.values(this.state.formErrors).forEach(
-      (e) => e.length > 0 && (valid = false)
-    );
-    Object.values(this.state.application).forEach(
-      (val) => val === '' && (valid = false)
-    );
-    return valid;
-  }
-
 
   step = val => e => {
     let k = 0
@@ -127,7 +107,6 @@ export default class Application extends Component {
       }) 
       .then(response => {
         if (response.data.message==="application registered sucessfully") {
-          console.log(response.data.application_id)
           const { step } = this.state;
           this.setState(prevState => ({
             step: step + 1, 
@@ -139,7 +118,6 @@ export default class Application extends Component {
         })
         );
         }
-        else {console.log(response.data)}
       })
 
   };
@@ -152,29 +130,24 @@ export default class Application extends Component {
             nationality: val  
         }
     }))
-    console.log(this.state.application)
     };
 
 
   handleChangeSave = input => e => {
-    // console.log(input, e)
     const value = e.target.value
-    console.log('RFFFFH',value)
     this.setState(prevState => ({
       application: {                 
           ...prevState.application, 
           [input]: value    
       }
   }))
-  console.log(this.state.application)
   }
 
 
   render() {
-    const { prev_appt, nationality, application_type, application_id, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
+    const { school_name, prev_appt, nationality, application_type, application_id, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
     const { step } = this.state
-    const values = { prev_appt, application_id, nationality, application_type, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex};
-    console.log('when passing it through to the switches: values= ',values)
+    const values = { school_name, prev_appt, application_id, nationality, application_type, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex};
     switch (step) {
       case 0: 
         return (

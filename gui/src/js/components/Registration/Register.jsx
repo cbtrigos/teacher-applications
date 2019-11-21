@@ -13,6 +13,7 @@ export default class UserForm extends React.Component {
       firstName: '',
       lastName: '',
       email: '',
+      mobile_number: '',
       gender: '',
       DOB: '',
       password1: '', 
@@ -53,7 +54,9 @@ export default class UserForm extends React.Component {
             "gender": this.state.gender, 
             "first_name": this.state.firstName, 
             "last_name": this.state.lastName, 
-            "birth_date": this.state.DOB
+            "mobile_number": this.state.mobile_number,
+            "birth_date": this.state.DOB,
+            "user_type": 0
         }) 
         .then(response => {
           if (response.data.message==="user registered sucessfully") {
@@ -87,6 +90,10 @@ export default class UserForm extends React.Component {
           formErrors.email =
           emailRegex.test(value) ? "" : "invalid email address";
         break;
+        case "mobile_number":
+          formErrors.mobile_number =
+          value.includes('*') ? "not a valid phone number" : "";
+        break;
         case "gender":
           formErrors.gender =
           value.length === 0 ? "Please select your gender" : ""
@@ -107,6 +114,7 @@ export default class UserForm extends React.Component {
         break;
   }
   this.setState({ formErrors, [name]: value });
+  console.log(this.state)
   }
 
   render() {

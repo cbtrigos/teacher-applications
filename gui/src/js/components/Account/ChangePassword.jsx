@@ -39,6 +39,7 @@ export default class ChangePassword extends React.Component {
     }
   
     checkPassword = () => e => {
+      console.log(this.state)
         if (this.state.currentPassword==='' || this.state.newPassword==='' || this.state.passwordConfirm==='') {
             this.setState({
                 error: 'Please fill out all fields'
@@ -47,6 +48,11 @@ export default class ChangePassword extends React.Component {
         else if (this.state.newPassword!==this.state.passwordConfirm) {
           this.setState({
             error: 'Passwords do not match'
+          })
+        }
+        else if (this.state.newPassword===this.state.currentPassword) {
+          this.setState({
+            error: 'Please enter a different password than your current one.'
           })
         }
         else if (!passwordRegex.test(this.state.newPassword) ) {
@@ -77,18 +83,18 @@ export default class ChangePassword extends React.Component {
         <>
         {this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
         <H2>Would you like to change your password?</H2>
-        <H2 left>Current password</H2>
-          <Input 
+        <H2 >Current password</H2>
+          <Input small
             type='password'
             onChange={this.handleChange('currentPassword')}
           />
-        <H2 left>New password</H2>
-          <Input 
+        <H2>New password</H2>
+          <Input small
             type='password'
             onChange={this.handleChange('newPassword')}
           />
-        <H2 left>Confirm new password</H2>
-          <Input 
+        <H2>Confirm new password</H2>
+          <Input small
             type='password'
             onChange={this.handleChange('passwordConfirm')}
           />
