@@ -9,7 +9,6 @@ export default class NavBar extends Component {
   }
 
     render() {
-      console.log(this.props.childProps)
       const {handleLogout, isAuthenticated, user} = this.props.childProps;
       return (
 

@@ -132,7 +132,6 @@ export class UpdatePass extends Component {
   }
   
   updatePassword = () => {
-    console.log('heres the code they typed in', this.state.code)
     // verify the code
     // update the password
 

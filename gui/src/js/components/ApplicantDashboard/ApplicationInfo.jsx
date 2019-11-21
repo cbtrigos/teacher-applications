@@ -59,7 +59,6 @@ export class AppType extends Component {
 export class PersonalInfo extends Component {
   render() {
     const { values, handleChangeSave, handleNationalityChange, step } = this.props;
-    console.log(values)
         return (
             <Wrapper>
              <FormWrapper>

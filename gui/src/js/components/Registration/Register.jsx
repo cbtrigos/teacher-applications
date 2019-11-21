@@ -114,7 +114,6 @@ export default class UserForm extends React.Component {
         break;
   }
   this.setState({ formErrors, [name]: value });
-  console.log(this.state)
   }
 
   render() {

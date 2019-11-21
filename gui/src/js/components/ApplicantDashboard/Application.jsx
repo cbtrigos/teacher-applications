@@ -84,7 +84,6 @@ export default class Application extends Component {
       this.state.application) 
     .then(response => {
       if (response.data==="application updated sucessfully") {
-          console.log('app updated successfully')
         }
       else {console.log(response.data)}
     })

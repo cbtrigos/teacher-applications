@@ -10,7 +10,6 @@ export default class Welcome extends Component {
     }
       render() {
         const user = this.props.user
-        console.log('in the welcome page..... props= ', this.props)
 
         return (
             <Wrapper> 

@@ -23,7 +23,6 @@ export default class MyApps extends Component {
           {"user_id": this.props.user.user_id
         }) 
         .then(response => {
-          console.log(response)
           if (response.data==="error in getting applications") {
            throw new Error("Error in pulling application information") } 
           else {

@@ -39,7 +39,6 @@ export default class ChangePassword extends React.Component {
     }
   
     checkPassword = () => e => {
-      console.log(this.state)
         if (this.state.currentPassword==='' || this.state.newPassword==='' || this.state.passwordConfirm==='') {
             this.setState({
                 error: 'Please fill out all fields'
