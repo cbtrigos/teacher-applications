@@ -1,9 +1,6 @@
 import React from 'react';
-import axios from 'axios'
-
-import {FormUserDetails, Submit} from "./RegistrationInfo.jsx"
-import { login } from '../../constants/utils';
-
+import axios from 'axios';
+import {FormUserDetails} from "./RegistrationInfo.jsx";
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 const passwordRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})");
@@ -13,10 +10,10 @@ export default class UserForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 1,
       firstName: '',
       lastName: '',
       email: '',
+      mobile_number: '',
       gender: '',
       DOB: '',
       password1: '', 
@@ -29,20 +26,8 @@ export default class UserForm extends React.Component {
         password1: '',
         password2: '',
       },
+      serverMessage: null
     };
-  };
-  // Proceed to next step
-  nextStep = () => {
-    const { step } = this.state;
-    this.setState({
-      step: step + 1
-    });
-  };
-  prevStep = () => {
-    const { step } = this.state;
-    this.setState({
-      step: step - 1
-    });
   };
 
   validateForm = () => {
@@ -58,6 +43,9 @@ export default class UserForm extends React.Component {
   
   submit = (event) => {
     event.preventDefault();
+    this.setState({
+      serverMessage: 'loading..'
+    })
     
       axios 
         .post('http://localhost:5000/api/register', 
@@ -66,12 +54,19 @@ export default class UserForm extends React.Component {
             "gender": this.state.gender, 
             "first_name": this.state.firstName, 
             "last_name": this.state.lastName, 
-            "birth_date": this.state.DOB
+            "mobile_number": this.state.mobile_number,
+            "birth_date": this.state.DOB,
+            "user_type": 0
         }) 
         .then(response => {
           if (response.data.message==="user registered sucessfully") {
             this.props.handleLogin(response.data.user)
           } 
+          else {
+            this.setState({
+              serverMessage: response.data
+            })
+          }
         })
 
 
@@ -85,15 +80,19 @@ export default class UserForm extends React.Component {
       switch (input) {
         case "firstName":
           formErrors.firstName =
-          value.length < 3 ? "minimum 3 characters required" : "";
+          value.length < 2 ? "minimum 2 characters required" : "";
         break;
         case "lastName":
           formErrors.lastName =
-          value.length < 3 ? "minimum 3 characters required" : "";
+          value.length < 2 ? "minimum 2 characters required" : "";
         break;
         case "email":
           formErrors.email =
           emailRegex.test(value) ? "" : "invalid email address";
+        break;
+        case "mobile_number":
+          formErrors.mobile_number =
+          value.includes('*') ? "not a valid phone number" : "";
         break;
         case "gender":
           formErrors.gender =
@@ -115,35 +114,20 @@ export default class UserForm extends React.Component {
         break;
   }
   this.setState({ formErrors, [name]: value });
-
+  console.log(this.state)
   }
 
   render() {
-    const { step, firstName, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
-    const values = { firstName, lastName, email, gender,  DOB, password1, password2, formErrors};
-
-    switch (step) {
-      case 1:
+    const {firstName, serverMessage, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
+    const values = { firstName, lastName, email, gender,  DOB, password1, password2, formErrors, serverMessage};
         return (
           <FormUserDetails
-            nextStep={this.nextStep}
             handleChangeSave={this.handleChangeSave}
             submit = {this.submit}
             validateForm = {this.validateForm}
             values={values}
           />
-          );
-      case 2:
-        return (
-          <Submit
-            nextStep={this.nextStep}
-            prevStep={this.prevStep}
-            values={values}
-          />
         );
-      case 3:
-        return <Success />;
-    }
   }
 }
 

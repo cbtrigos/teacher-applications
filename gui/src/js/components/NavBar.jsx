@@ -9,7 +9,8 @@ export default class NavBar extends Component {
   }
 
     render() {
-      const {handleLogout, isAuthenticated} = this.props;
+      console.log(this.props.childProps)
+      const {handleLogout, isAuthenticated, user} = this.props.childProps;
       return (
 
         <Navbar fluid collapseOnSelect>
@@ -29,19 +30,30 @@ export default class NavBar extends Component {
             </LinkContainer>        
             {isAuthenticated
               ? <Fragment>
-                 <NavDropdown title="Dashboard" id="basic-nav-dropdown" >
-                  <LinkContainer to="/dashboard/welcome" >
-                    <NavItem>My Dashboard</NavItem>
+                {user.user_type===0
+                  ?
+                    <NavDropdown title="Dashboard" id="basic-nav-dropdown" >
+                      <LinkContainer to="/dashboard" >
+                        <NavItem>My Dashboard</NavItem>
+                      </LinkContainer>
+                      <LinkContainer to="/dashboard/my-applications">
+                        <NavItem>My Applications</NavItem>
+                      </LinkContainer>
+                        <LinkContainer to="/dashboard/new-application">
+                          <NavItem>Start New Application</NavItem>
+                        </LinkContainer>
+                    </NavDropdown>  
+                  : 
+                    <LinkContainer to="/dashboard">
+                      <NavItem>My Dashboard</NavItem>
+                    </LinkContainer>  
+                }
+                <NavDropdown title="My Account" id="basic-nav-dropdown" >
+                  <LinkContainer to="/my-account">
+                    <NavItem>My Account</NavItem>
                   </LinkContainer>
-                  <LinkContainer to="/dashboard/my-applications">
-                    <NavItem>My Applications</NavItem>
-                  </LinkContainer>
-                  <LinkContainer to="/dashboard/new-application">
-                    <NavItem>Start New Application</NavItem>
-                  </LinkContainer>
+                  <NavItem onClick={handleLogout}>Logout</NavItem>
                 </NavDropdown>  
-              <NavItem onClick={handleLogout}>Logout</NavItem>
-
               </Fragment>
               : <Fragment>
                   <LinkContainer to="/register">

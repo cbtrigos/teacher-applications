@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import {H1, H2, It, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
+import {H1, H2, It, Clearlink, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
+import { CountryDropdown } from 'react-country-region-selector';
+import NumberFormat from 'react-number-format';
 
 
-// The "App Type" page is the 0th panel of registration 
 export class AppType extends Component {
   render() {
     
@@ -57,13 +58,15 @@ export class AppType extends Component {
 };
 export class PersonalInfo extends Component {
   render() {
-    const { values, handleChangeSave, step } = this.props;
+    const { values, handleChangeSave, handleNationalityChange, step } = this.props;
+    console.log(values)
         return (
             <Wrapper>
              <FormWrapper>
              <H1>Teacher Application</H1>
-              <H2>{values.application_type} School <br/><br/>
-             Personal Information: Part 1/5</H2><br/>        
+              <H2>{values.application_type} School <br/>
+                  Application #{values.application_id}<br/><br/>
+                  Personal Information: Part 1/5</H2><br/>        
 
                 <Buttons> 
                 <Left>
@@ -71,7 +74,6 @@ export class PersonalInfo extends Component {
                         <Input
                             type = "text"
                             className=""
-                            placeholder="First Name"
                             name='first_name'
                             noValidate 
                             disabled={true}
@@ -85,7 +87,6 @@ export class PersonalInfo extends Component {
                     <Input
                         type = "text"
                         className=""
-                        placeholder="Last Name"
                         name='last_name'
                         noValidate
                         disabled={true}
@@ -102,7 +103,6 @@ export class PersonalInfo extends Component {
 
                         <Input
                             type = "text"
-                            placeholder="Other Names"
                             name='other_names'
                             noValidate
                             onChange={handleChangeSave('other_names')}
@@ -111,22 +111,20 @@ export class PersonalInfo extends Component {
                 </New>
                 <New>
                     <Label htmlFor="mobile_number"> Mobile Number</Label>
-
-                        <Input
-                            type = "text"
-                            placeholder="Mobile Number"
-                            name='mobile_number'
-                            noValidate
-                            onChange={handleChangeSave('mobile_number')}
-                            defaultValue={values.mobile_number}
-                            />
+                      <NumberFormat 
+                          disabled={true}
+                          customInput={Input} 
+                          format="+232 ## ######" 
+                          mask="*"
+                          value={values.mobile_number} 
+                          onChange={handleChangeSave('mobile_number')}
+                          />
                 </New>
                 <New>
                     <Label htmlFor="gender"> Gender</Label>
 
                         <Input
                             type = "text"
-                            placeholder="Gender"
                             name='gender'
                             noValidate
                             disabled={true}
@@ -137,22 +135,42 @@ export class PersonalInfo extends Component {
                 <New>
                     <Label htmlFor="nationality"> Nationality</Label>
 
-                        <Input
-                            type = "text"
-                            placeholder="Nationality"
-                            name='nationality'
-                            noValidate
-                            onChange={handleChangeSave('nationality')}
-                            defaultValue={values.nationality}
-                            />
+                    <CountryDropdown
+                        country={values.nationality}
+                        value={values.nationality}
+                        priorityOptions={['SL', 'US']}
+                        onChange={(val) => handleNationalityChange(val)}
+                        style={{padding: '10px 10px',
+                                margin: '0 0 1.5% 0',
+                                width: '100%',
+                                borderRadius: '5px',
+                                outline: 'none',
+                                border: '1px solid #cfcfcf',
+                                height: '3em'
+                        }}
+                        tabIndex={100}
+                       />
                 </New>
 
                 <br/> <br/> 
+                <Buttons>
+                  <Left>
+                  <Clearlink href='my-applications'><CreateButton
+                    color="primary"
+                    variant="contained"
+                    onClick={step('exit')}
+                    disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                  >Save and Exit</CreateButton></Clearlink>
+                </Left>
                 <CreateButton
-                color="primary"
-                variant="contained"
-                onClick={step('next')}
-              >Save and Continue</CreateButton> 
+                  color="primary"
+                  variant="contained"
+                  onClick={step('next')}
+                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+
+                >Save and Continue</CreateButton>
+              </Buttons>
+
             </FormWrapper>
             </Wrapper>
 
@@ -167,7 +185,9 @@ export class TeacherInfo extends Component {
               <Wrapper>
                <FormWrapper>
                <H1>Teacher Application</H1>
-              <H2>{values.application_type} School <br/><br/>
+              <H2>{values.application_type} School <br/>
+              Application #{values.application_id}<br/><br/>
+
                 Teacher Information: Part 2/5</H2><br/>
                   <Buttons> 
                 
@@ -176,7 +196,6 @@ export class TeacherInfo extends Component {
                       <Label htmlFor="employing_authority">Employing authority </Label>
                       <Input
                           type = "text"
-                          placeholder="Employing Authority"
                           name="employing_authority"
                           noValidate
                           onChange={handleChangeSave('employing_authority')}
@@ -187,7 +206,6 @@ export class TeacherInfo extends Component {
                       <Label htmlFor="school_name">School Name </Label>
                       <Input
                           type = "text"
-                          placeholder="School Name"
                           name="school_name"
                           noValidate
                           onChange={handleChangeSave('school_name')}
@@ -199,7 +217,6 @@ export class TeacherInfo extends Component {
   
                           <Input
                               type = "text"
-                              placeholder="Pin code"
                               name='Pin Code'
                               noValidate
                               onChange={handleChangeSave('pin_code')}
@@ -212,7 +229,6 @@ export class TeacherInfo extends Component {
   
                           <Input
                               type = "text"
-                              placeholder="Nassit Number"
                               name='nassit_number'
                               noValidate
                               onChange={handleChangeSave('nassit')}
@@ -253,6 +269,12 @@ export class TeacherInfo extends Component {
 
                 >Save and Continue</CreateButton>
               </Buttons>
+              <Clearlink href='my-applications'><CreateButton
+                  color="primary"
+                  variant="contained"
+                  onClick={step('exit')}
+                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                >Save and Exit</CreateButton></Clearlink>
               </FormWrapper>
               </Wrapper>
   
@@ -267,14 +289,14 @@ export class ShortAnswer extends Component {
             <Wrapper>
               <FormWrapper>
               <H1>Teacher Application</H1>
-              <H2>{values.application_type} School <br/><br/>
+              <H2>{values.application_type} School <br/>
+              Application #{values.application_id}<br/><br/>
               Short Answer: Part 3/5</H2><br/>
                 <New>
                     <Label htmlFor="nassit_number"> Qualifications (if any)</Label>
 
                         <TextArea
                             type = "text"
-                            placeholder="Qualifications"
                             name='qualifications'
                             noValidate
                             onChange={handleChangeSave('qualifications')}
@@ -287,7 +309,6 @@ export class ShortAnswer extends Component {
 
                         <TextArea
                             type = "text"
-                            placeholder="Special Skills"
                             name='special_skills'
                             noValidate
                             onChange={handleChangeSave('special_skills')}
@@ -309,6 +330,12 @@ export class ShortAnswer extends Component {
                   onClick={step('next')}
                 >Save and Continue</CreateButton>
               </Buttons>
+              <Clearlink href='my-applications'><CreateButton
+                  color="primary"
+                  variant="contained"
+                  onClick={step('exit')}
+                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                >Save and Exit</CreateButton></Clearlink>
             </FormWrapper>
             </Wrapper>
 
@@ -316,7 +343,6 @@ export class ShortAnswer extends Component {
 
     };
 };
-
 export class Attachments extends Component {
   render() {
     const { values, handleChangeSave, step} = this.props;
@@ -324,8 +350,9 @@ export class Attachments extends Component {
             <Wrapper>
               <FormWrapper>
               <H1>Teacher Application</H1>
-              <H2>{values.application_type} School <br/><br/>
-             Attachments: Part 4/5</H2><br/>
+              <H2>{values.application_type} School <br/>
+              Application #{values.application_id}<br/><br/>
+              Attachments: Part 4/5</H2><br/>
                ***** 
               <Buttons>
                 <Left> 
@@ -341,6 +368,12 @@ export class Attachments extends Component {
                   onClick={step('next')}
                 >Save and Continue</CreateButton>
               </Buttons>
+              <Clearlink href='my-applications'><CreateButton
+                  color="primary"
+                  variant="contained"
+                  onClick={step('exit')}
+                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                >Save and Exit</CreateButton></Clearlink>
             </FormWrapper>
             </Wrapper>
 
@@ -348,7 +381,6 @@ export class Attachments extends Component {
 
     };
 };
-
 export class Submit extends Component {
   constructor(props) {
     super(props);
@@ -366,7 +398,8 @@ export class Submit extends Component {
         if (i['val']===null || i['val']==='') {emptyFields.push(i['name'])}
         })
       if (emptyFields.length!==0) {return emptyFields.join(', ')}
-      else return ''
+      else {
+        return ''}
     }
 
     getErrorMessage = (nationality, employingAuth) => {
@@ -387,8 +420,9 @@ export class Submit extends Component {
           <Wrapper>
             <FormWrapper>
               <H1>Application</H1>
-                <H2>{values.application_type} School <br/><br/>
-                5/5: Confirm Application Details</H2><br/>
+                <H2>{values.application_type} School <br/>
+              Application #{values.application_id}<br/><br/>
+               5/5: Confirm Application Details</H2><br/>
            <H2>
             <Div>
               <Category> First Name: </Category> <It> {values.first_name} </It>
@@ -430,16 +464,21 @@ export class Submit extends Component {
             </Div>
           <br />
         {missingString!='' &&
-          <H2>
-          <Input 
-          type="checkbox"
-          checked={checkmarked}
-          id='checked'
-          onChange={handleCheckboxChange()}
-          />
+          <Buttons>
+            <Left style={{minWidth: '2%', width: '4%', marginRight:'-1%'}}>
+              <Input 
+              type="checkbox"
+              checked={checkmarked}
+              id='checked'
+              onChange={handleCheckboxChange()}
+              />
+            </Left>
+            <New >
           I verify that I purposefully did not provide the following: {missingString}.
-          </H2>}
-          {(!checkmarked) && <ErrorMessage>Please check the above box in order to submit.</ErrorMessage>}
+          </New></Buttons>
+          }
+          </H2>
+          {missingString!='' && !checkmarked && <ErrorMessage>Please check the above box in order to submit.</ErrorMessage>}
           {errorMessage!==null && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
         <Buttons>
@@ -453,25 +492,58 @@ export class Submit extends Component {
           <CreateButton
             color="primary"
             variant="contained"
-            disabled={!checkmarked || errorMessage!==''}
+            disabled={(missingString!='' && !checkmarked) || errorMessage!==''}
             onClick={submit}
           >Submit</CreateButton>
           </Buttons>
+          <Clearlink href='my-applications'><CreateButton
+            color="primary"
+            variant="contained"
+            onClick={step('exit')}
+            disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+          >Exit</CreateButton></Clearlink>
+          
+          </FormWrapper>
+          </Wrapper>
+    );
+  }
+};
+export class Completed extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { values } = this.props;
+    return (
+          <Wrapper>
+            <FormWrapper>
+              <H1>Application</H1>
+                <H2>{values.application_type} School <br/>
+                Application #{values.application_id}<br/><br/>
+  
+                </H2>
+           <H2>
+              Application submitted successfully! <br/>
+              You'll hear from us as soon as approval updates begin. <br/>
+              Thank you for applying to teach Sierra Leone's youth. <br/>
+          <br />
+          <Clearlink href='/dashboard/my-applications'>
+          <CreateButton
+            color="primary"
+            variant="contained"
+          >Return to Dashboard</CreateButton> </Clearlink>
+
           </H2>
           </FormWrapper>
           </Wrapper>
     );
   }
-}
+};
 
 
 
-const CForm = styled(Form)`
-  display: -webkit-flex;
-  justify-content: center;
-  width: 100%;
-  padding-bottom: 5px;
-`
+
 const Div = styled.div`
 margin: 13px;`
 
@@ -481,14 +553,21 @@ text-align: center;
 font: inherit;`
 
 
-const Lab = styled.label`
-  background: red;
-  display: block;
-  padding: 1rem;
-`;
+const SLeft = styled(Left)`
+width: 10px`
 
-const Inp = styled.input`
-  &:checked + ${Label} {
-    background: blue;
-  }
-`;
+
+const Phoneinput = styled.input`
+    padding: 10px 10px;
+    margin: 0 0 1.5% 0;
+    width: 100%;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #cfcfcf;
+    float: right;
+    ::placeholder {
+        font-size: 1em;
+        font-weight: light;
+        color: #999;
+    };
+    `

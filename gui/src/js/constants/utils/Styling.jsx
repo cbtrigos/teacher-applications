@@ -2,15 +2,19 @@ import styled from "styled-components";
 
 // All of the styling for the registration sliding area :) 
 export const H1 = styled.h1`
-    text-align: center;
-    width: 100%;
-    color: #111;
-    font-weight: lighter;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;`
+  width: 100%;
+  color: #111;
+  font-weight: lighter;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    ${props =>
+      props.left ?
+      ``
+      : `text-align: center;
+      `};`
 
 export const Wrapper = styled.div`
-    height: 150vh;
+    height: 170vh;
     margin-top: -25px;
     width: 100%;
     display: -webkit-flex;
@@ -21,8 +25,8 @@ export const Wrapper = styled.div`
 
 export const FormWrapper= styled.div`
     width: 90%;
-    min-width: 300px;
-    max-width: 600px;
+    min-width: 30%;
+    max-width: 800px;
     flex-direction: column;
     padding: 10px 25px 25px 25px;
     box-shadow: 0px 10px 50px #555;
@@ -62,7 +66,7 @@ export const Input = styled.input`
     border-radius: 5px;
     outline: none;
     border: 1px solid #cfcfcf;
-    float: right;
+    // float: right;
     ::placeholder {
         font-size: 1em;
         font-weight: light;
@@ -75,6 +79,36 @@ export const Input = styled.input`
         `: `
         ''
         `};
+    ${props =>
+      props.small ?
+      `
+      width: 40%;
+      min-width: 200px;
+      float: center;
+      text-align: center;
+      margin: auto;
+      display: block;
+
+      `: `
+      ''
+      `};
+    `
+
+    export const InputLarge = styled.textarea`
+    padding: 10px 10px;
+    margin: 0 0 1.5% 0;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #cfcfcf;
+    float: right;
+    ::placeholder {
+        font-size: 1em;
+        font-weight: light;
+        color: #999;
+    }
     `
 
 export const Button = styled.button`
@@ -85,36 +119,29 @@ export const New = styled.div`
     width: 100%;
     `
 
-export const ErrorMessage = styled.h1`
-    color: red;
-    font-size: 0.75em;`
-
 export const CreateButton = styled.button`
-    color: #fff;
-    border: 2px solid #fff;
+    border: 2px solid white
     margin-top: 1em;
     padding: 8px 8px;
     font-size: 1em;
+    opacity: .7;
     width: 100%;
-    font-weight: lighter;
+    font-weight: light;
     display: block;
     letter-spacing: 1px;
-    &:hover {
-        // color: #519e8a;
-        // background-color: #fff;
-        border: 2px solid #519e8a;}
     &:small {
         color: #999;
-        font-weight: lighter;}
+        font-weight: lighter;};
         ${props =>
             props.disabled ?
             `
             background: lightgrey;
             `: `
-            background: #519e8a;
+            background: #84C7D0
+            &:hover {
+              opacity: 1;};
             `};
         ` 
-    
 
 export const A_center = styled.a`
     width: 100%;
@@ -161,7 +188,6 @@ export const Tool = styled.section`
     padding: 10px;
 `   
    
-   
 export const MenuButton=styled.button`
     background: inherit;
     border: none;
@@ -179,19 +205,20 @@ width: 100%;`
 export const WideButton = styled.input`
 width: 100%;
 display: inline-block;
-background-color: lightgrey;
+background-color: #93A3B1;
+opacity: 0.6;
 padding: .5em;
 margin: 3px;
 color: black;
 
 font: inherit;
-&:hover {
-    background-color: rgba(55, 174, 195, 1);
-};
+&: hover {
+    opacity:1
+  }
 ${props =>
     props.chosen ?
     `
-    background-color: rgba(55, 174, 195, 1);
+    opacity: 1;
     `: `
     `}
 
@@ -200,11 +227,6 @@ cursor: pointer;
 transition-duration: 0.2s;
 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
 Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;`
-
-
-
-
-
 
 export const Checkbox = styled.div`
   display: inline-block;
@@ -271,7 +293,9 @@ export const Checkbox = styled.div`
 export const H2 = styled(H1)`
 font-size: 12pt;`
 
-
+export const ErrorMessage = styled(H2)`
+  color: red;
+  font-size: 1em;`
 
 export const HorizSeparator = styled.div`
 width: 100%;
@@ -280,6 +304,32 @@ border-bottom: 1px solid #000;
 line-height: 0.1em;
 margin: 10px 0 20px;`
 
-export const  It= styled(H2)`
+export const  It= styled.div`
 font: inherit;
+text-align: center;
 font-style: italic`
+
+export const Notification = styled(H2)`
+color: red;
+font-size: 18pt;`
+
+export const Clearlink = styled.a`
+color: inherit;
+text-decoration: none;
+&:hover {
+  color: inherit;
+  text-decoration: none
+};
+&:active {
+  color: inherit;
+  text-decoration: none
+};
+&:visited {
+  color: inherit;
+  text-decoration: none
+}
+&:focus {
+  color: inherit;
+  text-decoration: none
+}
+`

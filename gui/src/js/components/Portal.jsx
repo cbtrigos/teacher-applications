@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import React, { Component, Fragment } from "react";
+import React from "react";
 import {withRouter } from "react-router-dom";
 import Routes from "../constants/Routes/Routes.jsx"
 import { BrowserRouter as Router} from 'react-router-dom';
@@ -8,7 +8,7 @@ import NavBar from "./NavBar.jsx";
 
 // this is the top-most component
 
-class Portal extends Component {
+class Portal extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -20,19 +20,13 @@ class Portal extends Component {
     }
 
     async componentDidMount() {
-      try {
         if (isLogin()) {
           const userInfo = getUser()
           this.setState({ 
             isAuthenticated: true,
             user:userInfo,
            });
-        }}
-      catch(e) {
-        if (e !== 'No current user') {
-          alert(e);
         }
-      }
       this.setState({ isAuthenticating: false });
 
     }
@@ -57,13 +51,14 @@ class Portal extends Component {
         const childProps = {
           isAuthenticated: this.state.isAuthenticated,
           handleLogin: this.handleLogin,
+          handleLogout: this.handleLogout,
           user: this.state.user
         };
         return (
           !this.state.isAuthenticating &&
           <div> 
           <Router> 
-              <NavBar handleLogout={this.handleLogout} isAuthenticated={this.state.isAuthenticated} />
+              <NavBar childProps={childProps} />
               <Routes childProps={childProps} /> 
           </Router >
           </div>

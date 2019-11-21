@@ -23,11 +23,13 @@ export default ({ component: C, props: cProps, ...rest }) => {
     <Route
       {...rest}
       render={props =>
-        !cProps.isAuthenticated //if not logged in, go to where you wanted to, 
-                                //else if logged in --> go to dashboard
-          ? <C {...props} {...cProps} />
+        cProps.isAuthenticated //if logged in, go where you want, else to log in
+          ? (cProps.user.user_type===0
+                ? <C {...props} {...cProps} /> 
+                : <Redirect to={"/dashboard"}/>
+                )
           : <Redirect
-              to={redirect === "" || redirect === null ? "/dashboard" : redirect}
+              to={redirect === "" || redirect === null ? "/login" : redirect}
             />}
     />
   );

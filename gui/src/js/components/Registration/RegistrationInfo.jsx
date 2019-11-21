@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import {H1, Wrapper, Buttons, Button, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
+import {H1, Wrapper, Buttons, Notification, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
+import NumberFormat from 'react-number-format';
 
 
 // The "Personal Details" page is the 1st panel of the registration 
@@ -11,13 +12,14 @@ export class FormUserDetails extends Component {
             <Wrapper>
             <FormWrapper>
               <H1>Registration</H1>
+              {values.serverMessage!==null && <Notification>{values.serverMessage}</Notification>}
                 <Buttons> 
                 <Left>
                     <Label htmlFor="firstName"> First Name</Label>
                         <Input
                             type = "text"
                             className=""
-                            placeholder="First Name"
+                            // placeholder="First Name"
                             name='firstName'
                             noValidate
                             onChange={handleChangeSave('firstName') }
@@ -32,7 +34,7 @@ export class FormUserDetails extends Component {
                     <Input
                         type = "text"
                         className=""
-                        placeholder="Last Name"
+                        // placeholder="Last Name"
                         name='lastName'
                         noValidate
                         onChange={handleChangeSave('lastName') }
@@ -48,13 +50,25 @@ export class FormUserDetails extends Component {
                     <Label htmlFor="email">Email </Label>
                     <Input
                         type = "text"
-                        placeholder="Email"
                         name="email"
                         noValidate
                         onChange={handleChangeSave('email')}
                         defaultValue={values.email}
                         />
                  <ErrorMessage>{values.formErrors.email}</ErrorMessage>
+                </New>
+                <New>
+                    <Label htmlFor="mobile_number"> Mobile Number</Label>
+                      <NumberFormat 
+                          customInput={Input} 
+                          format="+232 ## ######" 
+                          name="mobile_number"
+                          mask="*"
+                          value={values.mobile_number} 
+                          onChange={handleChangeSave('mobile_number')}
+                          />
+                  <ErrorMessage>{values.formErrors.mobile_number}</ErrorMessage>
+
                 </New>
 
                 <New> 
@@ -90,9 +104,6 @@ export class FormUserDetails extends Component {
                   <Label gender>Nonbinary</Label>
                 </FlexContainer>
                   </Buttons>
-
-
-
                 </New>
 
                 <New>
@@ -113,7 +124,7 @@ export class FormUserDetails extends Component {
                     <Label htmlFor="password1"> Password</Label>
                     <Input
                         className=""
-                        placeholder="Password"
+                        // placeholder="Password"
                         type="password"
                         name="password1"
                         noValidate
@@ -127,7 +138,7 @@ export class FormUserDetails extends Component {
                     <Label htmlFor="password2"> Password Confirmation</Label>
                     <Input
                         className=""
-                        placeholder="Password"
+                        // placeholder="Password"
                         type="password"
                         name="password2"
                         noValidate
@@ -154,53 +165,6 @@ export class FormUserDetails extends Component {
 
     };
 };
-
-
-// The "Confirm" page is the 3rd panel of the registration 
-export class Submit extends Component {
-  render() {
-    const { values, handleChangeSave, nextStep, prevStep } = this.props;
-
-    return (
-          <Wrapper>
-            <FormWrapper>
-              <H1>Registration</H1>
-                <h2>Confirm User Details</h2>
-            <br />
-            <Div>
-              <Category> First Name: </Category> <It> {values.firstName} </It>
-            </Div>
-            <Div>
-            <Category> Last Name: </Category><It> {values.lastName} </It>
-            </Div>
-            <Div>
-            <Category> Email: </Category><It> {values.email} </It>
-            </Div>
-            <Div>
-            <Category> DOB: </Category><It> {values.DOB} </It>
-            </Div>
-            <Div>
-            </Div> 
-          <br />
-        <Buttons>
-          <Left> 
-          <CreateButton
-            color="secondary"
-            variant="contained"
-            onClick={prevStep}
-          >Back</CreateButton>
-          </Left>
-          <CreateButton
-            color="primary"
-            variant="contained"
-            onClick={nextStep}
-          >Confirm & Continue</CreateButton>
-          </Buttons>
-          </FormWrapper>
-          </Wrapper>
-    );
-  }
-}
 
 
 

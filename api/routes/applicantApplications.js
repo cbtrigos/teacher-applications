@@ -1,5 +1,4 @@
 var mysql = require('mysql');
-const bcrypt = require('bcrypt');
 var {db} = require('../authentication/mysql.json')
 
   //                                 CONNECTING TO MYSQL
@@ -9,11 +8,11 @@ connection.connect(function(err) {
   if (err) {
     console.error('error connecting: ' + err.stack);
   } } );
-
+//                                  REGISTER AN APPLICATION
 exports.begin = function(req,res) {
   var now = new Date();
   var application={ //application_id
-    "applicant_id":req.body.applicant_id,
+    "user_id":req.body.user_id,
     "application_type":req.body.application_type,
     "created": now,
     "last_edited": now,
@@ -27,25 +26,27 @@ exports.begin = function(req,res) {
         res.status(400).send("error occured")
 
     }else{
-      connection.query('SELECT * FROM applications WHERE applicant_id = ? and application_type = ?',[application.applicant_id, application.application_type], function (error, results, fields) {
+      connection.query('SELECT * FROM applications WHERE user_id = ? and application_type = ?',[application.user_id, application.application_type], function (error, results, fields) {
         if (error) {
           res.status(400).send("couldn't find application")
         }else{
           if(results.length >0){ 
             res.status(201).send({
               message: "application registered sucessfully", 
-              application_id: results[0].application_id})
+              application_id: results[0].application_id,
+              created: results[0].created})
         }
     }}
     );
     }}
     );}
+//                                  UPDATE AN APPLICATION
 
 exports.save = function(req,res){
     var now = new Date();
     var application={ //application_id
         "application_id": req.body.application_id,
-        "applicant_id":req.body.applicant_id,
+        "user_id":req.body.user_id,
         "application_type":req.body.application_type,
         "employing_authority":req.body.employing_authority,
         "school_name":req.body.school_name,
@@ -72,39 +73,58 @@ exports.save = function(req,res){
     }}
   );
 };
+//                                  SUBMIT THE APPLICATION
 
 exports.submit = function(req,res){
     application_id = req.body.application_id
-    last_edited = Date()
-    connection.query('UPDATE applications SET submitted = ? WHERE application_id = ?',[true, application_id], function (error, results, fields) {
+    last_edited = new Date()
+    connection.query('UPDATE applications SET submitted = ?, last_edited=? WHERE application_id = ?',['true', last_edited, application_id], function (error, results, fields) {
       if (error) {
+        console.log(error)
           res.status(400).send("couldn't find application")
         }else{
-          res.status(400).send('application submitted successfully')
+          res.status(200).send("application submitted successfully")
     }}
     );
 }
 
+//                                  DELETE THE APPLICATION
+
+exports.delete = function(req,res){
+  application_id = req.body.application_id
+  connection.query('DELETE FROM applications WHERE application_id = ?',application_id, function (error, results, fields) {
+    if (error) {
+      console.log(error)
+        res.status(400).send("couldn't delete application")
+      }else{
+        res.status(200).send('application deleted successfully')
+  }}
+  );
+}
 
 
-exports.get = function(req,res){
-  applicant_id = req.body.applicant_id
+//                             GET A LIST OF ALL APPLICATIONS FOR AN APPLICANT (user type=1)
+
+exports.getApplicantApplications = function(req,res){
+  user_id = req.body.user_id
   last_edited = Date()
-  connection.query('SELECT * FROM applications WHERE applicant_id = ?',applicant_id, function (error, results, fields) {
+  connection.query('SELECT * FROM applications WHERE user_id = ?',user_id, function (error, results, fields) {
       if (error) {
+        console.log(error)
         res.status(400).send("error in getting applications")
       }else{
-         var submitted = []
-         var drafts = []
+         var incompleteApps = []
+         var submittedApps = []
          results.forEach(app =>{
            if (app.submitted==="true") {
-             submitted.push(app)}
-             else drafts.push(app)
+            submittedApps.push(app)}
+             else incompleteApps.push(app)
             })
             res.status(200).send({
-              'submittedApps': submitted,
-              'incompleteApps': drafts
+              'incompleteApps': incompleteApps,
+              'submittedApps': submittedApps
             })
          }}
   );
 }
+
