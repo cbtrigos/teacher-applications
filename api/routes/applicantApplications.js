@@ -62,6 +62,7 @@ exports.save = function(req,res){
         "nationality": req.body.nationality, 
         "national_id": req.body.national_id,
         "prev_appt": req.body.prev_appt,
+        "school_district": req.body.school_district,
         "pin_code": req.body.pin_code,
         "nassit": req.body.nassit,
         "qualifications": req.body.qualifications,
@@ -71,9 +72,11 @@ exports.save = function(req,res){
         "email":req.body.email, 
         "sex": req.body.sex, 
     }
-    connection.query('UPDATE applications SET application_type = ?, employing_authority = ?, school_name =?, other_names= ?, mobile_number = ?, nationality = ?, prev_appt = ?, pin_code = ?, nassit = ?, qualifications = ?, special_skills = ?, last_edited = ?, last_name = ?, email = ?, sex =?, national_id=? WHERE application_id = ?',
-    [application.application_type, application.employing_authority, application.school_name, application.other_names, application.mobile_number, application.nationality, application.prev_appt, application.pin_code, application.nassit, application.qualifications, application.special_skills, application.last_edited, application.last_name, application.email, application.sex, application.national_id, application.application_id], function (error, results, fields) {
+    console.log(application)
+    connection.query('UPDATE applications SET application_type = ?, school_district =?,employing_authority = ?, school_name =?, other_names= ?, mobile_number = ?, nationality = ?, prev_appt = ?, pin_code = ?, nassit = ?, qualifications = ?, special_skills = ?, last_edited = ?, last_name = ?, email = ?, sex =?, national_id=? WHERE application_id = ?',
+    [application.application_type, application.school_district, application.employing_authority, application.school_name, application.other_names, application.mobile_number, application.nationality, application.prev_appt, application.pin_code, application.nassit, application.qualifications, application.special_skills, application.last_edited, application.last_name, application.email, application.sex, application.national_id, application.application_id], function (error, results, fields) {
     if (error) {
+        console.log(error)
         res.status(400).send("error occured")
     }else{
         res.status(201).send("application updated sucessfully")

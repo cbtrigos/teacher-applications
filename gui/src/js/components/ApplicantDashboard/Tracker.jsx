@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {H2, H1, It, ErrorMessage} from '../../constants/utils/Styling.jsx'
+import {H2, H1, It, Div, Category} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
 
 export default class Tracker extends Component {
@@ -93,11 +93,3 @@ export default class Tracker extends Component {
     }
   };
 
-
-  const Div = styled.div`
-  margin: 13px;`
-  
-  const Category= styled.div`
-  background-color: lightgrey;
-  text-align: center;
-  font: inherit;`

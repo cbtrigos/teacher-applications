@@ -189,6 +189,16 @@ export default class Approver1Form extends Component {
                     />
           </Bucket>
           <Bucket>
+                <H2 label left htmlFor="mobile_number">Mobile Number *</H2>
+                <Field 
+                    type = "text"
+                    name="mobile_number"
+                    noValidate
+                    disabled={true}
+                    defaultValue={application.mobile_number}
+                    />
+          </Bucket>
+          <Bucket>
                 <H2 label left htmlFor="approver_1_name">Approver Name *</H2>
                 <Field 
                     type = "text"

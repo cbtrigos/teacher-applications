@@ -138,7 +138,7 @@ exports.submitApproverApplications_1 = function(req,res){
   const user_type = req.body.user_type
   const today = new Date()
   const applicant_id = req.body.application.user_id
-
+  console.log(req.body.mobile_number)
   const submission = {
     approver_id: req.body.application.approver_id, 
     application_id: req.body.application.application_id, 
@@ -152,6 +152,7 @@ exports.submitApproverApplications_1 = function(req,res){
     SSS_level_qualified: req.body.application.SSS_level_qualified,  
     approver_1_name: req.body.application.approver_1_name,  
     signed: req.body.application.signed,
+    mobile_1_number: req.body.application.mobile_number,
     date: today, 
     approved: 'true'
   }
@@ -188,7 +189,9 @@ exports.submitApproverApplications_1 = function(req,res){
 
         }
           }
-})
+
+
+        })
 
 
 

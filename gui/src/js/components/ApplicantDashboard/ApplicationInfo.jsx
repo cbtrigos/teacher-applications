@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import {H1, H2, It, Tooltip, InfoIcon, TooltipText, Clearlink, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
+import {Select, FormControl, MenuItem, InputLabel} from "@material-ui/core/"
 import { CountryDropdown } from 'react-country-region-selector';
 import NumberFormat from 'react-number-format';
-
+import Districts from '../../constants/utils/Districts.json'
 
 export default function Info(title) {
   event.preventDefault();
@@ -252,6 +253,49 @@ export class TeacherInfo extends Component {
                           onChange={handleChangeSave('school_name')}
                           defaultValue={values.school_name}
                           />
+                  </New>
+                  <New>
+                      <Label htmlFor="school_district">School District *
+                      {Info(values.toolTip.school_district)}
+                      </Label>
+                      {/* <Input
+                          type = "text"
+                          name="school_district"
+                          noValidate
+                          onChange={handleChangeSave('school_district')}
+                          defaultValue={values.school_district}
+                          /> */}
+                              <FormControl variant="outlined" style={{ width: "100%" }}>
+                                <InputLabel id="demo-simple-select-outlined-label">
+                                </InputLabel>
+                                <Select
+                                  labelId="demo-simple-select-outlined-label"
+                                  id="demo-simple-select-outlined"
+                                  value={values.school_district}
+                                  defaultValue={values.school_district}
+                                  onChange={handleChangeSave('school_district')}
+                                >
+                                  <MenuItem value="">
+                                    <em>None</em>
+                                  </MenuItem>
+                                  <MenuItem value={"Kenema"}>Kenema</MenuItem>
+                                  <MenuItem value={"Kailahun"}>Kailahun</MenuItem>
+                                  <MenuItem value={"Kenema"}>Kenema</MenuItem>
+                                  <MenuItem value={"Kono"}>Kono</MenuItem>
+                                  <MenuItem value={"Bombali"}>Bombali</MenuItem>
+                                  <MenuItem value={"Kambia"}>Kambia</MenuItem>
+                                  <MenuItem value={"Koinadugu"}>Koinadugu</MenuItem>
+                                  <MenuItem value={"Port Loko"}>Port Loko</MenuItem>
+                                  <MenuItem value={"Tonkolili"}>Tonkolili</MenuItem>
+                                  <MenuItem value={"Bo"}>Bo</MenuItem>
+                                  <MenuItem value={"Bonthe"}>Bonthe</MenuItem>
+                                  <MenuItem value={"Moyamba"}>Moyamba</MenuItem>
+                                  <MenuItem value={"Pujehun"}>Pujehun</MenuItem>
+                                  <MenuItem value={"Western Area Rural"}>Western Area Rural</MenuItem>
+                                  <MenuItem value={"Western Area Urban"}>Western Area Urban</MenuItem>
+                                  <MenuItem value={"Bo"}>Bo</MenuItem>
+                                </Select>
+                              </FormControl>
                   </New>
                   <New>
                       <Label htmlFor="pin_code"> Pin Code (if any)
