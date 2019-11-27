@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {FormWrapper, Form, Notification, New, Label, Input, InputLarge, CreateButton, Wrapper, H1, ErrorMessage} from "../../constants/utils/Styling.jsx"
+import {FormWrapper, Form, Notification, New, Label, Input, BigInput, CreateButton, Wrapper, H1, ErrorMessage} from "../../constants/utils/Styling.jsx"
 import axios from 'axios';
 
 
@@ -112,7 +112,7 @@ export default class Contact extends Component {
                       <Label htmlFor="email"> Email</Label>
                       <Input
                           className=""
-                          type="email"
+                          type="text"
                           name="email"
                           noValidate
                           onChange={this.handleChange('email')}
@@ -133,7 +133,7 @@ export default class Contact extends Component {
                   </New>
                   <New>
                       <Label htmlFor="message"> Message</Label>
-                      <InputLarge
+                      <BigInput
                           className=""
                           type="Input"
                           rows="5"

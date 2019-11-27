@@ -257,7 +257,6 @@ exports.changeEmail = function(req,res){
 
 //   //                                 CHANGE EMAIL
 exports.changeMobile = function(req,res){
-  console.log(req.body)
   var changeMobile = {
     prev_mobile_number: req.body.prev_mobile_number,
     mobile_number:req.body.mobile_number, 
@@ -267,8 +266,7 @@ exports.changeMobile = function(req,res){
 
 
   connection.query('SELECT * FROM mobile_change_requests WHERE user_id = ?',changeMobile.user_id, function (error, results, fields) {
-    if (error) {console.log(error)}
-    else if (results.length!==0) {
+    if (results.length!==0) {
       var today = moment().format("YYYY-MM-DD hh:mm:ss")
       results.forEach(app => {
         let valid = moment(app.expires).isBefore(today) 
@@ -296,7 +294,6 @@ exports.changeMobile = function(req,res){
     else {
       connection.query('INSERT INTO mobile_change_requests SET ?', changeMobile, function (error, results, fields) {
         if (error) { 
-          console.log(error)
 
           res.status(200).send({message:"Failed to update mobile number. Please refresh and try again."})
         } 

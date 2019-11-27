@@ -89,7 +89,8 @@ const Post = styled.section`
     background: lightgrey;
     margin: 3pt 3pt 0pt 3pt;
     // padding: white;
-    min-width: 46%;
-    width: 24%;
+    min-width: 20%;
+    max-width: 45%;
+    width: 40%;
 
 `

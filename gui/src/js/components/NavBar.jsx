@@ -9,7 +9,6 @@ export default class NavBar extends Component {
   }
 
     render() {
-      console.log(this.props.childProps)
       const {handleLogout, isAuthenticated, user} = this.props.childProps;
       return (
 
@@ -33,10 +32,10 @@ export default class NavBar extends Component {
                 {user.user_type===0
                   ?
                     <NavDropdown title="Dashboard" id="basic-nav-dropdown" >
-                      <LinkContainer to="/dashboard" >
+                      {/* <LinkContainer to="/dashboard" >
                         <NavItem>My Dashboard</NavItem>
-                      </LinkContainer>
-                      <LinkContainer to="/dashboard/my-applications">
+                      </LinkContainer> */}
+                      <LinkContainer to="/dashboard">
                         <NavItem>My Applications</NavItem>
                       </LinkContainer>
                         <LinkContainer to="/dashboard/new-application">

@@ -39,8 +39,18 @@ router.post('/delete-application', applicantApplications.delete)
 router.post('/get-user-applications', applicantApplications.getApplicantApplications)
 
 router.post('/get-approver-applications-1', approverApplications.getApproverApplications_1)
+// router.post('/save-approver-applications-1', approverApplications.saveApproverApplications_1)
+router.post('/approve-approver-applications-1', approverApplications.submitApproverApplications_1)
+router.post('/reject-approver-applications-1', approverApplications.rejectApproverApplications_1)
+
 router.post('/get-approver-applications-2', approverApplications.getApproverApplications_2)
+// router.post('/save-approver-applications-2', approverApplications.saveApproverApplications_2)
+router.post('/approve-approver-applications-2', approverApplications.submitApproverApplications_2)
+router.post('/reject-approver-applications-2', approverApplications.rejectApproverApplications_2)
+
 router.post('/get-approver-applications-3', approverApplications.getApproverApplications_3)
+router.post('/approve-approver-applications-3', approverApplications.submitApproverApplications_3)
+router.post('/reject-approver-applications-3', approverApplications.rejectApproverApplications_3)
 
 router.post('/outside-contact', contact.sendEmail)
 
