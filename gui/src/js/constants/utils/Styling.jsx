@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import React, { Component } from "react";
+
+import {HelpCircle} from 'styled-icons/boxicons-regular/HelpCircle'
 
 // All of the styling for the registration sliding area :) 
 export const H1 = styled.h1`
@@ -19,18 +22,21 @@ export const Wrapper = styled.div`
     width: 100%;
     display: -webkit-flex;
     flex-direction: column;
-    padding-top: 8%;
-    align-items: center;
+    padding-top: 3em;
+    align-items: center;   
     background: linear-gradient(0deg, rgba(37,142,160,1) 35%, rgba(129,121,144,1) 100%);`
 
 export const FormWrapper= styled.div`
     width: 90%;
     min-width: 30%;
-    max-width: 800px;
     flex-direction: column;
     padding: 10px 25px 25px 25px;
     box-shadow: 0px 10px 50px #555;
     background-color: #ffffff;
+    ${props =>
+      props.large ?
+      `max-width: 90%`
+      : `max-width: 800px;`};
     `
 
 export const Form = styled.form`
@@ -94,7 +100,7 @@ export const Input = styled.input`
       `};
     `
 
-    export const InputLarge = styled.textarea`
+export const BigInput = styled.textarea`
     padding: 10px 10px;
     margin: 0 0 1.5% 0;
     width: 100%;
@@ -291,7 +297,20 @@ export const Checkbox = styled.div`
 `;
 //rgba(37,142,160,1)
 export const H2 = styled(H1)`
-font-size: 12pt;`
+text-align: center;
+
+${props =>
+  props.left ?
+  `
+  text-align: left;
+  `: `
+  `};
+  ${props =>
+  props.label ?
+  `
+  font-size: 11pt;
+  `: `font-size:12pt;
+  `}`
 
 export const ErrorMessage = styled(H2)`
   color: red;
@@ -327,9 +346,89 @@ text-decoration: none;
 &:visited {
   color: inherit;
   text-decoration: none
-}
+};
 &:focus {
   color: inherit;
   text-decoration: none
 }
 `
+export const TooltipText = styled.button`
+visibility: hidden;
+// width: 100%;
+font: inherit;
+font-size: 10pt;
+background-color: #F0F0F0;
+text-align: left;
+border-radius: 5px;
+outline: none;
+border: 1px solid #cfcfcf;
+padding: 3px ;
+position: absolute;
+z-index: 1;
+top: -5px;
+// left: 105%;
+`
+
+export const Tooltip = styled.div`
+  position: relative;
+  width: 55%;
+  padding-left: 3px;
+  display: inline-block;
+  &:hover ${TooltipText} {
+    visibility: visible;
+  }
+`
+
+const Help = styled(HelpCircle)`
+  height: 15px;
+  width: 15px;
+  color: grey;
+  // background-color: white
+`
+export const InfoIcon = () => <Help />
+
+
+export const Application = styled.div`
+background: lightgrey;
+padding: 1em;
+// margin: 1em;
+width: 100%;
+`
+export const Partition = styled.section`
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+border-style: solid;
+border-color: grey;
+// background:
+margin: 1%;
+`
+export const Field = styled(Input)`
+width: 100%;
+margin: none;
+min-width: 100px;`
+
+export const Bucket = styled.section`
+width: 48%;
+max-width: 300px;
+margin: .3em;
+min-width: 180px;
+`
+export const InputLarge = styled.textarea`
+    padding: 3%;
+    margin-left: 5%;
+    width: 100%;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #cfcfcf;
+    float: right;
+    ::placeholder {
+        font-size: 1em;
+        font-weight: light;
+        color: #999;
+    }
+    `
+  export const Red = styled(H2)`
+  font: inherit;
+  color: darkred;
+  `

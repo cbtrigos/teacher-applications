@@ -4,13 +4,20 @@ import {AppType, PersonalInfo, TeacherInfo, ShortAnswer, Attachments, Submit, Co
 import styled from "styled-components";
 import axios from 'axios';
 
+// not showing any errors :((((()))))
+const nassitRegex = RegExp(/^[a-zA-Z]{1}[0-9]{16}$/);
+const natIDRegex = RegExp(/^[a-zA-Z0-9]{8}$/);
+
+
 export default class Application extends Component {
   constructor(props) {
     super(props);
     const user = props.user
+    const clearChosen = props.clearChosen
     this.state = {
       step: 0,
       submitOkay:false, 
+      missingString: '',
       errors: '',
       checkMark: false, 
       application: {
@@ -28,16 +35,48 @@ export default class Application extends Component {
         created: null,
         last_edited: null,
         submitted: null,
+        national_id: '', 
+        birth_date : (user.birth_date).slice(0,10),
         mobile_number: user.mobile_number, 
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
         user_id: user.user_id,
         sex: user.gender,
+      }, 
+      formErrors:{
+        employing_authority:'',
+        school_name:'',
+        nationality: '', 
+        prev_appt: '',
+        pin_code: '',
+        nassit: '',
+        national_id: '', 
+        nassit: ''
+      }, 
+      toolTip: {
+        employing_authority:'Who is the employing authority or management of the school you are employing for? Example: Roman Catholic, Government of Sierra Leone, ..',
+        school_name:'Official name of the school you are applying for',
+        other_names:'Any other names you go by',
+        nationality: 'Your nationality', 
+        prev_appt: 'Your previous employment title and location, whether it was as a teacher or not',
+        pin_code: "6 digit teacher's pin code",
+        nassit: "17 digit National Social Security and Insurance Trust number",
+        qualifications: 'Why are you qualified to teach? List and attach any certificate numbers',
+        special_skills: "e.g. Special Needs, Music, ..",
+        national_id: '8 digit alpha-numeric national identification, granted through the National Civil Registration Authority regardless of citizenship'
       }
-      
 };
  }
+  async componentDidMount() {
+    const app = this.props.application
+    if (this.props.application!==undefined) {
+      this.setState({
+        application: app,
+        step:1,
+      })
+    }
+  }
 
   submit = (event) => {
     const { step } = this.state;
@@ -51,58 +90,50 @@ export default class Application extends Component {
             this.setState({
               step: step + 1, 
             });
-          } else {console.log(response.data)}
+          } 
         })
       
   }
 
-  async componentDidMount() {
-    const app = this.props.application
-    if (this.props.application!==undefined) {
-      this.setState({
-        application: app,
-        step:1,
-      })
-    }
-  }
-
   step = val => e => {
     let k = 0
-    if (val==='exit') {
-      //push to dashboard 
-    }
-    else{
+    // if (val!=='exit') {
       if (val==='next') {k=1}
       else if (val==='prev') {k=-1}
       const { step } = this.state;
       this.setState({
         step: step + k
       });
-    }
+    // }
     axios 
     .post('http://localhost:5000/api/save-application', 
       this.state.application) 
     .then(response => {
       if (response.data==="application updated sucessfully") {
         }
-      else {console.log(response.data)}
-    })
-  };
+    }).catch(error => {
+     console.log(error)
+  });
+  if (val==='exit') {
+    this.props.clearChosen()
+  }
+};
 
   handleCheckboxChange = name => event => {
     this.setState({ checkMark: event.target.checked })
   }
 
   beginApp = () => e => {
-
     axios 
       .post('http://localhost:5000/api/begin-application', 
         {"email": this.state.application.email,
           "sex": this.state.application.sex, 
           "first_name": this.state.application.first_name, 
           "last_name": this.state.application.last_name, 
+          "mobile_number": this.state.application.mobile_number,
           "application_type": this.state.application.application_type,
-          "user_id": this.props.user.user_id
+          "user_id": this.props.user.user_id, 
+          "birth_date": this.state.application.birth_date
       }) 
       .then(response => {
         if (response.data.message==="application registered sucessfully") {
@@ -118,7 +149,6 @@ export default class Application extends Component {
         );
         }
       })
-
   };
 
  
@@ -133,20 +163,74 @@ export default class Application extends Component {
 
 
   handleChangeSave = input => e => {
-    const value = e.target.value
+    const { name, value } = e.target;
     this.setState(prevState => ({
       application: {                 
           ...prevState.application, 
           [input]: value    
       }
-  }))
+  })
+  )
+  let formErrors = { ...this.state.formErrors };
+  switch (input) {
+    case "national_id":
+      if (value==='') {formErrors.national_id=''}
+      else 
+        { formErrors.national_id =
+          !natIDRegex.test(value)? "Please enter a valid National ID" : ""
+          } 
+   break;
+   case "pin_code":
+      formErrors.pin_code =
+        (isNaN(value) || value.length!==6)? "Please enter a valid Pin number" : ""     
+   break;
+   case "nassit":
+      if (value==='') {formErrors.nassit=''}
+      else 
+        { formErrors.nassit =
+          !nassitRegex.test(value)? "Please enter a valid Nassit number" : ""
+          } 
+   break;
+}
+this.setState({ formErrors, [name]: value });
+
+
+  }
+
+
+  validateApplication = () => e=> {
+    let valid = true;
+    let errors = ''
+    let missingString = ''
+    const app = this.state.application
+    const req = [app.employing_authority, app.national_id, app.nationality, app.school_name]
+    const list = [{val:app.other_names, name:'any other names'}, {val:app.pin_code, name:'a pin code'}, {val:app.nassit, name:'a NASSIT number'}, {val:app.qualifications, name:'any qualifications'}, {val:app.special_skills, name:'any special skills'}]
+    const emptyFields = []
+    list.forEach(
+      (i) => {
+      if (i['val']===null || i['val']==='') {emptyFields.push(i['name'])}
+      })
+    if (emptyFields.length!==0) 
+      {missingString = emptyFields.join(', ')}
+    Object.values(req).forEach((val) => {
+      if (val===null) {
+        valid = false
+        errors ='The following are required: National Identification Number, School Name, Employing Authority, and Nationality.'
+      }});
+      this.setState({
+        errors: errors, 
+        missingString: missingString
+      })
+
+
+    return valid;
   }
 
 
   render() {
-    const { school_name, prev_appt, nationality, application_type, application_id, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
-    const { step } = this.state
-    const values = { school_name, prev_appt, application_id, nationality, application_type, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex};
+    const { birth_date, national_id, school_name, prev_appt, nationality, application_type, application_id, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
+    const { formErrors, step, errors, missingString, toolTip } = this.state
+    const values = { toolTip, formErrors, birth_date, national_id, school_name, prev_appt, application_id, nationality, application_type, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex, errors, missingString};
     switch (step) {
       case 0: 
         return (
@@ -191,10 +275,10 @@ export default class Application extends Component {
           <Submit
             step={this.step}
             submit = {this.submit}
+            validateApplication= {this.validateApplication}
             values={values}
             checkmarked = {this.state.checkMark}
             handleCheckboxChange = {this.handleCheckboxChange}
-            errors = {this.state.errors}
           />); 
       case 6:
         return (

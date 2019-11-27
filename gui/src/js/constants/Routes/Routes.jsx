@@ -9,12 +9,11 @@ import Register from "../../components/Registration/Register.jsx"
 import PasswordForgot from "../../components/Registration/PasswordForgot.jsx"
 // import ResetPassword from "../../components/Registration/ResetPassword.jsx"
 import NotFound from "../../components/NotFound.jsx"
-import Welcome from "../../components/ApplicantDashboard/Welcome.jsx"
+import Dashboard from "../../components/Dashboard.jsx"
 import Application from "../../components/ApplicantDashboard/Application.jsx"
 import AppliedRoute from "./AppliedRoute.jsx"
 import UnauthenticatedRoute from "./UnauthenticatedRoute.jsx"
 import AuthenticatedRoute from "./AuthenticatedRoute.jsx"
-import MyApps from "../../components/ApplicantDashboard/MyApps.jsx"
 import AcountPage from "../../components/Account/AccountPage.jsx"
 import AuthenticatedUserRoute from "./AuthenticatedUserRoute.jsx"
 
@@ -63,13 +62,6 @@ import AuthenticatedUserRoute from "./AuthenticatedUserRoute.jsx"
               props={childProps}
             /> 
 
-
-            <AuthenticatedRoute
-              path="/dashboard"
-              exact
-              component={Welcome}
-              props={childProps}
-            /> 
             <AuthenticatedRoute
               path="/my-account"
               exact
@@ -77,24 +69,20 @@ import AuthenticatedUserRoute from "./AuthenticatedUserRoute.jsx"
               props={childProps}
             /> 
 
-            {/*  only these two will need to change:  */ }
             <AuthenticatedRoute
-              path="/dashboard/my-applications"
+              path="/dashboard"
               exact
-              component={MyApps}
+              component={Dashboard}
               props={childProps}
             /> 
-            <AuthenticatedUserRoute  /*this one is ONLY FOR APPLICANTS */
+            <AuthenticatedUserRoute 
               path="/dashboard/new-application"
               exact
               component={Application}
               props={childProps}
             /> 
 
-
-
             <Route component={NotFound} /> 
     </Switch>
     );
-
 

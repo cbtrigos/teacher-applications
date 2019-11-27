@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var {db} = require('../authentication/mysql.json')
+var moment = require('moment');
 
   //                                 CONNECTING TO MYSQL
 
@@ -10,23 +11,28 @@ connection.connect(function(err) {
   } } );
 //                                  REGISTER AN APPLICATION
 exports.begin = function(req,res) {
-  var now = new Date();
+  var now = moment().format("YYYY-MM-DD hh:mm:ss");
   var application={ //application_id
     "user_id":req.body.user_id,
     "application_type":req.body.application_type,
     "created": now,
+    "mobile_number": req.body.mobile_number,
     "last_edited": now,
     "first_name":req.body.first_name,
     "last_name":req.body.last_name, 
     "email":req.body.email, 
     "sex": req.body.sex, 
+    "birth_date": req.body.birth_date
 }
+
+
+
   connection.query('INSERT INTO applications SET ?',application, function (error, results, fields) {
     if (error) {
         res.status(400).send("error occured")
 
     }else{
-      connection.query('SELECT * FROM applications WHERE user_id = ? and application_type = ?',[application.user_id, application.application_type], function (error, results, fields) {
+      connection.query('SELECT * FROM applications WHERE user_id = ? and application_type = ? and created=?',[application.user_id, application.application_type, application.created], function (error, results, fields) {
         if (error) {
           res.status(400).send("couldn't find application")
         }else{
@@ -52,7 +58,9 @@ exports.save = function(req,res){
         "school_name":req.body.school_name,
         "other_names":req.body.other_names,
         "mobile_number":req.body.mobile_number, 
+        "birth_date": req.body.birth_date,
         "nationality": req.body.nationality, 
+        "national_id": req.body.national_id,
         "prev_appt": req.body.prev_appt,
         "pin_code": req.body.pin_code,
         "nassit": req.body.nassit,
@@ -63,9 +71,8 @@ exports.save = function(req,res){
         "email":req.body.email, 
         "sex": req.body.sex, 
     }
-
-    connection.query('UPDATE applications SET application_type = ?, employing_authority = ?, school_name =?, other_names= ?, mobile_number = ?, nationality = ?, prev_appt = ?, pin_code = ?, nassit = ?, qualifications = ?, special_skills = ?, last_edited = ?, last_name = ?, email = ?, sex =? WHERE application_id = ?',
-    [application.application_type, application.employing_authority, application.school_name, application.other_names, application.mobile_number, application.nationality, application.prev_appt, application.pin_code, application.nassit, application.qualifications, application.special_skills, application.last_edited, application.last_name, application.email, application.sex, application.application_id], function (error, results, fields) {
+    connection.query('UPDATE applications SET application_type = ?, employing_authority = ?, school_name =?, other_names= ?, mobile_number = ?, nationality = ?, prev_appt = ?, pin_code = ?, nassit = ?, qualifications = ?, special_skills = ?, last_edited = ?, last_name = ?, email = ?, sex =?, national_id=? WHERE application_id = ?',
+    [application.application_type, application.employing_authority, application.school_name, application.other_names, application.mobile_number, application.nationality, application.prev_appt, application.pin_code, application.nassit, application.qualifications, application.special_skills, application.last_edited, application.last_name, application.email, application.sex, application.national_id, application.application_id], function (error, results, fields) {
     if (error) {
         res.status(400).send("error occured")
     }else{
@@ -80,7 +87,6 @@ exports.submit = function(req,res){
     last_edited = new Date()
     connection.query('UPDATE applications SET submitted = ?, last_edited=? WHERE application_id = ?',['true', last_edited, application_id], function (error, results, fields) {
       if (error) {
-        console.log(error)
           res.status(400).send("couldn't find application")
         }else{
           res.status(200).send("application submitted successfully")
@@ -94,7 +100,6 @@ exports.delete = function(req,res){
   application_id = req.body.application_id
   connection.query('DELETE FROM applications WHERE application_id = ?',application_id, function (error, results, fields) {
     if (error) {
-      console.log(error)
         res.status(400).send("couldn't delete application")
       }else{
         res.status(200).send('application deleted successfully')
@@ -110,7 +115,6 @@ exports.getApplicantApplications = function(req,res){
   last_edited = Date()
   connection.query('SELECT * FROM applications WHERE user_id = ?',user_id, function (error, results, fields) {
       if (error) {
-        console.log(error)
         res.status(400).send("error in getting applications")
       }else{
          var incompleteApps = []

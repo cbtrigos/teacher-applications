@@ -19,12 +19,33 @@ export const ExpansionPanel = withStyles({
     },
     expanded: {},
     })(MuiExpansionPanel);
+  
+  export const ExpansionPanelInsideSummary = withStyles({
+    root: {
+      backgroundColor: 'rgba(37,142,160,1)',
+      opacity: .85,
+      borderBottom: '1px solid rgba(0, 0, 0, .125)',
+      marginBottom: -1,
+      minHeight: 56,
+      '&:hover': {
+        opacity: 1,
+      },
+      '&$expanded': {
+        minHeight: 56,
+      },
+    },
+    content: {
+      '&$expanded': {
+        margin: '12px 0',
+      },
+    },
+    expanded: {},
+  })(MuiExpansionPanelSummary);
 
 export const ExpansionPanelSummary = withStyles({
     root: {
-      // backgroundColor: 'rgba(0, 0, 0, .03)',
-      backgroundColor: '#93A3B1',
-      opacity: .8,
+      backgroundColor: 'rgba(129,121,144,1)',
+      opacity: .85,
       borderBottom: '1px solid rgba(0, 0, 0, .125)',
       marginBottom: -1,
       minHeight: 56,

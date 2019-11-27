@@ -117,8 +117,8 @@ export default class UserForm extends React.Component {
   }
 
   render() {
-    const {firstName, serverMessage, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
-    const values = { firstName, lastName, email, gender,  DOB, password1, password2, formErrors, serverMessage};
+    const {firstName, serverMessage, mobile_number, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
+    const values = { firstName, mobile_number, lastName, email, gender,  DOB, password1, password2, formErrors, serverMessage};
         return (
           <FormUserDetails
             handleChangeSave={this.handleChangeSave}

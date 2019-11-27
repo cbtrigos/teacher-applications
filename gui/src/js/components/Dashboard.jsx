@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import {H1, A, H2, It, HorizSeparator, Wrapper, FormWrapper} from '../../constants/utils/Styling.jsx'
+import {H1, A, H2, It, HorizSeparator, Wrapper, FormWrapper} from '../constants/utils/Styling.jsx'
 import axios from 'axios';
-import Application from "./Application.jsx"
-import DraftPanels from './ApplicationPanels.jsx'
+import Application from "./ApplicantDashboard/Application.jsx"
+import DraftPanels from './ApplicantDashboard/ApplicationPanels.jsx'
+import ApproverPanels from './AdminDashboard/ApproverPanels.jsx'
 
 
 // The "App Type" page is the 0th panel of registration 
-export default class MyApps extends Component {
+export default class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,7 +16,6 @@ export default class MyApps extends Component {
       chosen: null, 
         };
   }
-
 
   async componentDidMount() {
        axios 
@@ -70,7 +70,7 @@ export default class MyApps extends Component {
 
   render() {
     const user = this.props.user
-    const startApp = <A href='new-application'>here</A>;
+    const startApp = <A href='/dashboard/new-application'>here</A>;
     const drafts = this.state.currentApps.map(item => 
           <DraftPanels key={item.application_id} application={item} type='draft' updateChosen={this.updateChosen} deleteApplication={this.confirmDelete}/>
           );
@@ -78,10 +78,27 @@ export default class MyApps extends Component {
       <DraftPanels key={item.application_id} application={item} type='submitted' deleteApplication={this.deleteApplication} />
      );
         return (
-            <>
-          {this.state.chosen===null
-            ? <Wrapper>
-                <FormWrapper>
+        <>
+        {user.user_type=== 0 
+        // applicant dashboard
+          ?  <>
+            {this.state.chosen===null
+              ? <Wrapper>
+                  <FormWrapper large>
+                    <H1>
+                      Welcome to your personal dashboard, {user.first_name}!
+                    </H1>
+                    <H2> Click on Dashboard in the above menu to start. <br/><br/>
+                        You can complete a primary, secondary, 
+                        or vocational school application within 15 minutes, or you can start one and 
+                        return whenever you're ready to submit it. <br/><br/>
+                    Once submitted, you'll be able to track your application as it gets approved by each agency. 
+                        As approval updates occur for your application, you'll receive both an email and a notification here in your dashboard!<br/><br/>
+                        Good luck!
+                    </H2>
+                  </FormWrapper ><br/> <br/>
+
+                <FormWrapper large>
                 <H1>{user.first_name}'s Applications</H1>
                     <div>
                     <HorizSeparator/>
@@ -101,10 +118,29 @@ export default class MyApps extends Component {
                 </Wrapper>
               :
               <>
-              <Application application={this.state.chosen} user = {this.props.user} clearChosen ={() =>this.updateChosen({})}/>
+              <Application application={this.state.chosen} user = {this.props.user} clearChosen ={this.clearChosen}/>
               </> 
               }
             </>
+        :<> 
+        {/* Approver Dashboard */}
+        <Wrapper>
+          <FormWrapper large>
+            <H1>
+              Welcome to your personal dashboard, {user.first_name}!
+            </H1>
+            <H2>
+              This dashboard was created for you to review applications efficiently and easily.<br/><br/>
+              Explore the below applications and either approve or reject them right here in this page. <br/><br/>
+              Good luck!
+            </H2>
+          </FormWrapper> <br/> <br/>
+        <ApproverPanels user={this.props.user}/>
+        </Wrapper>
+      </>
+      
+      }
+      </>
             );
           
         }

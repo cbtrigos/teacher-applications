@@ -1,9 +1,20 @@
 import React, { Component } from "react";
-import {H1, H2, It, Clearlink, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
+import {H1, H2, It, Tooltip, InfoIcon, TooltipText, Clearlink, TextArea, Wrapper, WideButton, Buttons, Left, FormWrapper, Input, Label, New, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
 import { CountryDropdown } from 'react-country-region-selector';
 import NumberFormat from 'react-number-format';
 
+
+export default function Info(title) {
+  event.preventDefault();
+
+  return (
+    <Tooltip> 
+      <InfoIcon/>
+      <TooltipText>{title}</TooltipText>
+    </Tooltip>
+  );
+}
 
 export class AppType extends Component {
   render() {
@@ -57,8 +68,9 @@ export class AppType extends Component {
     };
 };
 export class PersonalInfo extends Component {
+
   render() {
-    const { values, handleChangeSave, handleNationalityChange, step } = this.props;
+    const {values, handleChangeSave, handleNationalityChange, step } = this.props;
         return (
             <Wrapper>
              <FormWrapper>
@@ -69,7 +81,7 @@ export class PersonalInfo extends Component {
 
                 <Buttons> 
                 <Left>
-                    <Label htmlFor="firstName"> First Name</Label>
+                    <Label htmlFor="firstName">First Name * </Label>
                         <Input
                             type = "text"
                             className=""
@@ -78,11 +90,9 @@ export class PersonalInfo extends Component {
                             disabled={true}
                             onChange={handleChangeSave('first_name') }
                             defaultValue={values.first_name} />
-                           
-
                 </Left>
                 <New>
-                    <Label htmlFor="lastName">Last Name</Label>
+                    <Label htmlFor="lastName">Last Name *</Label>
                     <Input
                         type = "text"
                         className=""
@@ -91,14 +101,15 @@ export class PersonalInfo extends Component {
                         disabled={true}
                         onChange={handleChangeSave('last_name') }
                         defaultValue={values.last_name}
-
                         />
 
                 </New> 
                 </Buttons>
 
                 <New>
-                    <Label htmlFor="other_names"> Other Names</Label>
+                    <Label htmlFor="other_names">Other Names 
+                    {Info(values.toolTip.other_names)}
+                    </Label>
 
                         <Input
                             type = "text"
@@ -109,7 +120,8 @@ export class PersonalInfo extends Component {
                             />
                 </New>
                 <New>
-                    <Label htmlFor="mobile_number"> Mobile Number</Label>
+
+                    <Label htmlFor="mobile_number">Mobile Number *</Label>
                       <NumberFormat 
                           disabled={true}
                           customInput={Input} 
@@ -120,7 +132,7 @@ export class PersonalInfo extends Component {
                           />
                 </New>
                 <New>
-                    <Label htmlFor="gender"> Gender</Label>
+                    <Label htmlFor="gender">Gender *</Label>
 
                         <Input
                             type = "text"
@@ -132,7 +144,21 @@ export class PersonalInfo extends Component {
                             />
                 </New>
                 <New>
-                    <Label htmlFor="nationality"> Nationality</Label>
+                    <Label htmlFor="birth_date">Birth Date *</Label>
+                        <Input
+                            type = "text"
+                            name='birth_date'
+                            noValidate
+                            disabled={true}
+                            onChange={handleChangeSave('birth_date')}
+                            defaultValue={values.birth_date}
+                            />
+                </New>
+                <New>
+                    <Label htmlFor="nationality"> Nationality *
+                    {Info(values.toolTip.nationality)}
+
+                    </Label>
 
                     <CountryDropdown
                         country={values.nationality}
@@ -150,22 +176,34 @@ export class PersonalInfo extends Component {
                         tabIndex={100}
                        />
                 </New>
+                <New>
+                    <Label htmlFor="national_id"> National Identification Number *
+                    {Info(values.toolTip.national_id)}
+                    </Label>
+                    <Input
+                          customInput={Input} 
+                          value={values.national_id} 
+                          onChange={handleChangeSave('national_id')}
+                          />
+                   {values.formErrors.national_id!==''
+                      && <ErrorMessage>{values.formErrors.national_id}</ErrorMessage>}
+                </New>
 
                 <br/> <br/> 
                 <Buttons>
                   <Left>
-                  <Clearlink href='my-applications'><CreateButton
+                  <Clearlink href='/dashboard/'><CreateButton
                     color="primary"
                     variant="contained"
                     onClick={step('exit')}
-                    disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
-                  >Save and Exit</CreateButton></Clearlink>
+                    disabled = {values.formErrors.national_id!==''}
+                    >Save and Exit</CreateButton></Clearlink>
                 </Left>
                 <CreateButton
                   color="primary"
                   variant="contained"
                   onClick={step('next')}
-                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                  disabled = {values.formErrors.national_id!==''}
 
                 >Save and Continue</CreateButton>
               </Buttons>
@@ -192,7 +230,9 @@ export class TeacherInfo extends Component {
                 
                   </Buttons>
                   <New>
-                      <Label htmlFor="employing_authority">Employing authority </Label>
+                      <Label htmlFor="employing_authority">Employing authority *
+                      {Info(values.toolTip.employing_authority)}
+                      </Label>
                       <Input
                           type = "text"
                           name="employing_authority"
@@ -202,7 +242,9 @@ export class TeacherInfo extends Component {
                           />
                   </New>
                   <New>
-                      <Label htmlFor="school_name">School Name </Label>
+                      <Label htmlFor="school_name">School Name *
+                      {Info(values.toolTip.school_name)}
+                      </Label>
                       <Input
                           type = "text"
                           name="school_name"
@@ -212,7 +254,10 @@ export class TeacherInfo extends Component {
                           />
                   </New>
                   <New>
-                      <Label htmlFor="pin_code"> Pin Code (if any)</Label>
+                      <Label htmlFor="pin_code"> Pin Code (if any)
+                      {Info(values.toolTip.pin_code)}
+
+                      </Label>
   
                           <Input
                               type = "text"
@@ -221,23 +266,29 @@ export class TeacherInfo extends Component {
                               onChange={handleChangeSave('pin_code')}
                               defaultValue={values.pin_code}
                               />
-                        {isNaN(values.pin_code) && <ErrorMessage> Value must be a number</ErrorMessage>}   
+                        {values.formErrors.pin_code!=='' && <ErrorMessage> {values.formErrors.pin_code}</ErrorMessage>}   
                   </New>
                   <New>
-                      <Label htmlFor="nassit_number"> Nassit Number (if any)</Label>
+                      <Label htmlFor="nassit"> Nassit Number (if any)
+                      {Info(values.toolTip.nassit)}
+
+                      </Label>
   
                           <Input
                               type = "text"
-                              name='nassit_number'
+                              name='nassit'
                               noValidate
                               onChange={handleChangeSave('nassit')}
                               defaultValue={values.nassit}
                               />
-                        {isNaN(values.nassit) && <ErrorMessage> Value must be a number</ErrorMessage>}   
+                        {values.formErrors.nassit!=='' && <ErrorMessage> {values.formErrors.nassit}</ErrorMessage>}   
                  </New>
                   
                   <New>
-                      <Label htmlFor="prev_appt"> Previous appointment and Employing Authority (If any)</Label>
+                      <Label htmlFor="prev_appt"> Previous Employment (if any)
+                      {Info(values.toolTip.prev_appt)}
+
+                      </Label>
   
                           <Input
                               type = "text"
@@ -257,23 +308,23 @@ export class TeacherInfo extends Component {
                     color="primary"
                     variant="contained"
                     onClick={step('prev')}
-                    disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                    disabled = {values.formErrors.pin_code!=='' || values.formErrors.nassit!==''}
                   >Save and Go Back</CreateButton> 
                 </Left>
                 <CreateButton
                   color="primary"
                   variant="contained"
                   onClick={step('next')}
-                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
+                  disabled = {values.formErrors.pin_code!=='' || values.formErrors.nassit!==''}
 
                 >Save and Continue</CreateButton>
               </Buttons>
-              <Clearlink href='my-applications'><CreateButton
+              <Clearlink href='/dashboard/'><CreateButton
                   color="primary"
                   variant="contained"
                   onClick={step('exit')}
-                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
-                >Save and Exit</CreateButton></Clearlink>
+                  disabled = {values.formErrors.pin_code!=='' || values.formErrors.nassit!==''}
+                  >Save and Exit</CreateButton></Clearlink>
               </FormWrapper>
               </Wrapper>
   
@@ -292,7 +343,7 @@ export class ShortAnswer extends Component {
               Application #{values.application_id}<br/><br/>
               Short Answer: Part 3/5</H2><br/>
                 <New>
-                    <Label htmlFor="nassit_number"> Qualifications (if any)</Label>
+                    <Label htmlFor="qualifications"> Qualifications and Certificate Numbers (if any) {Info(values.toolTip.qualifications)}</Label>
 
                         <TextArea
                             type = "text"
@@ -301,10 +352,12 @@ export class ShortAnswer extends Component {
                             onChange={handleChangeSave('qualifications')}
                             defaultValue={values.qualifications}
                             />
-                {/* <ErrorMessage>{values.formErrors.qualifications}</ErrorMessage> */}
                 </New>
                 <New>
-                    <Label htmlFor="special_skills"> Special Skills (if any)</Label>
+                    <Label htmlFor="special_skills"> Special Skills (if any)
+                    {Info(values.toolTip.special_skills)}
+
+                    </Label>
 
                         <TextArea
                             type = "text"
@@ -313,7 +366,6 @@ export class ShortAnswer extends Component {
                             onChange={handleChangeSave('special_skills')}
                             defaultValue={values.special_skills}
                             />
-                {/* <ErrorMessage>{values.formErrors.special_skills}</ErrorMessage> */}
                 </New>
               <Buttons>
                 <Left> 
@@ -329,11 +381,10 @@ export class ShortAnswer extends Component {
                   onClick={step('next')}
                 >Save and Continue</CreateButton>
               </Buttons>
-              <Clearlink href='my-applications'><CreateButton
+              <Clearlink href='/dashboard/'><CreateButton
                   color="primary"
                   variant="contained"
                   onClick={step('exit')}
-                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
                 >Save and Exit</CreateButton></Clearlink>
             </FormWrapper>
             </Wrapper>
@@ -344,7 +395,7 @@ export class ShortAnswer extends Component {
 };
 export class Attachments extends Component {
   render() {
-    const { values, handleChangeSave, step} = this.props;
+    const { values, step} = this.props;
         return (
             <Wrapper>
               <FormWrapper>
@@ -352,7 +403,7 @@ export class Attachments extends Component {
               <H2>{values.application_type} School <br/>
               Application #{values.application_id}<br/><br/>
               Attachments: Part 4/5</H2><br/>
-               ***** 
+              Please attach all certificates listed previously 
               <Buttons>
                 <Left> 
                   <CreateButton
@@ -367,11 +418,10 @@ export class Attachments extends Component {
                   onClick={step('next')}
                 >Save and Continue</CreateButton>
               </Buttons>
-              <Clearlink href='my-applications'><CreateButton
+              <Clearlink href='/dashboard/'><CreateButton
                   color="primary"
                   variant="contained"
                   onClick={step('exit')}
-                  disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
                 >Save and Exit</CreateButton></Clearlink>
             </FormWrapper>
             </Wrapper>
@@ -383,45 +433,50 @@ export class Attachments extends Component {
 export class Submit extends Component {
   constructor(props) {
     super(props);
-    this.getErrorMessage = this.getErrorMessage.bind(this);
-    this.getMissingString = this.getMissingString.bind(this);
+    this.state = {
+      missingString: '',
+      errors: '', 
+      formDisabled:true
+    }
+  }
+  async componentDidMount() {
+    let disabled = false;
+    let errors = ''
+    let missingString = ''
+    const app = this.props.values
+    const req = [app.employing_authority, app.national_id, app.nationality, app.school_name]
+    // const optional = [app.other_names, app.pin_code, app.nassit, app.qualifications, app.special_skills]
+    const list = [{val:app.other_names, name:'any other names'}, {val:app.pin_code, name:'a pin code'}, {val:app.nassit, name:'a NASSIT number'}, {val:app.qualifications, name:'any qualifications'}, {val:app.special_skills, name:'any special skills'}]
+    const emptyFields = []
+    list.forEach(
+      (i) => {
+      if (i['val']===null || i['val']==='') {emptyFields.push(i['name'])}
+      })
+    if (emptyFields.length!==0) 
+      {missingString = emptyFields.join(', ')}
+    Object.values(req).forEach((val) => {
+      if (val===null) {
+        disabled = true
+        errors ='The following are required: National Identification Number, School Name, Employing Authority, and Nationality.'
+      }});
+      this.setState({
+        errors: errors, 
+        missingString: missingString, 
+        formDisabled: disabled
+      })
   }
 
-    getMissingString = () => {
-      const {mobile_number, other_names, school_name, pin_code, nassit, qualifications, special_skills} = this.props.values
-      const list = [{val: school_name, name: 'a school name'},{val:mobile_number, name:'a mobile number'}, {val:other_names, name:'any other names'}, {val:pin_code, name:'a pin code'}, {val:nassit, name:'a NASSIT number'}, {val:qualifications, name:'any qualifications'}, {val:special_skills, name:'any special skills'}]
-  
-      const emptyFields = []
-      list.forEach(
-        (i) => {
-        if (i['val']===null || i['val']==='') {emptyFields.push(i['name'])}
-        })
-      if (emptyFields.length!==0) {return emptyFields.join(', ')}
-      else {
-        return ''}
-    }
-
-    getErrorMessage = (nationality, employingAuth) => {
-      if ((nationality===null || nationality==='') && (employingAuth===null || employingAuth==='')) 
-        {return 'Both the nationality and the employing authority fields are required. Please return and provide them before proceeding.'}
-      else if (nationality===null || nationality==='') {
-        return 'The nationality field is required. Please return to provide it before proceeding.'}
-      else if (employingAuth===null || employingAuth==='') 
-        {return 'The employing authority field is required. Please return and provide it before proceeding.'}
-      return ''
-    }
-
   render() {
-    const { values, checkmarked, step, submit, handleCheckboxChange } = this.props;
-    const errorMessage = this.getErrorMessage(values.nationality, values.employing_authority)
-    const missingString = this.getMissingString()
+    const { values, checkmarked, step, submit, handleCheckboxChange, validateApplication } = this.props;
+
+    
     return (
           <Wrapper>
             <FormWrapper>
               <H1>Application</H1>
                 <H2>{values.application_type} School <br/>
               Application #{values.application_id}<br/><br/>
-               5/5: Confirm Application Details</H2><br/>
+               5/5: Confirm Application Details</H2>
            <H2>
             <Div>
               <Category> First Name: </Category> <It> {values.first_name} </It>
@@ -442,7 +497,9 @@ export class Submit extends Component {
             <Div>
             <Category> Nationality: </Category><It> {values.nationality} </It>
             </Div>
-
+            <Div>
+            <Category> National Identification Number: </Category><It> {values.national_id} </It>
+            </Div>
             <Div>
             <Category> Employing Authority: </Category><It> {values.employing_authority} </It>
             </Div>
@@ -462,7 +519,8 @@ export class Submit extends Component {
             <Category> Special Skills: </Category><It> {values.special_skills} </It>
             </Div>
           <br />
-        {missingString!='' &&
+
+        {this.state.missingString!='' &&
           <Buttons>
             <Left style={{minWidth: '2%', width: '4%', marginRight:'-1%'}}>
               <Input 
@@ -473,12 +531,12 @@ export class Submit extends Component {
               />
             </Left>
             <New >
-          I verify that I purposefully did not provide the following: {missingString}.
+          I verify that I purposefully did not provide the following: {this.state.missingString}.
           </New></Buttons>
           }
           </H2>
-          {missingString!='' && !checkmarked && <ErrorMessage>Please check the above box in order to submit.</ErrorMessage>}
-          {errorMessage!==null && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          {this.state.missingString.length> 0 && !checkmarked && <ErrorMessage>Please check the above box in order to submit.</ErrorMessage>}
+          {this.state.errors!=='' && <ErrorMessage>{this.state.errors}</ErrorMessage>}
 
         <Buttons>
           <Left> 
@@ -491,15 +549,14 @@ export class Submit extends Component {
           <CreateButton
             color="primary"
             variant="contained"
-            disabled={(missingString!='' && !checkmarked) || errorMessage!==''}
+            disabled = {this.state.formDisabled}
             onClick={submit}
           >Submit</CreateButton>
           </Buttons>
-          <Clearlink href='my-applications'><CreateButton
+          <Clearlink href='/dashboard/'><CreateButton
             color="primary"
             variant="contained"
             onClick={step('exit')}
-            disabled = {isNaN(values.nassit) || isNaN(values.pin_code)}
           >Exit</CreateButton></Clearlink>
           
           </FormWrapper>
@@ -527,7 +584,7 @@ export class Completed extends Component {
               You'll hear from us as soon as approval updates begin. <br/>
               Thank you for applying to teach Sierra Leone's youth. <br/>
           <br />
-          <Clearlink href='/dashboard/my-applications'>
+          <Clearlink href='/dashboard/'>
           <CreateButton
             color="primary"
             variant="contained"
@@ -550,23 +607,3 @@ const Category= styled.div`
 background-color: lightgrey;
 text-align: center;
 font: inherit;`
-
-
-const SLeft = styled(Left)`
-width: 10px`
-
-
-const Phoneinput = styled.input`
-    padding: 10px 10px;
-    margin: 0 0 1.5% 0;
-    width: 100%;
-    border-radius: 5px;
-    outline: none;
-    border: 1px solid #cfcfcf;
-    float: right;
-    ::placeholder {
-        font-size: 1em;
-        font-weight: light;
-        color: #999;
-    };
-    `
