@@ -10,6 +10,7 @@ This portal, SL Teacher Applications, is made for five user types:
 * Unauthenticated Approver (user type = 4); those waiting to be authenticated to become one of: Approver 1, Approver 2, Approver 3, or a Master User 
 * Master User (user type = 5)
 
+
 --------------------------------------------------------------------
 ### Background 
 The following is provided to give some backgorund into the flow of information through the portal, from the creation of an application to the allocation of the applicant to a school. 
@@ -98,3 +99,4 @@ teacher-applications/api $ nodemon server.js
 SL Teacher Applications is authored and maintained by Citlali Trigos-Raczkowski and built through the Directorate of Science, Technology, and Innovation [DSTI](https://www.dsti.gov.sl/) in collaboration with the Teacher Service Commision
 
 Email me here: cbtrigos@mit.edu
+:blush: :wave:
