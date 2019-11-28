@@ -73,6 +73,20 @@ Applicants can draft applications to return to or delete, or submit them immedia
 
 
 -------------------------------------------------------------------------
+### Progress & the Future 
+
+- [x] creating registration + login capabilities with routing 
+- [x] cookies & staying logged in on refresh 
+- [x] applicant dashboards with application register, save, submit, and delete routes 
+- [x] approval dashboards with approving/rejecting routes 
+- [x] application tracking capabilities
+- [x] pulling the appropriate applications for review & tracking for each user
+- [ ] functioning contact-us email form
+- [ ] verifying email 
+- [ ] authenticated signatures via docu-sign for each user
+- [ ] file uploading & s3 buckets
+- [ ] login timeout 
+
 ### Usage
 
 This project is created using ReactJS, Express, and MySQL. 
