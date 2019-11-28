@@ -86,6 +86,7 @@ Applicants can draft applications to return to or delete, or submit them immedia
 - [ ] authenticated signatures via docu-sign for each user
 - [ ] file uploading & s3 buckets
 - [ ] login timeout 
+--------------------------------------------------------------------
 
 ### Usage
 
@@ -118,6 +119,7 @@ and
 ``` bash
 teacher-applications/api $ nodemon server.js
 ```
+--------------------------------------------------------------------
 
 #### Maintainers
 
