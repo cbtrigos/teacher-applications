@@ -97,4 +97,4 @@ teacher-applications/api $ nodemon server.js
 
 SL Teacher Applications is authored and maintained by Citlali Trigos-Raczkowski and built through the Directorate of Science, Technology, and Innovation [DSTI](https://www.dsti.gov.sl/) in collaboration with the Teacher Service Commision
 
-Email me here!: cbtrigos@mit.edu
+Email me here: cbtrigos@mit.edu
