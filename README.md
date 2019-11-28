@@ -73,7 +73,14 @@ Applicants can draft applications to return to or delete, or submit them immedia
 
 This project is created using ReactJS for the front-end, Express for the backend, and a MySQL database. 
 
-To use this repo locally, start by cloning it and installing the NPM packages in each the api and the gui.
+To use this repo locally, you'll need the database tables and the authentication information to startup the backend. Go ahead and update the following files with the authentication information and also remove the "-sample" from the file names:
+
+- api/authentication/emailAuth-sample.json
+- api/authentication/awsAuth-sample.json
+- api/authentication/mysql-sample.json
+
+Then, go ahead and clone it and instal the NPM packages in each the api and the gui.
+
 
 ``` bash
 $ git clone https://github.com/cbtrigos/teacher-applications
