@@ -15,6 +15,7 @@ node_modules/
 awsAuth.json
 emailAuth.json
 mysql.json
+.DS_Store
 
 # TypeScript v1 declaration files
 typings/
