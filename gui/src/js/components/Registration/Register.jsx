@@ -3,9 +3,9 @@ import axios from 'axios';
 import ApplicantRegister from "./ApplicantRegister.jsx";
 import ApproverRegister from "./ApproverRegister.jsx"
 import { Wrapper, H1, H2, WideButton, CreateButton, FormWrapper } from '../../constants/utils/Styling.jsx';
+
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 const passwordRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})");
-
 
 export default class UserForm extends React.Component {
   constructor(props) {
@@ -22,8 +22,12 @@ export default class UserForm extends React.Component {
       password1: '', 
       password2: '', 
       title: '',
+      school_district: '',
+      approver_type: '',
+      additional_info: '',
       school_name: '',
       emis_code: '',
+
       formErrors: {
         firstName: '',
         lastName: '',
@@ -37,10 +41,13 @@ export default class UserForm extends React.Component {
       },
       serverMessage: null, 
       toolTip: {
+        approver_type: 'Select which approver type you wish to apply for. If none or multiple are applicable, please explain in the additional box below.',
+        school_district: 'If applying to represent a school, enter the district where the school is located. If applying to represent a district, enter that district',
         school_name:'Official name of the school you are registering to make approvals for. If you are applying to approve more than one, please put N/A',
         emis_code: "The school's unique identification code via the Education Management Information System", 
-        title: 'Your authorizing title. ex: Proprietor for school x, Education secretary for District y, Chairman of the Board of Governors for z'
-        }
+        title: 'Your authorizing title. ex: Proprietor for school x, Education secretary for District y, Chairman of the Board of Governors for z',
+        additional_info: "Please enter any additional information that you feel is both relevant and pertinent to your application that is not reflected above"
+      }
     };
   };
 
@@ -107,7 +114,10 @@ export default class UserForm extends React.Component {
             "user_type": 4, 
             "school_name": this.state.school_name, 
             "title": this.state.title, 
-            "emis_code": this.state.emis_code
+            "emis_code": this.state.emis_code,
+            "approver_type": this.state.approver_type,
+            "additional_info": this.state.additional_info,
+            "school_district": this.state.school_district
         }) 
         .then(response => {
           if (response.data.message==="user registered sucessfully") {
@@ -140,6 +150,7 @@ export default class UserForm extends React.Component {
   }
 
   handleChangeSave = input => e => {
+    console.log(input==='school_district')
     this.setState({ [input]: e.target.value });
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
@@ -180,11 +191,12 @@ export default class UserForm extends React.Component {
         break;
   }
   this.setState({ formErrors, [name]: value });
+  console.log(this.state)
   }
 
   render() {
-    const {school_name, title, emis_code, firstName, serverMessage, mobile_number, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
-    const values = {school_name, title, emis_code, firstName, mobile_number, lastName, email, gender,  DOB, password1, password2, formErrors, serverMessage};
+    const {additional_info, approver_type, school_district, school_name, title, emis_code, firstName, serverMessage, mobile_number, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
+    const values = {additional_info, approver_type, school_district, school_name, title, emis_code, firstName, mobile_number, lastName, email, gender,  DOB, password1, password2, formErrors, serverMessage};
     const step = this.state.step;
     switch (step) {
       case 0: 

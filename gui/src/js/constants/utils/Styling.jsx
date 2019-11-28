@@ -217,6 +217,9 @@ export const MenuButton=styled.button`
 `
 
 export const TextArea = styled.textarea`
+border-radius: 5px;
+outline: none;
+border: 1px solid #cfcfcf;
 width: 100%;`
 
 export const WideButton = styled.input`
@@ -321,7 +324,14 @@ ${props =>
   `
   font-size: 11pt;
   `: `font-size:12pt;
-  `}`
+  `}
+  ${props =>
+    props.small ?
+    `
+    margin: 0;
+    padding: 0;
+    `: `
+    `}`
 
 export const ErrorMessage = styled(H2)`
   color: red;

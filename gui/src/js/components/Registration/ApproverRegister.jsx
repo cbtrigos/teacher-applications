@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import {H1, H2, Wrapper, Buttons, Tooltip, InfoIcon, TooltipText, Notification, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
+import {H1, H2, Wrapper, Buttons, TextArea, Partition, Tooltip, InfoIcon, TooltipText, Field, Notification, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
 import NumberFormat from 'react-number-format';
+import {Select, FormControl, MenuItem, InputLabel} from "@material-ui/core/"
 
 export function Info(title) {
     event.preventDefault();
@@ -13,7 +14,6 @@ export function Info(title) {
       </Tooltip>
     );
   }
-// The "Personal Details" page is the 1st panel of the registration 
 export default class ApproverRegister extends Component {
   render() {
     const { values, handleChangeSave, submit, validateForm, step, toolTip } = this.props;
@@ -25,10 +25,122 @@ export default class ApproverRegister extends Component {
               <A_center H2 onClick={step('Clear')}>Looking for the applicant registration? Go here! </A_center><br/>
 
               {values.serverMessage!==null && <Notification>{values.serverMessage}</Notification>}
+              <Partition style={{padding: '3%'}}>
+                  <H1>Approval Request Information</H1>
+                  <New>
+                      <Label htmlFor="approver_type">Approval Request Type *
+                      {Info(toolTip.approver_type)}
+                      </Label>
+                              <FormControl variant="outlined" style={{ width: "100%", height: "45px", padding: '0', margin: '0 0 20px 0' }}>
+                                <InputLabel id="demo-simple-select-outlined-label">
+                                </InputLabel>
+                                <Select style={{ height: "45px" }}
+                                  labelId="demo-simple-select-outlined-label"
+                                  id="demo-simple-select-outlined"
+                                  value={values.approver_type}
+                                  defaultValue={values.approver_type}
+                                  onChange={handleChangeSave('approver_type')}
+                                >
+                                  <MenuItem value=""><H2 small>Please select one:</H2></MenuItem>
+                                  <MenuItem value={"District Education Secretary"}><H2 left small>District Education Secretary</H2></MenuItem>
+                                  <MenuItem value={"School Proprietor"}><H2 left small>School Proprietor/Head/Manager</H2></MenuItem>
+                                  <MenuItem value={"TSC Teacher Management Department"}><H2 left small>TSC Teacher Management Representative</H2></MenuItem>
+                                  <MenuItem value={"TSC Chair"}><H2 left small>TSC Chair</H2></MenuItem>
+                                  <MenuItem value={"Master"}><H2 left small >Master User</H2></MenuItem>
+                                  <MenuItem value={"Other"}><H2 left small >Other (will elaborate below)</H2></MenuItem>
+
+                             </Select>
+                              </FormControl>
+                  </New>
+                  <New>
+                    <Label htmlFor="email">Title * {Info(toolTip.title)}
+                    </Label>
+                    <Field
+                        type = "text"
+                        name="title"
+                        noValidate
+                        onChange={handleChangeSave('title')}
+                        defaultValue={values.title}
+                        />
+                 <ErrorMessage>{values.formErrors.title}</ErrorMessage>
+                </New>
+                <New>
+                    <Label htmlFor="school_name">School Name * {Info(toolTip.school_name)}
+
+                    </Label>
+                    <Field
+                        type = "text"
+                        name="school_name"
+                        noValidate
+                        onChange={handleChangeSave('school_name')}
+                        defaultValue={values.school_name}
+                        />
+                 <ErrorMessage>{values.formErrors.school_name}</ErrorMessage>
+                </New>
+                <New>
+                      <Label htmlFor="school_district">School District *
+                      {Info(toolTip.school_district)}
+                      </Label>
+                              <FormControl variant="outlined" style={{ width: "100%", height: "45px", padding: '0', margin: '0 0 20px 0' }}>
+                                <InputLabel id="demo-simple-select-outlined-label">
+                                </InputLabel>
+                                <Select style={{ height: "45px" }}
+                                  labelId="demo-simple-select-outlined-label"
+                                  id="demo-simple-select-outlined"
+                                  value={values.school_district}
+                                  defaultValue={values.school_district}
+                                  onChange={handleChangeSave('school_district')}
+                                >
+                                  <MenuItem value=""><H2 small>Please select one:</H2></MenuItem>
+                                   <MenuItem value={"Kenema"}><H2 left small >Kenema</H2></MenuItem>
+                                 <MenuItem value={"Kailahun"}><H2 left small>Kailahun</H2></MenuItem>
+                                  <MenuItem value={"Kenema"}><H2 left small>Kenema</H2></MenuItem>
+                                  <MenuItem value={"Kono"}><H2 left small>Kono</H2></MenuItem>
+                                  <MenuItem value={"Bombali"}><H2 left small>Bombali</H2></MenuItem>
+                                  <MenuItem value={"Kambia"}><H2 left small>Kambia</H2></MenuItem>
+                                  <MenuItem value={"Koinadugu"}><H2 left small>Koinadugu</H2></MenuItem>
+                                  <MenuItem value={"Port Loko"}><H2 left small>Port Loko</H2></MenuItem>
+                                  <MenuItem value={"Tonkolili"}><H2 left small>Tonkolili</H2></MenuItem>
+                                  <MenuItem value={"Bo"}><H2 left small>Bo</H2></MenuItem>
+                                  <MenuItem value={"Bonthe"}><H2 left small>Bonthe</H2></MenuItem>
+                                  <MenuItem value={"Moyamba"}><H2 left small>Moyamba</H2></MenuItem>
+                                  <MenuItem value={"Pujehun"}><H2 left small>Pujehun</H2></MenuItem>
+                                  <MenuItem value={"Western Area Rural"}><H2 left small>Western Area Rural</H2></MenuItem>
+                                  <MenuItem value={"Western Area Urban"}><H2 left small>Western Area Urban</H2></MenuItem> 
+                                </Select>
+                              </FormControl>
+                  </New>
+                <New>
+                    <Label htmlFor="emis_code">EMIS Code * {Info(toolTip.emis_code)}
+                    </Label>
+                    <Field
+                        type = "number"
+                        name="emis_code"
+                        noValidate
+                        onChange={handleChangeSave('emis_code')}
+                        defaultValue={values.emis_code}
+                        />
+                 <ErrorMessage>{values.formErrors.emis_code}</ErrorMessage>
+                </New>
+                <New>
+                    <Label htmlFor="additional_info"> Additional Info {Info(toolTip.additional_info)}</Label>
+
+                        <TextArea
+                            type = "text"
+                            name='additional_info'
+                            noValidate
+                            onChange={handleChangeSave('additional_info')}
+                            defaultValue={values.additional_info}
+                            />
+                </New>
+                </Partition>
+
+                <Partition  style={{padding: '3%'}}>
+                  <H1> Personal Account Information</H1>
                 <Buttons> 
                 <Left>
                     <Label htmlFor="firstName">First Name *</Label>
-                        <Input
+                        <Field
                             type = "text"
                             className=""
                             name='firstName'
@@ -42,7 +154,7 @@ export default class ApproverRegister extends Component {
                 </Left>
                 <New>
                     <Label htmlFor="lastName">Last Name *</Label>
-                    <Input
+                    <Field
                         type = "text"
                         className=""
                         name='lastName'
@@ -57,20 +169,8 @@ export default class ApproverRegister extends Component {
                 </New> 
                 </Buttons>
                 <New>
-                    <Label htmlFor="email">Title * {Info(toolTip.title)}
-                    </Label>
-                    <Input
-                        type = "text"
-                        name="title"
-                        noValidate
-                        onChange={handleChangeSave('title')}
-                        defaultValue={values.title}
-                        />
-                 <ErrorMessage>{values.formErrors.title}</ErrorMessage>
-                </New>
-                <New>
                     <Label htmlFor="email">Email *</Label>
-                    <Input
+                    <Field
                         type = "text"
                         name="email"
                         noValidate
@@ -105,7 +205,6 @@ export default class ApproverRegister extends Component {
                     onChange={handleChangeSave('gender')}/>
                   <Label gender>Female</Label>
                 </FlexContainer>
-
                 <FlexContainer>
                   <RadioButton
                     type="radio"
@@ -127,10 +226,9 @@ export default class ApproverRegister extends Component {
                 </FlexContainer>
                   </Buttons>
                 </New>
-
-                <New>
+                <New> <br/>
                     <Label htmlFor="DOB"> Date of Birth *</Label>
-                        <Input
+                        <Field
                             type = "date"
                             className=""
                             placeholder="MM/DD/YYYY"
@@ -142,33 +240,8 @@ export default class ApproverRegister extends Component {
                 <ErrorMessage>{values.formErrors.DOB}</ErrorMessage>
                 </New>
                 <New>
-                    <Label htmlFor="school_name">School Name * {Info(toolTip.school_name)}
-
-                    </Label>
-                    <Input
-                        type = "text"
-                        name="school_name"
-                        noValidate
-                        onChange={handleChangeSave('school_name')}
-                        defaultValue={values.school_name}
-                        />
-                 <ErrorMessage>{values.formErrors.school_name}</ErrorMessage>
-                </New>
-                <New>
-                    <Label htmlFor="emis_code">EMIS Code * {Info(toolTip.emis_code)}
-                    </Label>
-                    <Input
-                        type = "number"
-                        name="emis_code"
-                        noValidate
-                        onChange={handleChangeSave('emis_code')}
-                        defaultValue={values.emis_code}
-                        />
-                 <ErrorMessage>{values.formErrors.emis_code}</ErrorMessage>
-                </New>
-                <New>
                     <Label htmlFor="password1"> Password *</Label>
-                    <Input
+                    <Field
                         className=""
                         type="password"
                         name="password1"
@@ -181,7 +254,7 @@ export default class ApproverRegister extends Component {
                 </New>
                 <New>
                     <Label htmlFor="password2"> Password Confirmation</Label>
-                    <Input
+                    <Field
                         className=""
                         // placeholder="Password"
                         type="password"
@@ -195,6 +268,8 @@ export default class ApproverRegister extends Component {
                 <ErrorMessage>{values.formErrors.password2}</ErrorMessage>
               )}
                 </New>
+
+                </Partition>
                 <br/> <br/> 
                 <CreateButton
                 color="primary"

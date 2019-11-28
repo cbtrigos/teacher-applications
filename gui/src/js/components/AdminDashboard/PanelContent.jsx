@@ -105,6 +105,12 @@ export function Actions(props) {
                     value={application.school_name}/>   
                 </Bucket>
                 <Bucket>
+                <H2 left label>District of the School:</H2>
+                    <Field
+                    disabled={true}
+                    value={application.school_district}/>   
+                </Bucket>
+                <Bucket>
                     <H2 left label>Employing Authority:</H2>
                     <Field 
                     disabled={true}

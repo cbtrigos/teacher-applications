@@ -1,7 +1,7 @@
 import React  from 'react';
 import {H2, H1, Wrapper, FormWrapper, HorizSeparator, It} from '../../constants/utils/Styling.jsx'
 import axios from 'axios';
-import PanelContent from './Panels.jsx'
+import PanelContent from './MasterPanels.jsx'
 
 
 export default class MasterDash extends React.Component {
@@ -48,7 +48,7 @@ export default class MasterDash extends React.Component {
                 <H1>Welcome master user, {user.first_name}</H1>
                 <H2>From this portal, you have the ability to review and approve requests 
                   for Admin access (as application approvers) as well as peruse all users, applications, and schools.<br/>
-                  Start below by approving any requests. Then, use the dashboard drop-down menu above to explore data. <br/>
+                  Start below by approving any requests. Then, use the dashboard drop-down menu above to explore data. <br/><br/>
                   Good luck!</H2>
                 </FormWrapper>
                 <br/> <br/>

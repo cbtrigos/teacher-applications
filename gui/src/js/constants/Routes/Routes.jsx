@@ -11,11 +11,14 @@ import PasswordForgot from "../../components/Registration/PasswordForgot.jsx"
 import NotFound from "../../components/NotFound.jsx"
 import Dashboard from "../../components/Dashboard.jsx"
 import Application from "../../components/ApplicantDashboard/Application.jsx"
+import AcountPage from "../../components/Account/AccountPage.jsx"
+import MasterExplore from "../../components/MasterAccount/MasterExplore.jsx"
+
 import AppliedRoute from "./AppliedRoute.jsx"
 import UnauthenticatedRoute from "./UnauthenticatedRoute.jsx"
 import AuthenticatedRoute from "./AuthenticatedRoute.jsx"
-import AcountPage from "../../components/Account/AccountPage.jsx"
 import AuthenticatedUserRoute from "./AuthenticatedUserRoute.jsx"
+import MasterUserRoute from "./MasterUserRoute.jsx"
 
 // the following don't discriminate based on user_type: 
   // AuthenticatedRoute let's you go to the given component if you're logged in --> else takes you to /login 
@@ -25,7 +28,7 @@ import AuthenticatedUserRoute from "./AuthenticatedUserRoute.jsx"
 
 // these are based on user_type:
   // AuthenticatedUserRoute works like AuthenticatedRoute but redirects to dashboard if not user_type===0
-
+  // MasterUserRoute only allows authenticated master users (user_type=5)
   export default ({ childProps }) => (
     <Switch>
             <AppliedRoute 
@@ -82,6 +85,12 @@ import AuthenticatedUserRoute from "./AuthenticatedUserRoute.jsx"
               props={childProps}
             /> 
 
+            <MasterUserRoute 
+              path="/dashboard/explore"
+              exact
+              component={MasterExplore}
+              props={childProps}
+            />    
             <Route component={NotFound} /> 
     </Switch>
     );

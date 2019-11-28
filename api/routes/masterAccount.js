@@ -24,7 +24,8 @@ if (error) {
     res.status(400).send("error in authenticating user")
     }else{
         if (results.length===1 && user_type===5 && results[0].user_type===user_type) {
-        connection.query('SELECT * FROM approver_requests WHERE approved = ? ', [null], function (error, results, fields) {
+          console.log('got a single master user back..')
+        connection.query('SELECT * FROM approver_requests, users WHERE approver_requests.approved = ? and approver_requests.user_id=users.user_id',"pending", function (error, results, fields) {
             if (error) {
                 console.log(error)
                 res.status(400).send('failed to pull applications')

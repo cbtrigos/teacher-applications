@@ -1,5 +1,5 @@
 import React from "react";
-import {H2, CreateButton, Red, Buttons, Left} from '../../constants/utils/Styling.jsx'
+import {H2, CreateButton, Buttons, Left} from '../../constants/utils/Styling.jsx'
 import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails} from '../../constants/utils/ExpandingPanels.jsx'
 import Tracker from './Tracker.jsx'
 

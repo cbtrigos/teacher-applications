@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import {Wrapper, FormWrapper,} from '../../constants/utils/Styling.jsx'
-import {AppType, PersonalInfo, TeacherInfo, ShortAnswer, Attachments, Submit, Completed} from "./ApplicationInfo.jsx"
+import AppType from './ApplicationPages/AppType.jsx'
+import PersonalInfo from './ApplicationPages/PersonalInfo.jsx'
+import TeacherInfo from './ApplicationPages/TeacherInfo.jsx'
+import ShortAnswer from './ApplicationPages/ShortAnswer.jsx'
+import Attachments from './ApplicationPages/Attachments.jsx'
+import Submit from './ApplicationPages/Submit.jsx'
+import Completed from './ApplicationPages/Completed.jsx'
+
+
 import styled from "styled-components";
 import axios from 'axios';
 
