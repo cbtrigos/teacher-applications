@@ -8,7 +8,7 @@ This portal, SL Teacher Applications, is made for five user types:
 * Approver 2: TSC Teacher Manangement Department Representatives (user type = 2) 
 * Approver 3: TSC Chair (user type = 3)
 * Unauthenticated Approver (user type = 4); those waiting to be authenticated to become one of: Approver 1, Approver 2, Approver 3, or a Master User 
-* Master User (user type = 5)
+* Master User (user type = 5): basically granted if you're an all-powerful genie. or if you're the minister of education 
 
 
 --------------------------------------------------------------------
