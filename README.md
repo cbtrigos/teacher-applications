@@ -79,7 +79,7 @@ To use this repo locally, you'll need the database tables and the authentication
 - api/authentication/awsAuth-sample.json
 - api/authentication/mysql-sample.json
 
-Then, go ahead and clone it and instal the NPM packages in each the api and the gui.
+Then, go ahead and clone it and install the NPM packages in each the api and the gui.
 
 
 ``` bash
