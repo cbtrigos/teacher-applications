@@ -1,25 +1,27 @@
 import React, { Component } from "react";
-import {H1, Wrapper, Buttons, Notification, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
+import {H1, H2, Wrapper, Buttons,  Notification, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
 import NumberFormat from 'react-number-format';
 
 
 // The "Personal Details" page is the 1st panel of the registration 
-export class FormUserDetails extends Component {
+export default class ApplicantRegister extends Component {
   render() {
-    const { values, handleChangeSave, submit, validateForm } = this.props;
+    const { values, handleChangeSave, submit, validateForm, step } = this.props;
         return (
             <Wrapper>
             <FormWrapper>
-              <H1>Registration</H1>
+              <H1>Applicant Registration</H1>
+              <H2>For prospective primary, secondary, and vocational school teachers</H2> 
+              <A_center H2 onClick={step('Clear')}>Looking for the approver registration? Go here! </A_center><br/>
+
               {values.serverMessage!==null && <Notification>{values.serverMessage}</Notification>}
                 <Buttons> 
                 <Left>
-                    <Label htmlFor="firstName"> First Name</Label>
+                    <Label htmlFor="firstName"> First Name *</Label>
                         <Input
                             type = "text"
                             className=""
-                            // placeholder="First Name"
                             name='firstName'
                             noValidate
                             onChange={handleChangeSave('firstName') }
@@ -30,11 +32,10 @@ export class FormUserDetails extends Component {
               )} 
                 </Left>
                 <New>
-                    <Label htmlFor="lastName">Last Name</Label>
+                    <Label htmlFor="lastName">Last Name *</Label>
                     <Input
                         type = "text"
                         className=""
-                        // placeholder="Last Name"
                         name='lastName'
                         noValidate
                         onChange={handleChangeSave('lastName') }
@@ -47,7 +48,7 @@ export class FormUserDetails extends Component {
                 </New> 
                 </Buttons>
                 <New>
-                    <Label htmlFor="email">Email </Label>
+                    <Label htmlFor="email">Email *</Label>
                     <Input
                         type = "text"
                         name="email"
@@ -58,7 +59,7 @@ export class FormUserDetails extends Component {
                  <ErrorMessage>{values.formErrors.email}</ErrorMessage>
                 </New>
                 <New>
-                    <Label htmlFor="mobile_number"> Mobile Number</Label>
+                    <Label htmlFor="mobile_number"> Mobile Number *</Label>
                       <NumberFormat 
                           customInput={Input} 
                           format="+232 ## ######" 
@@ -72,7 +73,7 @@ export class FormUserDetails extends Component {
                 </New>
 
                 <New> 
-                  <Label htmlFor="Gender">Gender </Label>
+                  <Label htmlFor="Gender">Gender *</Label>
               <Buttons props={'center'}>
               <FlexContainer>
                   <RadioButton
@@ -107,7 +108,7 @@ export class FormUserDetails extends Component {
                 </New>
 
                 <New>
-                    <Label htmlFor="DOB"> Date of Birth</Label>
+                    <Label htmlFor="DOB"> Date of Birth *</Label>
                         <Input
                             type = "date"
                             className=""
@@ -121,10 +122,9 @@ export class FormUserDetails extends Component {
                 </New>
 
                 <New>
-                    <Label htmlFor="password1"> Password</Label>
+                    <Label htmlFor="password1"> Password *</Label>
                     <Input
                         className=""
-                        // placeholder="Password"
                         type="password"
                         name="password1"
                         noValidate
@@ -135,10 +135,9 @@ export class FormUserDetails extends Component {
                 <ErrorMessage>{values.formErrors.password1}</ErrorMessage>
                 </New>
                 <New>
-                    <Label htmlFor="password2"> Password Confirmation</Label>
+                    <Label htmlFor="password2"> Password Confirmation *</Label>
                     <Input
                         className=""
-                        // placeholder="Password"
                         type="password"
                         name="password2"
                         noValidate

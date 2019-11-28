@@ -4,7 +4,8 @@ import axios from 'axios';
 import Application from "./ApplicantDashboard/Application.jsx"
 import DraftPanels from './ApplicantDashboard/ApplicationPanels.jsx'
 import ApproverPanels from './AdminDashboard/ApproverPanels.jsx'
-
+import MasterDash from "./MasterAccount/MasterDash.jsx";
+import RequestingApproval from "./RequestingAdmin/RequestingApproval.jsx"
 
 // The "App Type" page is the 0th panel of registration 
 export default class Dashboard extends Component {
@@ -79,8 +80,7 @@ export default class Dashboard extends Component {
      );
         return (
         <>
-        {user.user_type=== 0 
-        // applicant dashboard
+        {user.user_type=== 0 // applicant dashboard
           ?  <>
             {this.state.chosen===null
               ? <Wrapper>
@@ -122,22 +122,28 @@ export default class Dashboard extends Component {
               </> 
               }
             </>
-        :<> 
-        {/* Approver Dashboard */}
-        <Wrapper>
-          <FormWrapper large>
-            <H1>
-              Welcome to your personal dashboard, {user.first_name}!
-            </H1>
-            <H2>
-              This dashboard was created for you to review applications efficiently and easily.<br/><br/>
-              Explore the below applications and either approve or reject them right here in this page. <br/><br/>
-              Good luck!
-            </H2>
-          </FormWrapper> <br/> <br/>
-        <ApproverPanels user={this.props.user}/>
-        </Wrapper>
-      </>
+        : [1,2,3].indexOf(user.user_type)!==-1 //approver dashboard
+        ? 
+          <> 
+          <Wrapper>
+            <FormWrapper large>
+              <H1>
+                Welcome to your personal dashboard, {user.first_name}!
+              </H1>
+              <H2>
+                This dashboard was created for you to review applications efficiently and easily.<br/><br/>
+                Explore the below applications and either approve or reject them right here in this page. <br/><br/>
+                Good luck!
+              </H2>
+            </FormWrapper> <br/> <br/>
+          <ApproverPanels user={this.props.user}/>
+          </Wrapper>
+        </>
+      : user.user_type === 4 
+        ? <RequestingApproval user = {user}/>
+        : user.user_type===5 // master user 
+          ? <MasterDash user = {user}/>
+          : <></>
       
       }
       </>

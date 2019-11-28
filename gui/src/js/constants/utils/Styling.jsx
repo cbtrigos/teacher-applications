@@ -152,7 +152,18 @@ export const CreateButton = styled.button`
 export const A_center = styled.a`
     width: 100%;
     text-align: center;
-    display: block;`
+    display: block;
+    ${props =>
+      props.H2 ?
+      `
+      width: 100%;
+      color: #111;
+      font-weight: lighter;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      `: `
+
+      `};`
 
 export const A = styled.a`
     width: 100%;`
@@ -206,6 +217,9 @@ export const MenuButton=styled.button`
 `
 
 export const TextArea = styled.textarea`
+border-radius: 5px;
+outline: none;
+border: 1px solid #cfcfcf;
 width: 100%;`
 
 export const WideButton = styled.input`
@@ -310,7 +324,14 @@ ${props =>
   `
   font-size: 11pt;
   `: `font-size:12pt;
-  `}`
+  `}
+  ${props =>
+    props.small ?
+    `
+    margin: 0;
+    padding: 0;
+    `: `
+    `}`
 
 export const ErrorMessage = styled(H2)`
   color: red;
@@ -432,3 +453,11 @@ export const InputLarge = styled.textarea`
   font: inherit;
   color: darkred;
   `
+
+ export const Div = styled.div`
+  margin: 13px;`
+  
+export const Category= styled.div`
+  background-color: lightgrey;
+  text-align: center;
+  font: inherit;`

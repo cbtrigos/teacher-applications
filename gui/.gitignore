@@ -71,7 +71,7 @@ typings/
 dist/
 
 ### react ###
-.DS_*
+.DS_Store
 **/*.backup.*
 **/*.back.*
 

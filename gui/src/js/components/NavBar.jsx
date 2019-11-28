@@ -32,9 +32,6 @@ export default class NavBar extends Component {
                 {user.user_type===0
                   ?
                     <NavDropdown title="Dashboard" id="basic-nav-dropdown" >
-                      {/* <LinkContainer to="/dashboard" >
-                        <NavItem>My Dashboard</NavItem>
-                      </LinkContainer> */}
                       <LinkContainer to="/dashboard">
                         <NavItem>My Applications</NavItem>
                       </LinkContainer>
@@ -42,10 +39,38 @@ export default class NavBar extends Component {
                           <NavItem>Start New Application</NavItem>
                         </LinkContainer>
                     </NavDropdown>  
-                  : 
-                    <LinkContainer to="/dashboard">
-                      <NavItem>My Dashboard</NavItem>
-                    </LinkContainer>  
+                  : [1,2,3].indexOf(user.user_type)!==-1
+                    ? <LinkContainer to="/dashboard">
+                        <NavItem>My Dashboard</NavItem>
+                      </LinkContainer>  
+//-------------------------------------------------------------------------------------
+                    : user.user_type===5
+                      ? <>
+                        <LinkContainer to="/dashboard">
+                          <NavItem>Approvals</NavItem>
+                        </LinkContainer>  
+                        <NavDropdown title="Dashboard" id="basic-nav-dropdown" >
+                        <LinkContainer to="/applications">
+                          <NavItem>Applications</NavItem>
+                        </LinkContainer>
+                          <LinkContainer to="/applicants">
+                            <NavItem>Applicants</NavItem>
+                          </LinkContainer>
+                          <LinkContainer to="/approvers">
+                            <NavItem>Approvers</NavItem>
+                          </LinkContainer>
+                          <LinkContainer to="/schools">
+                            <NavItem>Schools</NavItem>
+                          </LinkContainer>
+                        </NavDropdown>  
+                        </>
+//-------------------------------------------------------------------------------------
+
+                      : user.user_type ===4 
+                        ? <LinkContainer to="/dashboard">
+                          <NavItem>Dashboard</NavItem>
+                        </LinkContainer>  
+                        : <></>
                 }
                 <NavDropdown title="My Account" id="basic-nav-dropdown" >
                   <LinkContainer to="/my-account">

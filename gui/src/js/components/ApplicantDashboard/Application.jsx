@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import {Wrapper, FormWrapper,} from '../../constants/utils/Styling.jsx'
-import {AppType, PersonalInfo, TeacherInfo, ShortAnswer, Attachments, Submit, Completed} from "./ApplicationInfo.jsx"
+import AppType from './ApplicationPages/AppType.jsx'
+import PersonalInfo from './ApplicationPages/PersonalInfo.jsx'
+import TeacherInfo from './ApplicationPages/TeacherInfo.jsx'
+import ShortAnswer from './ApplicationPages/ShortAnswer.jsx'
+import Attachments from './ApplicationPages/Attachments.jsx'
+import Submit from './ApplicationPages/Submit.jsx'
+import Completed from './ApplicationPages/Completed.jsx'
+
+
 import styled from "styled-components";
 import axios from 'axios';
 
@@ -36,6 +44,7 @@ export default class Application extends Component {
         last_edited: null,
         submitted: null,
         national_id: '', 
+        school_district: '',
         birth_date : (user.birth_date).slice(0,10),
         mobile_number: user.mobile_number, 
         first_name: user.first_name,
@@ -64,6 +73,7 @@ export default class Application extends Component {
         nassit: "17 digit National Social Security and Insurance Trust number",
         qualifications: 'Why are you qualified to teach? List and attach any certificate numbers',
         special_skills: "e.g. Special Needs, Music, ..",
+        school_district: "select the district where the school you're applying for resides",
         national_id: '8 digit alpha-numeric national identification, granted through the National Civil Registration Authority regardless of citizenship'
       }
 };
@@ -97,14 +107,12 @@ export default class Application extends Component {
 
   step = val => e => {
     let k = 0
-    // if (val!=='exit') {
       if (val==='next') {k=1}
       else if (val==='prev') {k=-1}
       const { step } = this.state;
       this.setState({
         step: step + k
       });
-    // }
     axios 
     .post('http://localhost:5000/api/save-application', 
       this.state.application) 
@@ -193,7 +201,7 @@ export default class Application extends Component {
    break;
 }
 this.setState({ formErrors, [name]: value });
-
+console.log(this.state)
 
   }
 
@@ -203,7 +211,7 @@ this.setState({ formErrors, [name]: value });
     let errors = ''
     let missingString = ''
     const app = this.state.application
-    const req = [app.employing_authority, app.national_id, app.nationality, app.school_name]
+    const req = [app.employing_authority, app.national_id, app.nationality, app.school_name, app.school_district]
     const list = [{val:app.other_names, name:'any other names'}, {val:app.pin_code, name:'a pin code'}, {val:app.nassit, name:'a NASSIT number'}, {val:app.qualifications, name:'any qualifications'}, {val:app.special_skills, name:'any special skills'}]
     const emptyFields = []
     list.forEach(
@@ -215,7 +223,7 @@ this.setState({ formErrors, [name]: value });
     Object.values(req).forEach((val) => {
       if (val===null) {
         valid = false
-        errors ='The following are required: National Identification Number, School Name, Employing Authority, and Nationality.'
+        errors ='The following are required: National Identification Number, School Name, School District, Employing Authority, and Nationality.'
       }});
       this.setState({
         errors: errors, 
@@ -228,9 +236,9 @@ this.setState({ formErrors, [name]: value });
 
 
   render() {
-    const { birth_date, national_id, school_name, prev_appt, nationality, application_type, application_id, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
+    const { school_district, birth_date, national_id, school_name, prev_appt, nationality, application_type, application_id, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
     const { formErrors, step, errors, missingString, toolTip } = this.state
-    const values = { toolTip, formErrors, birth_date, national_id, school_name, prev_appt, application_id, nationality, application_type, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex, errors, missingString};
+    const values = { toolTip, formErrors, school_district, birth_date, national_id, school_name, prev_appt, application_id, nationality, application_type, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex, errors, missingString};
     switch (step) {
       case 0: 
         return (
