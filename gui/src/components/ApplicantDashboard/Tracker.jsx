@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {H2, H1, It, Div, Category} from '../../constants/utils/Styling.jsx'
-import styled from 'styled-components'
 
 export default class Tracker extends Component {
     formatDate = date => {
@@ -11,17 +10,16 @@ export default class Tracker extends Component {
       { const minute = date.slice(14,16)
         const hour = date.slice(11,13)
         const d = date.slice(8,10)
-        let day = ''
+        let day = 'xx'
         const month = monthNames[date.slice(5,7)-1]
         const year = date.slice(0,4)
-
-        {d[1]===1 
+        {d[1]==='1' 
           ? day=d+ 'st'
-          : d[1]===2 
+          : (d[1]==='2' 
             ? day = d+ 'nd'
-            :d[1]===3
+            :(d[1]==='3'
               ? day = d+ 'rd'
-              : day = d+ 'th'
+              : day = d+ 'th'))
         }
 
         return day + ' of ' + month +', ' + year + ' at time: ' + hour + ':' + minute }
@@ -50,44 +48,29 @@ export default class Tracker extends Component {
                 </It>
             </Div>
             <Div>
-            <Category> Approval from School {application.school_name}. Part 1/3: </Category>
+            <Category> Review by the TSC Teacher Management Department </Category>
               {application.approver_1===null 
                 ? <It> Decision Pending</It>
                 : application.approver_1==='false' 
-                    ? <It>Rejected on {ddate_1}<br/> Rejection reason: "{application.rejection_reason}"</It>
+                    ? <It>Rejected on the {ddate_1}<br/> Rejection reason: "{application.rejection_reason}"</It>
                     : application.approver_1==='true'
-                      ? <It>Approved on {ddate_1}</It>
+                      ? <It>Reviewed on {ddate_1}</It>
                       : <It> No updates to return </It>
               }
               </Div>
             {application.approver_1==='true' 
             &&
               <Div>
-              <Category> Approval from the TSC Teacher Management Department. Part 2/3: </Category>
+              <Category> Approval from the TSC Chair. </Category>
                 {application.approver_2===null 
                   ? <It> Decision Pending</It>
                   : application.approver_2==='false' 
-                      ? <It>Rejected on {ddate_2}<br/> Rejection reason: "{application.rejection_reason}"</It>
+                      ? <It>Rejected on the {ddate_2}<br/> Rejection reason: "{application.rejection_reason}"</It>
                       : application.approver_2==='true'
                         ? <It>Approved on {ddate_2}</It>
                         : <It> No updates to return </It>
                 }
                 </Div>}
-            {application.approver_2==='true' 
-            &&
-            <Div>
-            <Category> Final approval from the TSC Chair. Part 3/3: </Category>
-              {application.approver_3===null 
-                ? <It> Decision Pending</It>
-                : application.approver_3==='false' 
-                    ? <It>Rejected on {ddate_3}<br/> Rejection reason: "{application.rejection_reason}"</It>
-                    : application.approver_3==='true'
-                      ? <It>Approved on {ddate_3}</It>
-                      : <It> No updates to return </It>
-              }
-              </Div>
-            }
-
         </div>
       );
     }

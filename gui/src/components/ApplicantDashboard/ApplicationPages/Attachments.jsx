@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import {H1, H2, Tooltip, InfoIcon, TooltipText, Clearlink, Wrapper,  Buttons, Left, FormWrapper,  CreateButton} from '../../../constants/utils/Styling.jsx'
+import {H1, H2, Tooltip, InfoIcon, TooltipText, Wrapper,  Buttons, Left, FormWrapper, New, CreateButton} from '../../../constants/utils/Styling.jsx'
+
 
 export function Info(title) {
   event.preventDefault();
@@ -14,15 +15,19 @@ export function Info(title) {
 
 export default class Attachments extends Component {
   render() {
-    const { values, step} = this.props;
+    const {values, handleChangeSave, step } = this.props;
+
         return (
             <Wrapper>
               <FormWrapper>
               <H1>Teacher Application</H1>
-              <H2>{values.application_type} School <br/>
+              <H2>{values.title_proposed_appt} at {values.school_name} <br/>
               Application #{values.application_id}<br/><br/>
               Attachments: Part 4/5</H2><br/>
-              Please attach all certificates listed previously 
+              {values.qualification!=='' && <H2 tiny>Please attach your certificate from "{values.qualifications}"</H2> }
+              {values.certificates!=='' && <H2 tiny>Listed certificates: "{values.certificates}"</H2> }
+
+                  <br/> <br/>
               <Buttons>
                 <Left> 
                   <CreateButton
@@ -37,11 +42,11 @@ export default class Attachments extends Component {
                   onClick={step('next')}
                 >Save and Continue</CreateButton>
               </Buttons>
-              <Clearlink href='/dashboard/'><CreateButton
+              <CreateButton
                   color="primary"
                   variant="contained"
                   onClick={step('exit')}
-                >Save and Exit</CreateButton></Clearlink>
+                >Save and Exit</CreateButton>
             </FormWrapper>
             </Wrapper>
 

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import {Wrapper, FormWrapper,} from '../../constants/utils/Styling.jsx'
+import { withRouter } from "react-router-dom";
+
 import AppType from './ApplicationPages/AppType.jsx'
 import PersonalInfo from './ApplicationPages/PersonalInfo.jsx'
 import TeacherInfo from './ApplicationPages/TeacherInfo.jsx'
@@ -7,9 +8,6 @@ import ShortAnswer from './ApplicationPages/ShortAnswer.jsx'
 import Attachments from './ApplicationPages/Attachments.jsx'
 import Submit from './ApplicationPages/Submit.jsx'
 import Completed from './ApplicationPages/Completed.jsx'
-
-
-import styled from "styled-components";
 import axios from 'axios';
 
 // not showing any errors :((((()))))
@@ -17,7 +15,7 @@ const nassitRegex = RegExp(/^[a-zA-Z]{1}[0-9]{16}$/);
 const natIDRegex = RegExp(/^[a-zA-Z0-9]{8}$/);
 
 
-export default class Application extends Component {
+class Application extends Component {
   constructor(props) {
     super(props);
     const user = props.user
@@ -25,21 +23,22 @@ export default class Application extends Component {
     this.state = {
       step: 0,
       submitOkay:false, 
+      loading: '',
       missingString: '',
       errors: '',
       checkMark: false, 
       application: {
         application_id: null,
-        application_type: null,
-        employing_authority:null,
+        job_opening: '',
         school_name:null,
         other_names:null,
         nationality: null, 
         prev_appt: null,
         pin_code: null,
         nassit: null,
-        qualifications: null,
-        special_skills: null,
+        qualifications: '',
+        special_skills: '',
+        certificates: '',
         created: null,
         last_edited: null,
         submitted: null,
@@ -54,7 +53,6 @@ export default class Application extends Component {
         sex: user.gender,
       }, 
       formErrors:{
-        employing_authority:'',
         school_name:'',
         nationality: '', 
         prev_appt: '',
@@ -64,19 +62,22 @@ export default class Application extends Component {
         nassit: ''
       }, 
       toolTip: {
-        employing_authority:'Who is the employing authority or management of the school you are employing for? Example: Roman Catholic, Government of Sierra Leone, ..',
+        qualifications: 'Select your qualifified schooling level from the following list',
         school_name:'Official name of the school you are applying for',
         other_names:'Any other names you go by',
         nationality: 'Your nationality', 
         prev_appt: 'Your previous employment title and location, whether it was as a teacher or not',
         pin_code: "6 digit teacher's pin code",
         nassit: "17 digit National Social Security and Insurance Trust number",
-        qualifications: 'Why are you qualified to teach? List and attach any certificate numbers',
+        certificates: 'Please list the certificate numbers + associated schools to verify your above qualification ',
         special_skills: "e.g. Special Needs, Music, ..",
-        school_district: "select the district where the school you're applying for resides",
+        school_district: "the district where the school you're applying for resides",
         national_id: '8 digit alpha-numeric national identification, granted through the National Civil Registration Authority regardless of citizenship'
       }
 };
+
+this.beginApp=this.beginApp.bind(this);
+
  }
   async componentDidMount() {
     const app = this.props.application
@@ -91,9 +92,12 @@ export default class Application extends Component {
   submit = (event) => {
     const { step } = this.state;
     event.preventDefault();
+    this.setState({
+      loading: 'loading..', 
+    });
       axios 
         .post('http://localhost:5000/api/submit-application', 
-          {"application_id": this.state.application.application_id
+          {"application": this.state.application,
         }) 
         .then(response => {
           if (response.data==="application submitted successfully") {
@@ -123,7 +127,12 @@ export default class Application extends Component {
      console.log(error)
   });
   if (val==='exit') {
-    this.props.clearChosen()
+    if (this.props.clearChosen!==undefined) {
+      this.props.clearChosen()
+    }
+    else {
+      this.props.history.push("/dashboard")    
+    }
   }
 };
 
@@ -131,7 +140,8 @@ export default class Application extends Component {
     this.setState({ checkMark: event.target.checked })
   }
 
-  beginApp = () => e => {
+  beginApp = (opening) => e => {
+    console.log(opening)
     axios 
       .post('http://localhost:5000/api/begin-application', 
         {"email": this.state.application.email,
@@ -139,7 +149,7 @@ export default class Application extends Component {
           "first_name": this.state.application.first_name, 
           "last_name": this.state.application.last_name, 
           "mobile_number": this.state.application.mobile_number,
-          "application_type": this.state.application.application_type,
+          "job_opening": opening.opening_key,
           "user_id": this.props.user.user_id, 
           "birth_date": this.state.application.birth_date
       }) 
@@ -151,7 +161,11 @@ export default class Application extends Component {
             application: {
               ...prevState.application,
               application_id: response.data.application_id,
-              created: response.data.created
+              job_opening: opening.opening_key,
+              created: response.data.created,
+              school_name: opening.school,
+              title_proposed_appt: opening.title_proposed_appt,
+              school_district: opening.district
           }
         })
         );
@@ -199,10 +213,8 @@ export default class Application extends Component {
           !nassitRegex.test(value)? "Please enter a valid Nassit number" : ""
           } 
    break;
-}
-this.setState({ formErrors, [name]: value });
-console.log(this.state)
-
+  }
+  this.setState({ formErrors, [name]: value });
   }
 
 
@@ -211,7 +223,7 @@ console.log(this.state)
     let errors = ''
     let missingString = ''
     const app = this.state.application
-    const req = [app.employing_authority, app.national_id, app.nationality, app.school_name, app.school_district]
+    const req = [ app.national_id, app.nationality, app.school_name, app.school_district]
     const list = [{val:app.other_names, name:'any other names'}, {val:app.pin_code, name:'a pin code'}, {val:app.nassit, name:'a NASSIT number'}, {val:app.qualifications, name:'any qualifications'}, {val:app.special_skills, name:'any special skills'}]
     const emptyFields = []
     list.forEach(
@@ -223,7 +235,7 @@ console.log(this.state)
     Object.values(req).forEach((val) => {
       if (val===null) {
         valid = false
-        errors ='The following are required: National Identification Number, School Name, School District, Employing Authority, and Nationality.'
+        errors ='The following are required: National Identification Number, School Name, School District, and Nationality.'
       }});
       this.setState({
         errors: errors, 
@@ -236,9 +248,9 @@ console.log(this.state)
 
 
   render() {
-    const { school_district, birth_date, national_id, school_name, prev_appt, nationality, application_type, application_id, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
-    const { formErrors, step, errors, missingString, toolTip } = this.state
-    const values = { toolTip, formErrors, school_district, birth_date, national_id, school_name, prev_appt, application_id, nationality, application_type, last_name, employing_authority, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex, errors, missingString};
+    const { title_proposed_appt, certificates, school_district, birth_date, national_id, school_name, prev_appt, nationality, job_opening, application_id, last_name, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
+    const { loading, formErrors, step, errors, missingString, toolTip } = this.state
+    const values = {loading, title_proposed_appt, certificates, toolTip, formErrors, school_district, birth_date, national_id, school_name, prev_appt, application_id, nationality, job_opening, last_name, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex, errors, missingString};
     switch (step) {
       case 0: 
         return (
@@ -277,6 +289,8 @@ console.log(this.state)
             <Attachments
               step={this.step}
               values={values}
+              handleChangeSave={this.handleChangeSave}
+
             />);    
       case 5:
         return (
@@ -299,32 +313,33 @@ console.log(this.state)
   }
 };
 
+export default withRouter(Application);
 
 
 
-const SideWrapper = styled(Wrapper)`
-width: 100%;
-display:inline-block;
-padding-top: 1%;
-margin: 0px;
-`
+// const SideWrapper = styled(Wrapper)`
+// width: 100%;
+// display:inline-block;
+// padding-top: 1%;
+// margin: 0px;
+// `
 
-const Menu = styled.div`
-display: inline-block;
-width: 23%;
-text-align: left;
-border-radius: 3px;
-margin: 1%;
-vertical-align: top;
-max-width: 100%;
-`
-const View = styled.div`
-display: inline-block;
-text-align: left;
-width: 74%;
-border-radius: 3px;
-margin: 1% 1% 0 0 ;
-max-width: 100%;
-`
-const Form = styled(FormWrapper)`
-max-width: 100%;`
+// const Menu = styled.div`
+// display: inline-block;
+// width: 23%;
+// text-align: left;
+// border-radius: 3px;
+// margin: 1%;
+// vertical-align: top;
+// max-width: 100%;
+// `
+// const View = styled.div`
+// display: inline-block;
+// text-align: left;
+// width: 74%;
+// border-radius: 3px;
+// margin: 1% 1% 0 0 ;
+// max-width: 100%;
+// `
+// const Form = styled(FormWrapper)`
+// max-width: 100%;`

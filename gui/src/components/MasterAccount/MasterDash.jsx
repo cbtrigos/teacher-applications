@@ -1,7 +1,7 @@
 import React  from 'react';
 import {H2, H1, Wrapper, FormWrapper, HorizSeparator, It} from '../../constants/utils/Styling.jsx'
 import axios from 'axios';
-import PanelContent from './MasterPanels.jsx'
+import ApproverPanels from './ApproverPanels.jsx';
 
 
 export default class MasterDash extends React.Component {
@@ -31,10 +31,9 @@ export default class MasterDash extends React.Component {
  }
 
     render() {
-      console.log(this.state)
       const user = this.props.user
       const toDos = this.state.toApprove.map(item => 
-            <PanelContent 
+            <ApproverPanels
               key={item.user_id} 
               user = {user}
               application={item} 

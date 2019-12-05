@@ -14,7 +14,7 @@ const handleChange = panel => (event, newExpanded) => {
 return ( <div>
                 <ExpansionPanel square expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
                     <ExpansionPanelSummary aria-controls="panel2d-content" id="panel2d-header">
- <H2 style={{textAlign:'center'}}>#{application.application_id}: {application.application_type} School Application {application.school_name!==null && <>for {application.school_name}</>} {application.rejection_reason!==null && <> --- <span style={{color: 'darkred'}}>REJECTED</span></>} </H2>
+ <H2 style={{textAlign:'center'}}>#{application.application_id}: {application.title_proposed_appt} {application.school_name!==null && <>for {application.school_name}</>} {application.rejection_reason!==null && <> --- <span style={{color: 'darkred'}}>REJECTED</span></>} </H2>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
 

@@ -1,8 +1,10 @@
 import React from "react";
 import { H1, H2, Field, Bucket, Partition, Application} from '../../constants/utils/Styling.jsx'
 import {ExpansionPanel,  ExpansionPanelSummary, ExpansionPanelDetails} from '../../constants/utils/ExpandingPanels.jsx'
+import axios from 'axios';
 
-export default function PanelContent(props) {
+
+export default function ApproverPanels(props) {
     const {application, type, approveApplication, rejectApplication, user} = props
     const [expanded, setExpanded] = React.useState('panel1');
     const handleChange = panel => (event, BucketExpanded) => {

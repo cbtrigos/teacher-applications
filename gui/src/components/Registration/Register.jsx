@@ -3,16 +3,19 @@ import axios from 'axios';
 import ApplicantRegister from "./ApplicantRegister.jsx";
 import ApproverRegister from "./ApproverRegister.jsx"
 import { Wrapper, H1, H2, WideButton, CreateButton, FormWrapper } from '../../constants/utils/Styling.jsx';
-
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 const passwordRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})");
+
+// In order to make the approver registration available: 
+// 1. change the state.step = 0 and state.application_type = ''
+// 2. in ./ApplicantRegister.jsx, uncomment the link on line 16 
 
 export default class UserForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 0,
-      application_type: '',
+      step: 1,
+      application_type: 'Applicant',
       firstName: '',
       lastName: '',
       email: '',
@@ -150,7 +153,6 @@ export default class UserForm extends React.Component {
   }
 
   handleChangeSave = input => e => {
-    console.log(input==='school_district')
     this.setState({ [input]: e.target.value });
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
@@ -191,7 +193,6 @@ export default class UserForm extends React.Component {
         break;
   }
   this.setState({ formErrors, [name]: value });
-  console.log(this.state)
   }
 
   render() {

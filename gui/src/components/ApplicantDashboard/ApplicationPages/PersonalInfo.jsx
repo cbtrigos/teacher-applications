@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {H1, H2,  Tooltip, InfoIcon, TooltipText, Clearlink, Wrapper, Buttons, Left, FormWrapper, Input, Label, New, ErrorMessage, CreateButton} from '../../../constants/utils/Styling.jsx'
+import {H1, H2,  Tooltip, InfoIcon, TooltipText, Wrapper, Buttons, Left, FormWrapper, Input, Label, New, ErrorMessage, CreateButton} from '../../../constants/utils/Styling.jsx'
 import { CountryDropdown } from 'react-country-region-selector';
 import NumberFormat from 'react-number-format';
 
@@ -23,7 +23,7 @@ export default class PersonalInfo extends Component {
             <Wrapper>
              <FormWrapper>
              <H1>Teacher Application</H1>
-              <H2>{values.application_type} School <br/>
+             <H2>{values.title_proposed_appt} at {values.school_name} <br/>
                   Application #{values.application_id}<br/><br/>
                   Personal Information: Part 1/5</H2><br/>        
 
@@ -140,12 +140,12 @@ export default class PersonalInfo extends Component {
                 <br/> <br/> 
                 <Buttons>
                   <Left>
-                  <Clearlink href='/dashboard/'><CreateButton
+                  <CreateButton
                     color="primary"
                     variant="contained"
                     onClick={step('exit')}
                     disabled = {values.formErrors.national_id!==''}
-                    >Save and Exit</CreateButton></Clearlink>
+                    >Save and Exit</CreateButton>
                 </Left>
                 <CreateButton
                   color="primary"

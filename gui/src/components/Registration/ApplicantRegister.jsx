@@ -13,7 +13,7 @@ export default class ApplicantRegister extends Component {
             <FormWrapper>
               <H1>Applicant Registration</H1>
               <H2>For prospective primary, secondary, and vocational school teachers</H2> 
-              <A_center H2 onClick={step('Clear')}>Looking for the approver registration? Go here! </A_center><br/>
+              {/* <A_center H2 onClick={step('Clear')}>Looking for the approver registration? Go here! </A_center><br/> */}
 
               {values.serverMessage!==null && <Notification>{values.serverMessage}</Notification>}
                 <Buttons> 

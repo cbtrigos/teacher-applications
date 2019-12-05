@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {H2, H1, ErrorMessage, Application, Partition, Buttons, Bucket, InputLarge, Field, Input, New, CreateButton, Left} from '../../../constants/utils/Styling.jsx'
+import {Select, FormControl, MenuItem, InputLabel} from "@material-ui/core/"
 
 export default class RejectionForm extends Component {
     constructor(props) {
@@ -10,12 +11,12 @@ export default class RejectionForm extends Component {
         checked: false,
         rejection: {
           rejection_reason: '',
-          approver_name: '', 
+          additional: '',
+          approver_name: user.first_name + ' ' + user.last_name, 
           approver_id: user.user_id, 
           application_id: props.application.application_id, 
-          signed: 'yes', 
-          email: user.email,
-          user_id: user.user_id
+          user_id: user.user_id,
+          signed: 'yes'
         }
         
   };
@@ -33,6 +34,26 @@ export default class RejectionForm extends Component {
     } 
     return thisMonth+'/'+thisDate+'/'+ thisYear
   }
+  submit = () => e => {
+    const {rejection} = this.state
+    let rej = ''
+    if (rejection.rejection_reason ==="Other. I'll explain below:") {
+        rej = rejection.additional
+    }
+    else (rej = rejection.rejection_reason + '. ' + rejection.additional)
+
+    const application = {
+        rejection_reason: rej,
+        approver_id: rejection.approver_id, 
+        approver_name: rejection.approver_name,
+        application_id: rejection.application_id,
+        signed: rejection.signed,
+        email: rejection.email, 
+        user_id: rejection.user_id
+    }
+    this.props.rejectApplication(application)
+
+  }
 
 
 
@@ -43,14 +64,13 @@ export default class RejectionForm extends Component {
             checked: e.target.checked
         })
     }
-    else 
+    else
         {this.setState(prevState => ({
         rejection: {                 
             ...prevState.rejection, 
             [input]: value    
         }
         }))}
-    
     }
 
 
@@ -67,13 +87,40 @@ export default class RejectionForm extends Component {
             <Application>
             <Partition>
                 <H1>Rejection Petition for #{application.application_id}</H1><br/>
+                <New style={{width:'96%'}}>
+                <H2 label >Select a rejection reason * </H2>
+                 <FormControl variant="outlined" style={{ width: "100%", height: "45px", backgroundColor: 'white', borderRadius:'5px' }}>
+                    <InputLabel id="demo-simple-select-outlined-label">
+                    </InputLabel>
+                    <Select style={{ height: "45px"}}
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={rejection.rejection_reason}
+                        onChange={this.handleChangeSave('rejection_reason')}
+                        >
+                        <MenuItem value={"Certificate not attached"}><H2 left small>Certificate not attached</H2></MenuItem>
+                        <MenuItem value={"Unauthenticated Certificate"}><H2 left small>Unauthenticated Certificate</H2></MenuItem>
+                        <MenuItem value={"Wrong qualification"}><H2 left small>Wrong qualification</H2></MenuItem>
+                        <MenuItem value={"Certificate number not indicated"}><H2 left small>Certificate number not indicated</H2></MenuItem>
+                        <MenuItem value={"Wrong qualification"}><H2 left small>Wrong qualification</H2></MenuItem>
+                        <MenuItem value={"Name Mismatches"}><H2 left small>Name Mismatches</H2></MenuItem>
+                        <MenuItem value={"Date of birth discrepancy/mismatch"}><H2 left small>Date of birth discrepancy/mismatch</H2></MenuItem>
+                        <MenuItem value={"Name Mismatches"}><H2 left small>Name Mismatches</H2></MenuItem>
+                        <MenuItem value={"Unsigned ED Form"}><H2 left small>Unsigned ED Form</H2></MenuItem>
+                       <MenuItem value="Other. I'll explain below:"><H2 left small>Other. I'll explain below:</H2></MenuItem>
+                    </Select>
+                </FormControl> 
+                </New>
+                <New style={{width:'96%'}}>
+                <H2 label> Please enter any additional reasoning for the applicant: </H2>
                 <InputLarge
-                name='rejection_reason'
-                noValidate
-                style={{margin:'1em'}}
-                onChange={this.handleChangeSave('rejection_reason')}
-                defaultValue={rejection.rejection_reason}
+                    name='additional'
+                    noValidate
+                    style= {{padding: '1em', width: '100%'}}
+                    onChange={this.handleChangeSave('additional')}
+                    defaultValue={''}
                 />
+                </New>
             <Buttons>
             <Left style={{minWidth: '2%', width: '4%',  margin: '1.5%',display: 'flex', justifyContent: 'center', alignItems:'center' }}>
             <input 
@@ -84,7 +131,7 @@ export default class RejectionForm extends Component {
               />
             </Left>
             <New>
-            <H2 left>By checking this box, I verify that I have provided a descriptive reason as to why this application is being rejected.</H2>
+            <H2 left label>By checking this box, I verify that I have provided a descriptive reason as to why this application is being rejected.</H2>
             </New></Buttons>
             <Bucket>
                 <H2 label left htmlFor="approver_name">Approver Name *</H2>
@@ -92,7 +139,7 @@ export default class RejectionForm extends Component {
                     type = "text"
                     name="approver_name"
                     noValidate
-                    onChange={this.handleChangeSave('approver_name')}
+                    disabled={true}
                     defaultValue={rejection.approver_name}
                     />
           </Bucket>
@@ -105,29 +152,32 @@ export default class RejectionForm extends Component {
                     defaultValue={today}
                     />
           </Bucket>
-          <Bucket>
-                <H2 label left htmlFor="birth_date">Birth Date *</H2>
-                <Field
-                    name="birth_date"
-                    noValidate
-                    disabled= {true}
-                    defaultValue={birth_date}
-                    />
-          </Bucket>
-          <Bucket>
-                <H2 label left htmlFor="date">Signature *</H2>
-                <Field
-                    name="signature"
-                    noValidate
-                    disabled= {true}
-                    defaultValue={rejection.signature}
-                    />
-          </Bucket>
-
+          {user.user_type===2 &&
+          <>
+            <Bucket>
+                    <H2 label left htmlFor="birth_date">Birth Date *</H2>
+                    <Field
+                        name="birth_date"
+                        noValidate
+                        disabled= {true}
+                        defaultValue={birth_date}
+                        />
+            </Bucket>
+            <Bucket>
+                    <H2 label left htmlFor="date">Signature *</H2>
+                    <Field
+                        name="signature"
+                        noValidate
+                        disabled= {true}
+                        defaultValue={rejection.signed}
+                        />
+            </Bucket>
+            </>
+          }
             </Partition>
-            {rejection.approver_name==='' || rejection.rejection_reason==='' 
+            {rejection.approver_name==='' || rejection.rejection_reason==='' ||( rejection.rejection_reason==="Other. I'll explain below:" && rejection.additional==='')
             ? <ErrorMessage>All fields are required</ErrorMessage>
-            : rejection.rejection_reason.length<10 || rejection.rejection_reason.length>150
+            :  rejection.rejection_reason==="Other. I'll explain below:" && (rejection.additional.length<10 || rejection.additional.length>150)
                 ? <ErrorMessage>Please enter a descriptive reason for rejection between 10 and 150 characters.</ErrorMessage>
                 : this.state.checked===false 
                     ? <ErrorMessage>Please check the above box.</ErrorMessage>
@@ -135,8 +185,14 @@ export default class RejectionForm extends Component {
             }
 
             <CreateButton 
-                disabled={rejection.approver_name==='' ||  this.state.checked===false || rejection.rejection_reason.length<10 || rejection.rejection_reason.length>150}
-                onClick={() => rejectApplication(rejection)}>
+                disabled={
+                        rejection.approver_name==='' ||  
+                        this.state.checked===false || 
+                        rejection.rejection_reason==="" || 
+                        (rejection.rejection_reason==="Other. I'll explain below:" &&
+                        (rejection.additional.length<10||rejection.additional.length>150))
+                    }
+                onClick={this.submit()}>
                     Reject application #{application.application_id}
             </CreateButton>
 

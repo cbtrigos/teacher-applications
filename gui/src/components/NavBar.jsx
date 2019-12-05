@@ -21,12 +21,17 @@ export default class NavBar extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav pullRight>
-            <LinkContainer to="/faq">
-              <NavItem>FAQ</NavItem>
+          <LinkContainer to="/openings">
+              <NavItem>Job Openings</NavItem>
             </LinkContainer>
-            <LinkContainer to="/contact">
-              <NavItem>Contact</NavItem>
-            </LinkContainer>        
+            <NavDropdown title="About" id="basic-nav-dropdown" >
+                      <LinkContainer to="/faq">
+                        <NavItem>FAQ</NavItem>
+                      </LinkContainer>
+                        <LinkContainer to="/contact">
+                          <NavItem>Contact</NavItem>
+                        </LinkContainer>
+                    </NavDropdown>  
             {isAuthenticated
               ? <Fragment>
                 {user.user_type===0

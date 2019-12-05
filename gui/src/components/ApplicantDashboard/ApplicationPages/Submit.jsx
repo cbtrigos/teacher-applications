@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {H1, H2, It, Div, Category, Clearlink,Wrapper, Buttons, Left, FormWrapper, Input,  New, ErrorMessage, CreateButton} from '../../../constants/utils/Styling.jsx'
+import {H1, H2, It, Div, Category, Notification, Wrapper, Buttons, Left, FormWrapper, Input,  New, ErrorMessage, CreateButton} from '../../../constants/utils/Styling.jsx'
 
 
 
@@ -17,8 +17,7 @@ export default class Submit extends Component {
     let errors = ''
     let missingString = ''
     const app = this.props.values
-    const req = [app.employing_authority, app.national_id, app.nationality, app.school_name]
-    // const optional = [app.other_names, app.pin_code, app.nassit, app.qualifications, app.special_skills]
+    const req = [ app.national_id, app.nationality, app.school_name]
     const list = [{val:app.other_names, name:'any other names'}, {val:app.pin_code, name:'a pin code'}, {val:app.nassit, name:'a NASSIT number'}, {val:app.qualifications, name:'any qualifications'}, {val:app.special_skills, name:'any special skills'}]
     const emptyFields = []
     list.forEach(
@@ -30,7 +29,7 @@ export default class Submit extends Component {
     Object.values(req).forEach((val) => {
       if (val===null) {
         disabled = true
-        errors ='The following are required: National Identification Number, School Name, Employing Authority, and Nationality.'
+        errors ='The following are required: National Identification Number, School Name, and Nationality.'
       }});
       this.setState({
         errors: errors, 
@@ -47,7 +46,7 @@ export default class Submit extends Component {
           <Wrapper>
             <FormWrapper>
               <H1>Application</H1>
-                <H2>{values.application_type} School <br/>
+              <H2>{values.title_proposed_appt} at {values.school_name} <br/>
               Application #{values.application_id}<br/><br/>
                5/5: Confirm Application Details</H2>
            <H2>
@@ -74,9 +73,6 @@ export default class Submit extends Component {
             <Category> National Identification Number: </Category><It> {values.national_id} </It>
             </Div>
             <Div>
-            <Category> Employing Authority: </Category><It> {values.employing_authority} </It>
-            </Div>
-            <Div>
             <Category> School Name: </Category><It> {values.school_name} </It>
             </Div>
             <Div>
@@ -87,6 +83,9 @@ export default class Submit extends Component {
             </Div>
             <Div>
             <Category> Qualifications: </Category><It> {values.qualifications} </It>
+            </Div>
+            <Div>
+            <Category> Certificate Number(s) and Associated School(s): </Category><It> {values.qualifications} </It>
             </Div>
             <Div>
             <Category> Special Skills: </Category><It> {values.special_skills} </It>
@@ -110,7 +109,7 @@ export default class Submit extends Component {
           </H2>
           {this.state.missingString.length> 0 && !checkmarked && <ErrorMessage>Please check the above box in order to submit.</ErrorMessage>}
           {this.state.errors!=='' && <ErrorMessage>{this.state.errors}</ErrorMessage>}
-
+          {values.loading==='loading..' && <Notification>Please wait. Loading..</Notification>}
         <Buttons>
           <Left> 
           <CreateButton
@@ -126,11 +125,11 @@ export default class Submit extends Component {
             onClick={submit}
           >Submit</CreateButton>
           </Buttons>
-          <Clearlink href='/dashboard/'><CreateButton
+          <CreateButton
             color="primary"
             variant="contained"
             onClick={step('exit')}
-          >Exit</CreateButton></Clearlink>
+          >Exit</CreateButton>
           
           </FormWrapper>
           </Wrapper>

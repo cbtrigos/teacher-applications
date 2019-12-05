@@ -43,7 +43,7 @@ export default class ApproverRegister extends Component {
                                 >
                                   <MenuItem value=""><H2 small>Please select one:</H2></MenuItem>
                                   <MenuItem value={"District Education Secretary"}><H2 left small>District Education Secretary</H2></MenuItem>
-                                  <MenuItem value={"School Proprietor"}><H2 left small>School Proprietor/Head/Manager</H2></MenuItem>
+                                  <MenuItem value={"Chairman for a school's Board of Governors"}><H2 left small>Chairman for a school's Board of Governors</H2></MenuItem>
                                   <MenuItem value={"TSC Teacher Management Department"}><H2 left small>TSC Teacher Management Representative</H2></MenuItem>
                                   <MenuItem value={"TSC Chair"}><H2 left small>TSC Chair</H2></MenuItem>
                                   <MenuItem value={"Master"}><H2 left small >Master User</H2></MenuItem>
@@ -92,11 +92,12 @@ export default class ApproverRegister extends Component {
                                   onChange={handleChangeSave('school_district')}
                                 >
                                   <MenuItem value=""><H2 small>Please select one:</H2></MenuItem>
-                                   <MenuItem value={"Kenema"}><H2 left small >Kenema</H2></MenuItem>
-                                 <MenuItem value={"Kailahun"}><H2 left small>Kailahun</H2></MenuItem>
-                                  <MenuItem value={"Kenema"}><H2 left small>Kenema</H2></MenuItem>
+                                  <MenuItem value={"Kenema"}><H2 left small >Kenema</H2></MenuItem>
+                                  <MenuItem value={"Kailahun"}><H2 left small>Kailahun</H2></MenuItem>
                                   <MenuItem value={"Kono"}><H2 left small>Kono</H2></MenuItem>
                                   <MenuItem value={"Bombali"}><H2 left small>Bombali</H2></MenuItem>
+                                  <MenuItem value={"Falaba"}><H2 left small>Falaba</H2></MenuItem>
+                                  <MenuItem value={"Karene"}><H2 left small>Karene</H2></MenuItem>
                                   <MenuItem value={"Kambia"}><H2 left small>Kambia</H2></MenuItem>
                                   <MenuItem value={"Koinadugu"}><H2 left small>Koinadugu</H2></MenuItem>
                                   <MenuItem value={"Port Loko"}><H2 left small>Port Loko</H2></MenuItem>

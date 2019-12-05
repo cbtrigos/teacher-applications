@@ -39,7 +39,7 @@ export default class ApproverPanels extends Component {
       .post('http://localhost:5000/api/approve-approver-applications-'+this.props.user.user_type, 
         {"user_id": this.props.user.user_id, 
         "user_type": this.props.user.user_type,
-        "application": application
+        "application": application 
       }) 
       .then(response => {
         if (response.data==="error submitting applications") {
@@ -49,7 +49,7 @@ export default class ApproverPanels extends Component {
       })
   }};
 
-  rejectApplication = (application) => { 
+  rejectApplication = (application) =>  { 
     if (window.confirm('Are you sure you wish to reject application #'+ application.application_id +'? Press ok to reject.')) {
       axios 
       .post('http://localhost:5000/api/reject-approver-applications-'+this.props.user.user_type, 

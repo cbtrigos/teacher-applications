@@ -13,7 +13,8 @@ import Dashboard from "../../components/Dashboard.jsx"
 import Application from "../../components/ApplicantDashboard/Application.jsx"
 import AcountPage from "../../components/Account/AccountPage.jsx"
 import MasterExplore from "../../components/MasterAccount/MasterExplore.jsx"
-
+import Openings from "../../components/PublicPages/Openings.jsx"
+import CreateOpening from "../../components/PublicPages/CreateOpening.jsx"
 import AppliedRoute from "./AppliedRoute.jsx"
 import UnauthenticatedRoute from "./UnauthenticatedRoute.jsx"
 import AuthenticatedRoute from "./AuthenticatedRoute.jsx"
@@ -36,6 +37,19 @@ import MasterUserRoute from "./MasterUserRoute.jsx"
               exact 
               component = {Modules} 
               props={childProps}/>
+            <AppliedRoute 
+              path='/openings' 
+              exact 
+              component ={Openings} 
+              props={childProps}/>  
+            <AppliedRoute 
+              path='/new-job-opening' 
+              exact 
+              component ={CreateOpening} 
+              props={childProps}/>  
+
+
+
             <AppliedRoute 
               path='/faq' 
               exact 

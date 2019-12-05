@@ -98,6 +98,7 @@ export const Input = styled.input`
       `: `
       ''
       `};
+    
     `
 
 export const BigInput = styled.textarea`
@@ -135,6 +136,7 @@ export const CreateButton = styled.button`
     font-weight: light;
     display: block;
     letter-spacing: 1px;
+    border-radius: 8px;
     &:small {
         color: #999;
         font-weight: lighter;};
@@ -144,9 +146,18 @@ export const CreateButton = styled.button`
             background: lightgrey;
             `: `
             background: #84C7D0
+            // background: #FCBF49;
+            // background: #FF8E00
             &:hover {
               opacity: 1;};
             `};
+    ${props =>
+      props.tall ?
+      `
+      height: 80px;
+      `: `
+    
+      `}
         ` 
 
 export const A_center = styled.a`
@@ -183,8 +194,18 @@ export const Buttons = styled.div`
         props.center ?
         `
         justify-content: center;
+
         `: `
         flex-direction: space-between;
+        `}
+  ${props =>
+        props.left ?
+        `
+        align-items: left;
+        align-content: flex-start;
+        justify-content: left;
+
+        `: `
         `}`
 
 export const Right = styled.div`
@@ -319,19 +340,27 @@ ${props =>
   text-align: left;
   `: `
   `};
-  ${props =>
-  props.label ?
+${props =>
+props.label ?
+`
+font-size: 11pt;
+`: `font-size:12pt;
+`}
+${props =>
+  props.small ?
   `
-  font-size: 11pt;
-  `: `font-size:12pt;
+  margin: 0;
+  padding: 0;
+  `: `
   `}
-  ${props =>
-    props.small ?
-    `
-    margin: 0;
-    padding: 0;
-    `: `
-    `}`
+${props =>
+  props.tiny ?
+  `
+  margin: 0;
+  padding: 0;
+  font-size: 10pt;
+  `: `
+  `}`
 
 export const ErrorMessage = styled(H2)`
   color: red;
@@ -419,10 +448,15 @@ export const Partition = styled.section`
 display: flex;
 flex-wrap: wrap;
 justify-content: center;
-border-style: solid;
 border-color: grey;
-// background:
 margin: 1%;
+${props =>
+  props.noBorder ?
+  `
+  `: `
+  border-style: solid;
+
+  `}
 `
 export const Field = styled(Input)`
 width: 100%;
