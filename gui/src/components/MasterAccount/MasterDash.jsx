@@ -9,26 +9,86 @@ export default class MasterDash extends React.Component {
       super(props)
       this.state= {
         error: '',
-        toApprove: []
+        toApprove: [],
+        serverMessage: '',
+        rejection_reason: ''
       }
-    }
+    } 
   
-    async componentDidMount() {
-      axios 
-       .post('http://localhost:5000/api/get-all-approver-requests', 
-         {"user_id": this.props.user.user_id, 
-         "user_type": this.props.user.user_type
-       }) 
-       .then(response => {
-         if (response.data==="error in getting applications") {
-          throw new Error("Error in pulling application information") } 
-         else {
-           this.setState({ 
-            toApprove: response.data.toApprove, 
-           });
-         }
-       })
- }
+  async componentDidMount() {
+  axios 
+    .post('http://localhost:5000/api/get-all-opening-requests', 
+      {"user_id": this.props.user.user_id, 
+      "user_type": this.props.user.user_type
+    }) 
+    .then(response => {
+      if (response.data==="error in getting requests") {
+      throw new Error("Error in pulling opening requests") } 
+      else {
+        this.setState({ 
+        toApprove: response.data.toApprove, 
+        });
+      }
+    })
+}
+
+  approveOpening = (opening) => e => {
+  if (window.confirm(`Are you sure you wish to approve job opening "${opening.title_proposed_appt}" at "${opening.school}"? Press ok to continue.`)) {
+    this.setState({
+      serverMessage: 'loading..',
+    })
+    axios 
+    .post('http://localhost:5000/api/approve-opening', 
+      { 
+        "opening": opening,
+        "user_type": this.props.user.user_type,
+        "user_id": this.props.user.user_id, 
+    }) 
+    .then(response => {
+      if (response.data === 'Success') {
+        window.location.reload();
+      } 
+      else {
+        this.setState({
+          serverMessage: response.data
+        })
+      }
+    })
+    
+    }
+}
+  rejectOpening = (opening) => e => { 
+  if (window.confirm(`Are you sure you wish to reject job opening "${opening.title_proposed_appt}" at "${opening.school}"? Press ok to reject.`)) {
+    this.setState({
+      serverMessage: 'loading..'
+    })
+    axios 
+    .post('http://localhost:5000/api/reject-opening', 
+      { 
+        "opening": opening,
+        "rejection_reason": this.state.rejection_reason,
+        "user_type": this.props.user.user_type,
+        "user_id": this.props.user.user_id, 
+    }) 
+    .then(response => {
+      if (response.data === 'Success') {
+        window.location.reload();
+      } 
+      else {
+        this.setState({
+          serverMessage: response.data
+        })
+      }
+    })
+    
+    }
+}
+updateReason = (reason) => e => { 
+    this.setState({
+      rejection_reason: e.target.value
+    })
+}
+
 
     render() {
       const user = this.props.user
@@ -37,8 +97,11 @@ export default class MasterDash extends React.Component {
               key={item.user_id} 
               user = {user}
               application={item} 
-              // approveApplication = {this.approveApplication}
-              // rejectApplication = {this.rejectApplication}
+              serverMessage = {this.state.serverMessage}
+              updateReason = {this.updateReason}
+              approveOpening = {this.approveOpening}
+              rejectOpening = {this.rejectOpening}
+              rejection_reason = {this.state.rejection_reason}
               />
       );
         return (
@@ -46,13 +109,13 @@ export default class MasterDash extends React.Component {
             <FormWrapper large>
                 <H1>Welcome master user, {user.first_name}</H1>
                 <H2>From this portal, you have the ability to review and approve requests 
-                  for Admin access (as application approvers) as well as peruse all users, applications, and schools.<br/>
-                  Start below by approving any requests. Then, use the dashboard drop-down menu above to explore data. <br/><br/>
+                  to post new job openings as well as peruse all users, applications, and schools.<br/>
+                  Start below by approving any requests. Then, use the explore menu above to explore data. <br/><br/>
                   Good luck!</H2>
                 </FormWrapper>
                 <br/> <br/>
                 <FormWrapper large>
-                <H1>Admin Requests to Approve</H1>
+                <H1>Job Opening Requests to Approve</H1>
                     <div>
                     <HorizSeparator/>
                       <div>

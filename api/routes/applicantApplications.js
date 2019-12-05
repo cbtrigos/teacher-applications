@@ -28,35 +28,47 @@ exports.begin = function (req, res) {
     birth_date: req.body.birth_date,
   };
 
-  connection.query('INSERT INTO applications SET ?', application, (
-    error,
-  ) => {
-    if (error) {
-      console.log(error)
-      res.status(400).send('error occured');
-    } else {
-      connection.query(
-        'SELECT * FROM applications WHERE user_id = ? and job_opening = ? and created=?',
-        [
-          application.user_id,
-          application.job_opening,
-          application.created,
-        ],
-        (error, results) => {
-          if (error) {
-            res.status(400).send("couldn't find application");
-          } else if (results.length > 0) {
-            res.status(201).send({
-              message: 'application registered sucessfully',
-              application_id: results[0].application_id,
-              created: results[0].created,
-            });
-          }
-        },
-      );
-    }
-  });
-};
+  connection.query(
+    'SELECT * FROM applications WHERE user_id = ? and job_opening= ? and rejection_reason is null',
+    [application.user_id, application.job_opening],
+    (error, results) => {
+      if (error) {
+        res.status(400).send('error in getting applications');
+      } else
+      if (results.length>0) {
+        res.status(200).send('You already have an application for this position started or submitted so you may not start another');
+
+      }
+    else {
+      connection.query('INSERT INTO applications SET ?', application, (
+      error,
+    ) => {
+      if (error) {
+        res.status(400).send('error occured');
+      } else {
+        connection.query(
+          'SELECT * FROM applications WHERE user_id = ? and job_opening = ? and created=?',
+          [
+            application.user_id,
+            application.job_opening,
+            application.created,
+          ],
+          (error, results) => {
+            if (error) {
+              res.status(400).send("couldn't find application");
+            } else if (results.length > 0) {
+              res.status(201).send({
+                message: 'application registered sucessfully',
+                application_id: results[0].application_id,
+                created: results[0].created,
+              });
+            }
+          },
+        );
+      }
+    });}
+  ;}
+)}
 //                                  UPDATE AN APPLICATION
 
 exports.save = function (req, res) {
@@ -107,7 +119,6 @@ exports.save = function (req, res) {
     ],
     (error) => {
       if (error) {
-        console.log(error);
         res.status(400).send('error occured');
       } else {
         res.status(201).send('application updated sucessfully');

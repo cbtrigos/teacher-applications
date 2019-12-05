@@ -106,6 +106,8 @@ exports.resetValid = function (req, res) {
     'SELECT * FROM password_change_requests WHERE id = ?',
     token,
     (error, results, fields) => {
+      if (error) {
+      }
       if (results.length > 0) {
         const valid = moment(results[0].expires).isAfter(
           moment().format('YYYY-MM-DD hh:mm:ss'),
@@ -131,6 +133,8 @@ exports.resetPassword = function (req, res) {
     'SELECT * FROM password_change_requests WHERE id = ?',
     token,
     (error, results, fields) => {
+      if (error) {
+      }
       if (results.length > 0) {
         const valid = moment(results[0].expires).isAfter(
           moment().format('YYYY-MM-DD hh:mm:ss'),
@@ -175,6 +179,8 @@ exports.changeName = function (req, res) {
     'SELECT * FROM name_change_requests WHERE user_id = ?',
     changeName.user_id,
     (error, results, fields) => {
+      if (error) {
+      }
       if (results.length !== 0) {
         const today = moment().format('YYYY-MM-DD hh:mm:ss');
         results.forEach((app) => {
@@ -274,6 +280,8 @@ exports.changeEmail = function (req, res) {
     'SELECT * FROM email_change_requests WHERE user_id = ?',
     changeEmail.user_id,
     (error, results) => {
+      if (error) {
+      }
       if (results.length !== 0) {
         const today = moment().format('YYYY-MM-DD hh:mm:ss');
         results.forEach((app) => {
@@ -365,6 +373,8 @@ exports.changeMobile = function (req, res) {
     'SELECT * FROM mobile_change_requests WHERE user_id = ?',
     changeMobile.user_id,
     (error, results) => {
+      if (error) {
+      }
       if (results.length !== 0) {
         const today = moment().format('YYYY-MM-DD hh:mm:ss');
         results.forEach((app) => {
@@ -453,9 +463,11 @@ exports.changePassword = function (req, res) {
   const hash_password = bcrypt.hashSync(password, 12);
 
   connection.query('SELECT * FROM users WHERE user_id = ?', user_id, (
+    error,
     results,
   ) => {
     if (results.length > 0) {
+      
       if (bcrypt.compareSync(current_password, results[0].password)) {
         connection.query(
           'UPDATE users SET password = ? WHERE user_id = ?',

@@ -18,7 +18,6 @@ exports.getJobOpenings = function (req, res) {
     results,
   ) => {
     if (error) {
-        console.log(error)
         res.status(400).send('error in getting openings');
     } 
     else  {
@@ -38,7 +37,6 @@ connection.query('SELECT * FROM job_openings WHERE closed = ? and live = ? and e
   results,
 ) => {
   if (error) {
-      console.log(error)
       res.status(400).send('error in getting openings');
   } 
   else  {
@@ -87,12 +85,10 @@ exports.createJobOpening = function (req, res) {
     sent: new Date(),
   }; 
 
-  console.log(submission)
     connection.query('INSERT INTO job_openings SET ?', submission, (
       error
     ) => {
       if (error) {
-        console.log(error) 
         res
           .status(200)
           .send('An error occured. Please refresh and try again. ');

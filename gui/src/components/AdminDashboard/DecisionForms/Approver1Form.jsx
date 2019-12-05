@@ -18,25 +18,6 @@ export default class Approver1Form extends Component {
       basic_yearly_salary: yearly_salary,
       approver_1_name: user.first_name + ' ' + user.last_name,  
       approver_1_email: user.email
-
-      //   school_id: '',                
-      //   title_proposed_appt: '',        
-      //   date_proposed_appt: '',         
-      //   reasons_proposed_appt: '',      
-      //   current_pupil_enrollment: '',   
-      //   on_payroll: '',            
-      //   JSS_level_qualified: '', 
-      //   SSS_level_qualified: '',  
-      //   signed: 'yes', 
-      //   mobile_number: user.mobile_number, 
-      //   email: user.email,
-  
-      // formErrors: {
-      //   school_id: '',                     
-      //   date_proposed_appt: '',         
-      //   approver_1_name: '',  
-      //   signed: '', 
-      // }
 };
 
  }
@@ -46,7 +27,6 @@ handleChange = input => e => {
   this.setState({
         [input]: value    
     });
-    console.log(this.state)
 
 }
 
@@ -103,7 +83,7 @@ handleChange = input => e => {
             <CreateButton 
               onClick={() => approveApplication(this.state)}
               disabled={!this.state.checkmark}>
-              Approve application #{this.state.application_id}
+              Approve for Continuation #{this.state.application_id}
           </CreateButton>
           </Application>
       //     <Application>

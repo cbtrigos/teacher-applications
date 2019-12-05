@@ -122,20 +122,18 @@ export default class CreateOpening extends Component {
             break;
         }
         this.setState({ formErrors });
-        console.log(this.state)
     }
 
     validateForm = () => {
-        console.log('validating')
-        let valid = true;
-        Object.values(this.state.formErrors).forEach(
-            (e) => e.length > 0 && (valid = false)
-        );
-        Object.values(this.state.submission).forEach(
-            (val) => 
-            val === '' && (valid = false)
-            );
-        return valid;
+      let valid = true;
+      Object.values(this.state.formErrors).forEach(
+          (e) => e.length > 0 && (valid = false)
+      );
+      Object.values(this.state.submission).forEach(
+          (val) => 
+          val === '' && (valid = false)
+          );
+      return valid;
     }
       
 
@@ -168,7 +166,7 @@ export default class CreateOpening extends Component {
       }
       {this.state.step===0 &&      <FormWrapper>
               <H1>Job Opening Submission</H1>
-              <H2>For school proprietors and board of governors</H2> 
+              <H2>For school proprietors and school boards of governors</H2> 
               {this.state.serverMessage!==null && <Notification>{this.state.serverMessage}</Notification>}
                 <HorizSeparator/>
                   <H2>School Information</H2>

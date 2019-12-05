@@ -5,53 +5,42 @@ import Tracker from '../ApplicantDashboard/Tracker.jsx'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Approver1Form from './DecisionForms/Approver1Form.jsx';
 import Approver2Form from './DecisionForms/Approver2Form.jsx';
-// import Approver3Form from './DecisionForms/Approver3Form.jsx';
 import RejectionForm from './DecisionForms/RejectionForm.jsx';
 
 function getSalary(grade, qualifications) {
-    // var grade = props.grade
-    // var qualifications = props.qualifications 
     let monthly_salary = ''
     let yearly_salary = ''
-    console.log(qualifications, grade)
 
     if (qualifications==='Teachers Certificate Lower (TCL)') {
         monthly_salary = '999,812.'
         yearly_salary =  '11,997,744.'
-        console.log('decided')
     }
     else if (qualifications==='Teachers Certificate (TC)') {
         monthly_salary = '1,061,522.'
         yearly_salary =  '12,738,264.'
-        console.log('decided')
 
     }
     else if (qualifications==="Higher Teachers Certificate (HTC) Primary or Secondary" || qualifications==="Bachelors of Science or Arts (B.Sc./B.A.) Hons or Gen") {
         monthly_salary = '1,210,164.'
         yearly_salary =  '14,521,968.'
-        console.log('decided')
 
     }
     else if (qualifications==="Bachelors of Education" ||qualifications === "Bachelors of Science or Arts in Education" || qualifications ==="Masters in Education or a Higher Degree") {
         if (grade==9) {
         monthly_salary = '1,675,846.'
         yearly_salary =  '20,110,152.'
-        console.log('decided')
 
         }
         else {
         monthly_salary = '1,356,648.'
         yearly_salary =  '16,279,776.'
-        console.log('decided')
 
     }
     }
-    console.log('in the func',monthly_salary, yearly_salary)
 
     return [monthly_salary, yearly_salary]
 }
 export function Actions(props) {
-    console.log('in the actions', props.application)
     const {user, application, approveApplication, rejectApplication} = props
     const [expanded, setExpanded] = React.useState(false);
     const handleChange = panel => (event, isExpanded) => {

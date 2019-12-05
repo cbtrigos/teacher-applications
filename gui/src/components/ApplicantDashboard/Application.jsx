@@ -27,6 +27,8 @@ class Application extends Component {
       missingString: '',
       errors: '',
       checkMark: false, 
+      serverMessage: '',
+      bannedOpening: '',
       application: {
         application_id: null,
         job_opening: '',
@@ -106,7 +108,6 @@ this.beginApp=this.beginApp.bind(this);
             });
           } 
         })
-      
   }
 
   step = val => e => {
@@ -141,7 +142,6 @@ this.beginApp=this.beginApp.bind(this);
   }
 
   beginApp = (opening) => e => {
-    console.log(opening)
     axios 
       .post('http://localhost:5000/api/begin-application', 
         {"email": this.state.application.email,
@@ -170,6 +170,12 @@ this.beginApp=this.beginApp.bind(this);
         })
         );
         }
+      else {
+        this.setState({
+          serverMessage: response.data,
+          bannedOpening: opening.opening_key
+        })
+      }
       })
   };
 
@@ -249,7 +255,7 @@ this.beginApp=this.beginApp.bind(this);
 
   render() {
     const { title_proposed_appt, certificates, school_district, birth_date, national_id, school_name, prev_appt, nationality, job_opening, application_id, last_name, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
-    const { loading, formErrors, step, errors, missingString, toolTip } = this.state
+    const { loading, formErrors, step, errors, missingString, toolTip, serverMessage, bannedOpening } = this.state
     const values = {loading, title_proposed_appt, certificates, toolTip, formErrors, school_district, birth_date, national_id, school_name, prev_appt, application_id, nationality, job_opening, last_name, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex, errors, missingString};
     switch (step) {
       case 0: 
@@ -258,6 +264,8 @@ this.beginApp=this.beginApp.bind(this);
           beginApp={this.beginApp}
           handleChangeSave={this.handleChangeSave}
           values={values}
+          serverMessage= {serverMessage}
+          bannedOpening = {bannedOpening}
           />
         )
       case 1:

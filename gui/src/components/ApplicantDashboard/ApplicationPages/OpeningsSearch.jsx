@@ -1,11 +1,12 @@
 import React  from 'react';
-import { H2, CreateButton, Buttons, Div, Left, Category, It, HorizSeparator} from '../../../constants/utils/Styling.jsx'
+import { H2, CreateButton, ErrorMessage, HorizSeparator} from '../../../constants/utils/Styling.jsx'
 import { makeStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+// import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+// import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+// import ExpansionPanelAppSummary from '@material-ui/core/ExpansionPanelAppSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {ExpansionPanel, ExpansionPanelAppSummary, ExpansionPanelDetails} from '../../../constants/utils/ExpandingPanels.jsx'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Opening(props) {
-  const {opening, beginApp} = props
+  const {opening, beginApp, serverMessage, bannedOpening} = props
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -34,14 +35,14 @@ export default function Opening(props) {
   return (
         <div className={classes.root}>
           <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-            <ExpansionPanelSummary
+            <ExpansionPanelAppSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
               <Typography className={classes.heading}><H2 left> {opening.emis_code}</H2></Typography>
               <Typography className={classes.secondaryHeading}><H2 left>{opening.school}</H2> </Typography>
-            </ExpansionPanelSummary>
+            </ExpansionPanelAppSummary>
             <ExpansionPanelDetails>
               <div style={{width: '100%'}}>
               <HorizSeparator/>
@@ -51,6 +52,7 @@ export default function Opening(props) {
                 {!isNaN(opening.grade_requested) &&
                   <H2 >For grade level:  <span style={{fontStyle:"italic"}}>{opening.grade_requested} </span></H2>
                 }
+                {(bannedOpening===opening.opening_key && serverMessage!=='') && <ErrorMessage>{serverMessage}</ErrorMessage>}
                   <CreateButton 
                       onClick= {beginApp(opening)}>
                     Apply for this position

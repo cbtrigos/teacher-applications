@@ -18,6 +18,12 @@ const AllApps = (props) => {
         width: 270
       },
       {
+        label: 'Submitted',
+        field: 'submitted',
+        sort: 'asc',
+        width: 150
+      },
+      {
         label: 'Job Opening ID',
         field: 'job_opening',
         sort: 'asc',
@@ -30,32 +36,26 @@ const AllApps = (props) => {
         width: 100
       },
       {
-        label: 'First Name',
-        field: 'first_name',
-        sort: 'asc',
-        width: 150
-      },
-      {
-        label: 'Last Name',
-        field: 'last_name',
-        sort: 'asc',
-        width: 150
-      },
-      {
-        label: 'Other Names',
-        field: 'other_names',
-        sort: 'asc',
-        width: 150
-      },
-      {
-        label: 'Mobile Number',
-        field: 'mobile_number',
-        sort: 'asc',
-        width: 150
-      },
-      {
         label: 'Nationality',
         field: 'nationality',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'Special Skills',
+        field: 'special_skills',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'Previous Appt',
+        field: 'prev_appt',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'National ID',
+        field: 'national_id',
         sort: 'asc',
         width: 150
       },
@@ -84,15 +84,21 @@ const AllApps = (props) => {
         width: 150
       },
       {
-        label: 'Last Edited',
-        field: 'last_edited',
+        label: 'Certificates',
+        field: 'certificates',
+        sort: 'asc',
+        width: 150
+      },
+
+      {
+        label: 'Rejection Reason',
+        field: 'rejection_reason',
         sort: 'asc',
         width: 150
       }
     ],
     rows: applications 
   };
-
   return (
     <MDBDataTable
       striped
@@ -100,6 +106,8 @@ const AllApps = (props) => {
       responsive
       bordered
       small
+      searching={false}
+      // paging={false}
       data={data}
     />
   );

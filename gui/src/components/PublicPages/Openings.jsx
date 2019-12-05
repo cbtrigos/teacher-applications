@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {FormWrapper, Wrapper, H1, H2, Field, HorizSeparator, CreateButton, Buttons, Left, Clearlink} from "../../constants/utils/Styling.jsx"
+import {FormWrapper, Field, Wrapper, H1, H2,HorizSeparator, CreateButton, Buttons, Left, Clearlink} from "../../constants/utils/Styling.jsx"
 import axios from 'axios';
 import { MDBDataTable } from 'mdbreact';
 import Fuse from "fuse.js";
@@ -114,7 +114,6 @@ export default class Openings extends Component {
     handleChange = input => e => {
       var fuse = new Fuse(this.state.allOpenings, searchOptions); // "list" is the item array
       const value = e.target.value
-      console.log(value)
       if (value !==''){
         let results = fuse.search(value)
         this.setState({
@@ -126,7 +125,7 @@ export default class Openings extends Component {
         listedOpenings: this.state.allOpenings
       })
     }
-        
+         
 
 
 

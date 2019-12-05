@@ -98,13 +98,14 @@ import MasterUserRoute from "./MasterUserRoute.jsx"
               component={Application}
               props={childProps}
             /> 
-
+ 
             <MasterUserRoute 
-              path="/dashboard/explore"
+              path="/explore"
               exact
               component={MasterExplore}
               props={childProps}
             />    
+
             <Route component={NotFound} /> 
     </Switch>
     );

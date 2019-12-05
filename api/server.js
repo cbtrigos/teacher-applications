@@ -52,10 +52,7 @@ router.post('/begin-application', applicantApplications.begin);
 router.post('/save-application', applicantApplications.save);
 router.post('/submit-application', applicantApplications.submit);
 router.post('/delete-application', applicantApplications.delete);
-router.post(
-  '/get-user-applications',
-  applicantApplications.getApplicantApplications,
-);
+router.post('/get-user-applications',applicantApplications.getApplicantApplications);
 
 // approvers approving
 router.post(
@@ -109,9 +106,20 @@ router.post('/outside-contact', contact.sendEmail);
 router.post('/get-my-approver-request', unverifiedApprover.getApproverRequest);
 
 // get master account information
-router.post('/get-all-approver-requests', masterAccount.getallApproverRequests);
+router.post('/get-all-opening-requests', masterAccount.getallOpeningRequests);
+router.post('/get-all-openings', masterAccount.getallOpenings);
 router.post('/get-all-applications', masterAccount.getallApplications);
 router.post('/get-all-users', masterAccount.getallUsers);
+router.post('/get-user', masterAccount.getUser)
+router.post('/get-opening', masterAccount.getOpening)
+router.post('/update-user', masterAccount.updateUser);
+router.post('/update-opening', masterAccount.updateOpening);
+
+router.post('/approve-opening', masterAccount.approveOpening);
+router.post('/reject-opening', masterAccount.rejectOpening);
+
+
+// router.post('get-application', masterAccount.getApplication)
 
 app.use('/api', router);
 

@@ -16,8 +16,41 @@ class Portal extends React.Component {
         isAuthenticating: true, 
         user: {}
       };
+      this.events = [
+        "load",
+        "mousemove",
+        "mousedown",
+        "click",
+        "scroll",
+        "keypress"
+      ];
       this.handleLogin = this.handleLogin.bind(this);
+// %%%%%%%%%%%%%%%%%%%%%%%%%%% The following is for auto-logout :-) %%%%%%%%%%%%%%%%%%
+      this.resetTimeout = this.resetTimeout.bind(this);
+  
+      if (Object.values(this.state.user).length!==0) {
+        for (var i in this.events) {
+          window.addEventListener(this.events[i], this.resetTimeout);
+        }
+        this.setTimeout();}
     }
+    clearTimeout() {
+      if (this.logoutTimeout) clearTimeout(this.logoutTimeout);
+    }
+    setTimeout() {
+      this.logoutTimeout = setTimeout(this.handleLogout, 500 * 1000);
+    }
+    resetTimeout() {
+      this.clearTimeout();
+      this.setTimeout();
+    }
+    destroy() {
+      this.clearTimeout();
+      for (var i in this.events) {
+        window.removeEventListener(this.events[i], this.resetTimeout);
+      }
+    }
+//  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     async componentDidMount() {
         if (isLogin()) {

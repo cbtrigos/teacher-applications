@@ -48,28 +48,15 @@ export default class NavBar extends Component {
                     ? <LinkContainer to="/dashboard">
                         <NavItem>My Dashboard</NavItem>
                       </LinkContainer>  
-//-------------------------------------------------------------------------------------
                     : user.user_type===5
                       ? <>
                         <LinkContainer to="/dashboard">
-                          <NavItem>Approvals</NavItem>
+                          <NavItem>Dashboard</NavItem>
                         </LinkContainer>  
-                        <NavDropdown title="Dashboard" id="basic-nav-dropdown" >
-                        <LinkContainer to="/applications">
-                          <NavItem>Applications</NavItem>
-                        </LinkContainer>
-                          <LinkContainer to="/applicants">
-                            <NavItem>Applicants</NavItem>
-                          </LinkContainer>
-                          <LinkContainer to="/approvers">
-                            <NavItem>Approvers</NavItem>
-                          </LinkContainer>
-                          <LinkContainer to="/schools">
-                            <NavItem>Schools</NavItem>
-                          </LinkContainer>
-                        </NavDropdown>  
+                        <LinkContainer to="/explore">
+                          <NavItem>Explore</NavItem>
+                        </LinkContainer>  
                         </>
-//-------------------------------------------------------------------------------------
 
                       : user.user_type ===4 
                         ? <LinkContainer to="/dashboard">

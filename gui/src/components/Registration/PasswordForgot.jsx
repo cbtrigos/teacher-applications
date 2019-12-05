@@ -88,7 +88,7 @@ export default class PasswordForgot extends Component {
         }) 
         .then(response => {
           if (response.data==="application submitted successfully") {
-          } else {console.log(response.data)}
+          } 
         }).catch(error => {
           dispatch({
               type: "FETCH_FAILED",

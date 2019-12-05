@@ -1,8 +1,39 @@
 import React, { Component } from "react";
-import {H1, H2, It, HorizSeparator, FormWrapper} from '../../constants/utils/Styling.jsx'
+import {H1, H2, It, HorizSeparator, FormWrapper, Field} from '../../constants/utils/Styling.jsx'
 import axios from 'axios';
 import PanelContent from './PanelContent.jsx'
+import Fuse from "fuse.js";
 
+var searchApps = {
+  shouldSort: true,
+  threshold: 0.6,
+  location: 0,
+  distance: 100,
+  maxPatternLength: 32,
+  minMatchCharLength: 1,
+  keys: [
+    "user_id",
+    "job_opening",
+    "application_id",
+    "submitted",
+    "title_proposed_appt",
+    "date_proposed_appt",
+    "reasons_proposed_appt",
+    "district",
+    "created",
+    'school',
+    "nationality",
+    "pin_code",
+    "nassit",
+    "qualifications",
+    "special_skills",
+    "prev_appt",
+    "national_id",
+    "school_district",
+    "certificates",
+    "rejection_reason"
+  ]
+};
 
 // The "App Type" page is the 0th panel of registration 
 export default class ApproverPanels extends Component {
@@ -11,6 +42,7 @@ export default class ApproverPanels extends Component {
     this.state = {
       toApprove: [],
       alreadyApproved: [], 
+      chosenApproved: []
     };
   }
 
@@ -28,6 +60,7 @@ export default class ApproverPanels extends Component {
             this.setState({ 
               toApprove: response.data.toApprove, 
               alreadyApproved: response.data.alreadyApproved,
+              chosenApproved: response.data.alreadyApproved
             });
           }
         })
@@ -64,7 +97,20 @@ export default class ApproverPanels extends Component {
 
       })
   }}
-
+  handleSearch = input => e => {
+    var fuse = new Fuse(this.state.alreadyApproved, searchApps); // "list" is the item array
+    const value = e.target.value
+    if (value !==''){
+      let results = fuse.search(value)
+      this.setState({
+        chosenApproved: results
+      })
+    }
+    else 
+    this.setState({
+      chosenApproved: this.state.alreadyApproved
+    })
+  }
   render() {
     const user = this.props.user
     const toDos = this.state.toApprove.map(item => 
@@ -77,7 +123,7 @@ export default class ApproverPanels extends Component {
             rejectApplication = {this.rejectApplication}
             />
     );
-    const history = this.state.alreadyApproved.map(item =>
+    const history = this.state.chosenApproved.map(item =>
           <PanelContent 
             key={item.application_id} 
             user = {user}
@@ -101,6 +147,16 @@ export default class ApproverPanels extends Component {
                       <HorizSeparator/>
                       <H2>Applications already Reviewed</H2>
                       {this.state.alreadyApproved.length===0 &&  <It>You haven't approved any applications yet! </It> }
+                      {this.state.alreadyApproved.length!==0 && 
+                      <Field
+                        style = {{textAlign: 'center'}}
+                        type = "text"
+                        name="search"
+                        noValidate
+                        placeholder="Filter by any application field.."
+                        onChange={this.handleSearch('search')}
+                    />
+                      }
                         {history}
                       </div>
                       </div>

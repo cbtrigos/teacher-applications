@@ -27,7 +27,6 @@ exports.register = function (req, res) {
     gender: req.body.gender,
     mobile_number: req.body.mobile_number,
   };
-  console.log(applicants)
   connection.query(
     'SELECT * FROM users WHERE email = ?',
     [applicants.email],
@@ -39,7 +38,6 @@ exports.register = function (req, res) {
           error,
         ) => {
           if (error) {
-            console.log(error) //////
             res
               .status(400)
               .send('An error occured. Please refresh and try again. ');
@@ -49,7 +47,6 @@ exports.register = function (req, res) {
               [applicants.email],
               (error, results) => {
                 if (error) {
-                  console.log(error) //////
                   res.status(400).send('error occured');
                 } else if (results.length > 0) {
                   res.status(200).send({

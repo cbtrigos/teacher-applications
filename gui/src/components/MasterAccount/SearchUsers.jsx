@@ -70,6 +70,8 @@ const AllUsers = (props) => {
       responsive
       bordered
       small
+      searching={false}
+      // paging={false}
       data={data}
     />
   );

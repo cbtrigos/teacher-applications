@@ -24,10 +24,11 @@ export default function FAQPanels() {
                 <p>The same application is used for primary, secondary, and vocational schools.</p>
                 <p>Here's a list of everything you need:</p>
                 <div style={{textAlign: 'left', margin:'0 0 0 2%'}}>
-                <li>Employing authority and school for which you're applying for</li>
+                <li>Basic personal info</li>
+                <li>The teacher opening for which you're applying for</li>
                 <li>Pin code and NASSIT number, if available</li>
-                <li>Qualifications and applicable cretificate numbers</li>
-                <li>Special skills such as special skills, music</li>
+                <li>Qualifications and applicable certificate numbers to upload</li>
+                <li>Special skills such as working with special ed, music</li>
                 <li>Previous appointment and employing authority if available</li>
                 </div>
               </H2>
@@ -50,8 +51,8 @@ export default function FAQPanels() {
             <ExpansionPanelDetails>
               <H2>
                 <p>Before this digital platform existed, the teacher application was a paper-based system that traveled all across Sierra Leone to be hand-signed by five different agencies.
-                This often took as long as 3 months. <br/>
-                With this system, you will be able to track your application in real-time and receive approval notices in real time as the approving agencies review your application. 
+                This often took as long as 3 months. <br/><br/>
+                With this system, you will be able to track your application in real-time and receive updates as the approving agencies review your application. 
                 </p>     
               </H2>
             </ExpansionPanelDetails>
@@ -62,7 +63,7 @@ export default function FAQPanels() {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <H2>
-              <p>Once an application has been submitted, it cannot be modified or updated. You can, however, delete your application if you so choose, and restart from the beginning. </p>
+              <p>Once an application has been submitted, it cannot be modified or updated.  </p>
               </H2>
             </ExpansionPanelDetails>
           </ExpansionPanel>    

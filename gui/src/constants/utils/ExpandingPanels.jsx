@@ -42,6 +42,28 @@ export const ExpansionPanel = withStyles({
     expanded: {},
   })(MuiExpansionPanelSummary);
 
+  export const ExpansionPanelAppSummary = withStyles({
+    root: {
+      backgroundColor: 'lightgrey',
+      opacity: .85,
+      borderBottom: '1px solid rgba(0, 0, 0, .125)',
+      marginBottom: -1,
+      minHeight: 56,
+      '&:hover': {
+        opacity: 1,
+      },
+      '&$expanded': {
+        minHeight: 56,
+      },
+    },
+    content: {
+      '&$expanded': {
+        margin: '12px 0',
+      },
+    },
+    expanded: {},
+  })(MuiExpansionPanelSummary);
+
 export const ExpansionPanelSummary = withStyles({
     root: {
       backgroundColor: 'rgba(129,121,144,1)',

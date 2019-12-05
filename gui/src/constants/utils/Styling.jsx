@@ -17,7 +17,8 @@ export const H1 = styled.h1`
       `};`
 
 export const Wrapper = styled.div`
-    height: 170vh;
+    min-height: 120vh;
+    height: 130%;
     margin-top: -25px;
     width: 100%;
     display: -webkit-flex;

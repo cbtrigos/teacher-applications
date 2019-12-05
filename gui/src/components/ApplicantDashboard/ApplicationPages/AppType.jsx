@@ -69,8 +69,8 @@ async componentDidMount() {
     })
   }
   render() {
-    const drafts = this.state.listedOpenings.map(item => 
-      <Opening opening={item} key = {item.opening_id}  beginApp = {this.props.beginApp}/>
+    const openings = this.state.listedOpenings.map(item => 
+      <Opening opening={item} key = {item.opening_id}  beginApp = {this.props.beginApp} bannedOpening = {this.props.bannedOpening} serverMessage = {this.props.serverMessage}/>
       );
 
         return ( 
@@ -90,7 +90,7 @@ async componentDidMount() {
                     defaultValue={this.state.search}
                     />
                 </form>
-             {drafts}
+             {openings}
                 <br/> <br/> 
             </FormWrapper>
             </Wrapper>

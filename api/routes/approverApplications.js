@@ -64,7 +64,7 @@ exports.getApproverApplications_2 = async function (req, res) {
       res.status(400).send('error in authenticating user');
     } else if (results.length === 1 && results[0].user_type === user_type) {
       connection.query(
-        'SELECT * FROM applications apps INNER JOIN approver_1 apps1 ON apps.application_id = apps1.application_id AND apps.approver_1= ? LEFT JOIN job_openings jo ON apps.job_opening=jo.opening_key;',
+        'SELECT * FROM applications apps INNER JOIN approver_1 apps1 ON apps.application_id = apps1.app_id AND apps.approver_1= ? LEFT JOIN job_openings jo ON apps.job_opening=jo.opening_key;',
         'true',
         (error, results) => {
           if (error) {
@@ -99,25 +99,13 @@ exports.submitApproverApplications_1 = function (req, res) {
   const applicant_id = req.body.application.user_id;
   const submission = {
     approver_1_id: req.body.application.approver_id,
-    application_id: req.body.application.application_id,
+    app_id: req.body.application.application_id,
     basic_monthly_salary: req.body.application.basic_monthly_salary,
     basic_yearly_salary: req.body.application.basic_yearly_salary,
     approver_1_name: req.body.application.approver_1_name,
     approver_1_email: req.body.application.approver_1_email,
 
-    // school_id: req.body.application.school_id,
-    // title_proposed_appt: req.body.application.title_proposed_appt,
-    // date_proposed_appt: req.body.application.date_proposed_appt,
-    // reasons_proposed_appt: req.body.application.reasons_proposed_appt,
-    // current_pupil_enrollment: req.body.application.current_pupil_enrollment,
-    // on_payroll: req.body.application.on_payroll,
-    // JSS_level_qualified: req.body.application.JSS_level_qualified,
-    // SSS_level_qualified: req.body.application.SSS_level_qualified,
-    // signed: req.body.application.signed,
-    // mobile_1_number: req.body.application.mobile_number,
-
   };
-  console.log(submission)
   connection.query('SELECT * FROM users WHERE user_id = ?', user_id, (
     error,
     results,
@@ -127,17 +115,16 @@ exports.submitApproverApplications_1 = function (req, res) {
     } else if (user_type === 1 && results[0].user_type === user_type) {
       connection.query(
         'SELECT * FROM applications WHERE user_id = ? and application_id=? and submitted=?',
-        [applicant_id, submission.application_id, 'true'],
+        [applicant_id, submission.app_id, 'true'],
         (error) => {
           if (error) {
             res.status(400).send('user with that application was not found');
           } else {
             connection.query(
               'UPDATE applications SET approver_1 = ?, approver_1_decision=? WHERE application_id = ?',
-              ['true', today, submission.application_id],
+              ['true', today, submission.app_id],
               (error) => {
                 if (error) {
-                  console.log(error)
                   res.status(400).send("couldn't find application");
                 } else {
                   connection.query(
@@ -151,7 +138,6 @@ exports.submitApproverApplications_1 = function (req, res) {
                             'Error occured in submitting approval request',
                           );
                       } else {
-                        console.log('ok got here.........')
                         res
                           .status(200)
                           .send('Submitted Approval Successfully');
@@ -176,13 +162,12 @@ exports.submitApproverApplications_2 = function (req, res) {
   const { applicant_id } = req.body.application;
   const submission = {
     approver_2_id: req.body.application.approver_id,
-    application_id: req.body.application.application_id,
+    app_id: req.body.application.application_id,
     approver_2_name: req.body.application.approver_2_name,
     date: today,
     signed: req.body.application.signed,
     approved: 'true',
   };
-  console.log(submission)
 
   connection.query('SELECT * FROM users WHERE user_id = ?', user_id, (
     error,
@@ -193,14 +178,14 @@ exports.submitApproverApplications_2 = function (req, res) {
     } else if (user_type === 2 && results[0].user_type === user_type) {
       connection.query(
         'SELECT * FROM applications WHERE user_id = ? and application_id=? and submitted=? and approver_1 = ?',
-        [applicant_id, submission.application_id, 'true', 'true'],
+        [applicant_id, submission.app_id, 'true', 'true'],
         (error) => {
           if (error) {
             res.status(400).send('user with that application was not found');
           } else {
             connection.query(
               'UPDATE applications SET approver_2 = ?, approver_2_decision=? WHERE application_id = ?',
-              ['true', today, submission.application_id],
+              ['true', today, submission.app_id],
               (error) => {
                 if (error) {
                   res.status(400).send("couldn't find application");
@@ -244,7 +229,7 @@ exports.rejectApproverApplications_1 = function (req, res) {
     rejection_1_reason: req.body.application.rejection_reason,
     approver_1_name: req.body.application.approver_name,
     approver_1_id: req.body.application.approver_id,
-    application_id: req.body.application.application_id,
+    app_id: req.body.application.application_id,
     date: today,
     approved: 'false',
   };
@@ -253,17 +238,13 @@ exports.rejectApproverApplications_1 = function (req, res) {
     results,
   ) => {
     if (error) {
-      console.log(error)
-
       res.status(400).send('error finding user');
     } else if (user_type === 1 && results[0].user_type === user_type) {
       connection.query(
         'SELECT * FROM applications WHERE user_id = ? and application_id=? and submitted=?',
-        [applicant_id, submission.application_id, 'true'],
+        [applicant_id, submission.app_id, 'true'],
         (error) => {
           if (error) {
-            console.log(error)
-
             res.status(400).send('user with that application was not found');
           } else {
             connection.query(
@@ -272,11 +253,10 @@ exports.rejectApproverApplications_1 = function (req, res) {
                 'false',
                 today,
                 submission.rejection_1_reason,
-                submission.application_id,
+                submission.app_id,
               ],
               (error) => {
                 if (error) {
-                  console.log(error)
                   res.status(400).send("couldn't find application");
                 } else {
                   connection.query(
@@ -284,8 +264,6 @@ exports.rejectApproverApplications_1 = function (req, res) {
                     submission,
                     (error) => {
                       if (error) {
-                        console.log(error)
-
                         res
                           .status(400)
                           .send(
@@ -317,7 +295,7 @@ exports.rejectApproverApplications_2 = function (req, res) {
     rejection_2_reason: req.body.application.rejection_reason,
     approver_2_name: req.body.application.approver_name,
     approver_2_id: req.body.application.approver_id,
-    application_id: req.body.application.application_id,
+    app_id: req.body.application.application_id,
     signed: req.body.application.signed,
     date: today,
     approved: 'false',
@@ -332,7 +310,7 @@ exports.rejectApproverApplications_2 = function (req, res) {
     } else if (user_type === 2 && results[0].user_type === user_type) {
       connection.query(
         'SELECT * FROM applications WHERE user_id = ? and application_id=? and submitted = ? and approver_1 = ?',
-        [applicant_id, submission.application_id, 'true', 'true'],
+        [applicant_id, submission.app_id, 'true', 'true'],
         (error) => {
           if (error) {
             res.status(400).send('user with that application was not found');
@@ -343,7 +321,7 @@ exports.rejectApproverApplications_2 = function (req, res) {
                 'false',
                 today,
                 submission.rejection_2_reason,
-                submission.application_id,
+                submission.app_id,
               ],
               (error) => {
                 if (error) {
