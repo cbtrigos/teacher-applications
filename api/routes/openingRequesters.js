@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const { db } = require('../authentication/mysql.json');
+const { db } = require('../authentication/mysql.js');
 
 //                                 CONNECTING TO MYSQL
 

@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
-const { db } = require('../authentication/mysql.json');
+const { db } = require('../authentication/mysql.js');
 
 //                                 CONNECTING TO MYSQL
 

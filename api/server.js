@@ -9,6 +9,9 @@ const account = require('./routes/account');
 const contact = require('./routes/contact');
 const openings = require('./routes/jobOpenings');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
