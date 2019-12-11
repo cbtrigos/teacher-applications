@@ -100,7 +100,7 @@ this.beginApp=this.beginApp.bind(this);
       loading: 'loading', 
     });
       axios 
-        .post('http://localhost:5000/api/submit-application', 
+        .post(process.env.REACT_APP_API+'/api/submit-application', 
           {"application": this.state.application,
         }) 
         .then(response => {
@@ -121,7 +121,7 @@ this.beginApp=this.beginApp.bind(this);
         step: step + k
       });
     axios 
-    .post('http://localhost:5000/api/save-application', 
+    .post(process.env.REACT_APP_API+'/api/save-application', 
       this.state.application) 
     .then(response => {
       if (response.data==="application updated sucessfully") {
@@ -145,7 +145,7 @@ this.beginApp=this.beginApp.bind(this);
 
   beginApp = (opening) => e => {
     axios 
-      .post('http://localhost:5000/api/begin-application', 
+      .post(process.env.REACT_APP_API+'/api/begin-application', 
         {"email": this.state.application.email,
           "sex": this.state.application.sex, 
           "first_name": this.state.application.first_name, 

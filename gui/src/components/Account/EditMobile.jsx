@@ -16,7 +16,7 @@ export default class EditMobile extends React.Component {
   
     updateMobile = () =>  {
         axios 
-        .post('http://localhost:5000/api/change-mobile', {
+        .post(process.env.REACT_APP_API+'/api/change-mobile', {
             "mobile_number": this.state.mobile_number, 
             "prev_mobile_number": this.props.user.mobile_number,
             "user_id": this.props.user.user_id, 

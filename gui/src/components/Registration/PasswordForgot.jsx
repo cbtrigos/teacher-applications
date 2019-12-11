@@ -70,7 +70,7 @@ export default class PasswordForgot extends Component {
           showNullError: false,
         });
           const response = await axios.post(
-            'http://localhost:5000/api/password-forgot',
+            process.env.REACT_APP_API+'/api/password-forgot',
             {
               email,
             },
@@ -83,7 +83,7 @@ export default class PasswordForgot extends Component {
     updatePassword = async (e) => {
       event.preventDefault();
       axios 
-        .post('http://localhost:5000/api/submit-application', 
+        .post(process.env.REACT_APP_API+'/api/submit-application', 
           {"application_id": this.state.application_id
         }) 
         .then(response => {

@@ -69,7 +69,7 @@ export default class CreateOpening extends Component {
             step:1
         })
         axios 
-        .post('http://localhost:5000/api/new_job_opening', 
+        .post(process.env.REACT_APP_API+'/api/new_job_opening', 
             this.state.submission) 
         .then(response => {
             if (response.data==="Job Opening submitted sucessfully") {

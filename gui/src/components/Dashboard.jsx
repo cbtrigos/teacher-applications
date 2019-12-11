@@ -20,7 +20,7 @@ export default class Dashboard extends Component {
 
   async componentDidMount() {
        axios 
-        .post('http://localhost:5000/api/get-user-applications', 
+        .post(process.env.REACT_APP_API+'/api/get-user-applications', 
           {"user_id": this.props.user.user_id
         }) 
         .then(response => {
@@ -59,7 +59,7 @@ export default class Dashboard extends Component {
 
   deleteApplication = (input) => {
     axios 
-      .post('http://localhost:5000/api/delete-application', 
+      .post(process.env.REACT_APP_API+'/api/delete-application', 
         {"application_id": input
       }) 
       .then(response => {

@@ -15,7 +15,7 @@ export default class RequestingApproval extends React.Component {
     }
     async componentDidMount() {
         axios 
-         .post('http://localhost:5000/api/get-my-opening-request', 
+         .post(process.env.REACT_APP_API+'/api/get-my-opening-request', 
            {"user_id": this.props.user.user_id, 
            "user_type": this.props.user.user_type
          }) 

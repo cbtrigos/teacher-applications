@@ -85,7 +85,7 @@ export default class UserForm extends React.Component {
       serverMessage: 'loading'
     })
       axios 
-        .post('http://localhost:5000/api/register', 
+        .post(process.env.REACT_APP_API+'/api/register', 
           {"email": this.state.email,
             "password": this.state.password1, 
             "gender": this.state.gender, 
@@ -112,7 +112,7 @@ export default class UserForm extends React.Component {
       serverMessage: 'loading'
     })
       axios 
-        .post('http://localhost:5000/api/approver-request', 
+        .post(process.env.REACT_APP_API+'/api/approver-request', 
           {"email": this.state.email,
             "password": this.state.password1, 
             "gender": this.state.gender, 

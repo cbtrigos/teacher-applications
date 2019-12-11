@@ -17,7 +17,7 @@ export default class MasterDash extends React.Component {
   
   async componentDidMount() {
   axios 
-    .post('http://localhost:5000/api/get-all-opening-requests', 
+    .post(process.env.REACT_APP_API+'/api/get-all-opening-requests', 
       {"user_id": this.props.user.user_id, 
       "user_type": this.props.user.user_type
     }) 
@@ -38,7 +38,7 @@ export default class MasterDash extends React.Component {
       serverMessage: 'loading',
     })
     axios 
-    .post('http://localhost:5000/api/approve-opening', 
+    .post(process.env.REACT_APP_API+'/api/approve-opening', 
       { 
         "opening": opening,
         "user_type": this.props.user.user_type,
@@ -63,7 +63,7 @@ export default class MasterDash extends React.Component {
       serverMessage: 'loading'
     })
     axios 
-    .post('http://localhost:5000/api/reject-opening', 
+    .post(process.env.REACT_APP_API+'/api/reject-opening', 
       { 
         "opening": opening,
         "rejection_reason": this.state.rejection_reason,

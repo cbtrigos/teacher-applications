@@ -49,7 +49,7 @@ export default class ApproverPanels extends Component {
 
   async componentDidMount() {
        axios 
-        .post('http://localhost:5000/api/get-approver-applications-'+this.props.user.user_type, 
+        .post(process.env.REACT_APP_API+'/api/get-approver-applications-'+this.props.user.user_type, 
           {"user_id": this.props.user.user_id, 
           "user_type": this.props.user.user_type
         }) 
@@ -69,7 +69,7 @@ export default class ApproverPanels extends Component {
   approveApplication = (application) => {
     if (window.confirm('Please press ok to continue with the approval of application #'+ application.application_id +', or cancel to go back.')) {
       axios 
-      .post('http://localhost:5000/api/approve-approver-applications-'+this.props.user.user_type, 
+      .post(process.env.REACT_APP_API+'/api/approve-approver-applications-'+this.props.user.user_type, 
         {"user_id": this.props.user.user_id, 
         "user_type": this.props.user.user_type,
         "application": application 
@@ -85,7 +85,7 @@ export default class ApproverPanels extends Component {
   rejectApplication = (application) =>  { 
     if (window.confirm('Are you sure you wish to reject application #'+ application.application_id +'? Press ok to reject.')) {
       axios 
-      .post('http://localhost:5000/api/reject-approver-applications-'+this.props.user.user_type, 
+      .post(process.env.REACT_APP_API+'/api/reject-approver-applications-'+this.props.user.user_type, 
         {"user_id": this.props.user.user_id, 
         "user_type": this.props.user.user_type,
         "application": application

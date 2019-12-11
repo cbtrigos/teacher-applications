@@ -126,7 +126,7 @@ export default class MasterExplore extends React.Component {
   
     async componentDidMount() {
       axios 
-       .post('http://localhost:5000/api/get-all-applications', 
+       .post(process.env.REACT_APP_API+'/api/get-all-applications', 
          {"user_id": this.props.user.user_id, 
          "user_type": this.props.user.user_type
        }) 
@@ -141,7 +141,7 @@ export default class MasterExplore extends React.Component {
          }
        })
        axios 
-       .post('http://localhost:5000/api/get-all-users', 
+       .post(process.env.REACT_APP_API+'/api/get-all-users', 
          {"user_id": this.props.user.user_id, 
          "user_type": this.props.user.user_type
        }) 
@@ -156,7 +156,7 @@ export default class MasterExplore extends React.Component {
          }
        })
        axios 
-       .post('http://localhost:5000/api/get-all-openings', 
+       .post(process.env.REACT_APP_API+'/api/get-all-openings', 
          {"user_id": this.props.user.user_id, 
          "user_type": this.props.user.user_type
        }) 
@@ -221,7 +221,7 @@ export default class MasterExplore extends React.Component {
       selectedUser: {}, 
      });
     axios 
-       .post('http://localhost:5000/api/get-user', 
+       .post(process.env.REACT_APP_API+'/api/get-user', 
          { 
            "searched": e.target.value, 
            "user_type": this.props.user.user_type,
@@ -245,7 +245,7 @@ export default class MasterExplore extends React.Component {
       selectedOpening: {}, 
      });
     axios 
-       .post('http://localhost:5000/api/get-opening', 
+       .post(process.env.REACT_APP_API+'/api/get-opening', 
          { 
            "searched": e.target.value, 
            "user_type": this.props.user.user_type,
@@ -272,7 +272,7 @@ export default class MasterExplore extends React.Component {
         }
       }
       axios 
-        .post('http://localhost:5000/api/update-user', 
+        .post(process.env.REACT_APP_API+'/api/update-user', 
           { 
             "changed_id": id, 
             "type": type_val,
@@ -298,7 +298,7 @@ export default class MasterExplore extends React.Component {
       : string = `Are you sure you want to make opening ${id} live? It will immediately become public for anyone to apply to. Press ok to continue. `}
     if (window.confirm(string)) {
       axios 
-        .post('http://localhost:5000/api/update-opening', 
+        .post(process.env.REACT_APP_API+'/api/update-opening', 
           { 
             "opening_key": id, 
             "type": type_val,

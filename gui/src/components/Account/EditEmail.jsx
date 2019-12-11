@@ -18,7 +18,7 @@ export default class EditEmail extends React.Component {
   
     updateEmail = () =>  {
         axios 
-        .post('http://localhost:5000/api/change-email', {
+        .post(process.env.REACT_APP_API+'/api/change-email', {
             "email": this.state.email, 
             "prev_email": this.props.user.email,
             "user_id": this.props.user.user_id, 

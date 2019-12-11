@@ -74,7 +74,7 @@ export default class Contact extends Component {
             serverMessage: 'loading'
           })
           axios 
-          .post('http://localhost:5000/api/outside-contact', 
+          .post(process.env.REACT_APP_API+'/api/outside-contact', 
             {"email": this.state.email,
              "name": this.state.name,
              "message": this.state.message, 

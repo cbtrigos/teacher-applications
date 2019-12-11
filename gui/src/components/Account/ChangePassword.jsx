@@ -20,7 +20,7 @@ export default class ChangePassword extends React.Component {
   
     updatePassword = () =>  {
         axios 
-        .post('http://localhost:5000/api/change-password', {
+        .post(process.env.REACT_APP_API+'/api/change-password', {
             "password": this.state.newPassword, 
             "current_password": this.state.currentPassword,
             "user_id": this.props.user.user_id, 

@@ -33,7 +33,7 @@ export default class AppType extends Component {
 
 async componentDidMount() {
   axios 
-  .get('http://localhost:5000/api/get-job-openings') 
+  .get(process.env.REACT_APP_API+'/api/get-job-openings') 
   .then(response => {
   if (response.data==="error in getting openings") {
       throw new Error("Error in pulling openings") } 

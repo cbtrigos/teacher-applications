@@ -32,7 +32,7 @@ class Login extends Component {
         error: 'loading'
       })
       axios 
-      .post('http://localhost:5000/api/login', 
+      .post(process.env.REACT_APP_API+'/api/login', 
         {"email": this.state.email,
           "password": this.state.password, 
       }) 

@@ -18,7 +18,7 @@ export default class EditName extends React.Component {
     updateName = () => {
       event.preventDefault();
       axios 
-      .post('http://localhost:5000/api/change-name', 
+      .post(process.env.REACT_APP_API+'/api/change-name', 
         { "first_name": this.state.first_name, 
           "last_name": this.state.last_name, 
           "user_id": this.props.user.user_id, 
