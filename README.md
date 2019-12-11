@@ -1,6 +1,6 @@
 # SL Teacher Applications 
 
-[This portal](https://slteacherapplications-8ce98.firebaseapp.com/openings) was made to digitize and improve Sierra Leone's paper-based teacher application, approval, and allocation system, which has a physical paper application travel between up to three different agencies once submitted by an applicant and can take up to six months just to be seen. Many applications have been destroyed by flooding and other emergencies, leaving thousands of applicants waiting in vain for decisions that will never come. The project addresses this, allowing on-the-go tracking for everyone involved. 
+[This portal](https://slteacherapplications-8ce98.firebaseapp.com) was made to digitize and improve Sierra Leone's paper-based teacher application, approval, and allocation system, which has a physical paper application travel between up to three different agencies once submitted by an applicant and can take up to six months just to be seen. Many applications have been destroyed by flooding and other emergencies, leaving thousands of applicants waiting in vain for decisions that will never come. The project addresses this, allowing on-the-go tracking for everyone involved. 
 
 This portal, SL Teacher Applications, is made for five user types: 
 * Applicant (user type = 0 ) 
@@ -106,7 +106,7 @@ teacher-applications/api $ nodemon server.js
 ```
 
 
-... or check out the portal live [here](https://slteacherapplications-8ce98.firebaseapp.com/openings).
+... or check out the portal live [here](https://slteacherapplications-8ce98.firebaseapp.com).
 --------------------------------------------------------------------
 
 #### Maintainers
