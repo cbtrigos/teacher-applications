@@ -125,5 +125,6 @@ router.post('/reject-opening', masterAccount.rejectOpening);
 // router.post('get-application', masterAccount.getApplication)
 
 app.use('/api', router);
-
+console.log('hitting the api')
+console.log(process.env.DB_HOST)
 app.listen(5000);
