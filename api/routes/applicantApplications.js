@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const nodemailer = require('nodemailer');
 const { db } = require('../authentication/mysql.js');
-const { emailAuth } = require('../authentication/emailAuth.json');
+const { emailAuth } = require('../authentication/emailAuth.js');
 const moment = require('moment');
 
 //                                 CONNECTING TO MYSQL

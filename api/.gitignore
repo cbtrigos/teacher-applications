@@ -12,8 +12,6 @@ build/Release
 
 # Dependency directories
 node_modules/
-awsAuth.json
-emailAuth.json
 .DS_Store
 .env
 

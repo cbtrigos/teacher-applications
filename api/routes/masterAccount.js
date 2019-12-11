@@ -2,7 +2,7 @@ const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 const { db } = require('../authentication/mysql.js');
 const nodemailer = require('nodemailer');
-const { emailAuth } = require('../authentication/emailAuth.json');
+const { emailAuth } = require('../authentication/emailAuth.js');
 
 //                                 CONNECTING TO MYSQL
 

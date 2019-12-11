@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const moment = require('moment');
 const bcrypt = require('bcrypt');
 const { db } = require('../authentication/mysql.js');
-const { emailAuth } = require('../authentication/emailAuth.json');
+const { emailAuth } = require('../authentication/emailAuth.js');
 
 //                                 CONNECTING TO MYSQL
 

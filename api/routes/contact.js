@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const { db } = require('../authentication/mysql.js');
 const nodemailer = require('nodemailer');
-const { emailAuth } = require('../authentication/emailAuth.json');
+const { emailAuth } = require('../authentication/emailAuth.js');
 
 //                                 CONNECTING TO MYSQL
 
@@ -26,6 +26,7 @@ exports.sendEmail = function (req, res) {
     error,
   ) => {
     if (error) {
+      console.log(error)
       res.status(400).send({
         message: 'Error occured when sending your email',
       });
@@ -46,6 +47,8 @@ exports.sendEmail = function (req, res) {
 
       transporter.sendMail(mailOptions, (err) => {
         if (err) {
+          console.log(err)
+
           return res.status(200).send({
             message:
               'Failed to send email. Please check your connection and try again.',
