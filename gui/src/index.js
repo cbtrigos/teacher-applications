@@ -1,1 +1,1 @@
-import Portal from "./js/components/Portal.jsx";
+import Portal from './components/Portal.jsx';
