@@ -16,6 +16,7 @@ export default class UserForm extends React.Component {
     this.state = {
       step: 1,
       application_type: 'Applicant',
+      to_create_listing: '',
       firstName: '',
       lastName: '',
       email: '',
@@ -49,7 +50,8 @@ export default class UserForm extends React.Component {
         school_name:'Official name of the school you are registering to make approvals for. If you are applying to approve more than one, please put N/A',
         emis_code: "The school's unique identification code via the Education Management Information System", 
         title: 'Your authorizing title. ex: Proprietor for school x, Education secretary for District y, Chairman of the Board of Governors for z',
-        additional_info: "Please enter any additional information that you feel is both relevant and pertinent to your application that is not reflected above"
+        additional_info: "Please enter any additional information that you feel is both relevant and pertinent to your application that is not reflected above",
+        to_create_listing: "Please check if you are a school proprietor or similar and wish to make a job listing public. Do not check if you wish to apply as a teacher."
       }
     };
   };
@@ -66,7 +68,7 @@ export default class UserForm extends React.Component {
       );
       }
     else {
-      if (this.state.firstName==='' || this.state.lastName==='' || this.state.email==='' || this.state.DOB==='' || this.state.password1==='' || this.state.password2==='') {
+      if (this.state.firstName==='' || this.state.lastName==='' || this.state.email==='' || this.state.DOB==='' || this.state.password1==='' || this.state.password2===''|| this.state.mobile==='' ||  this.state.gender==='' || this.state.to_create_listing==='') {
         valid= false
       }
     }
@@ -74,9 +76,13 @@ export default class UserForm extends React.Component {
   }
   
   submitApplicant = (event) => {
+    let type = null 
+    if (this.state.to_create_listing ==="I wish to apply for a teacher position") {type=0}
+    if (this.state.to_create_listing ==="I wish to submit a job listing") {type=4}
+    console.log(type)
     event.preventDefault();
     this.setState({
-      serverMessage: 'loading..'
+      serverMessage: 'loading'
     })
       axios 
         .post('http://localhost:5000/api/register', 
@@ -87,7 +93,7 @@ export default class UserForm extends React.Component {
             "last_name": this.state.lastName, 
             "mobile_number": this.state.mobile_number,
             "birth_date": this.state.DOB,
-            "user_type": 0
+            "user_type": type,
         }) 
         .then(response => {
           if (response.data.message==="user registered sucessfully") {
@@ -103,7 +109,7 @@ export default class UserForm extends React.Component {
   submitApprover = (event) => {
     event.preventDefault();
     this.setState({
-      serverMessage: 'loading..'
+      serverMessage: 'loading'
     })
       axios 
         .post('http://localhost:5000/api/approver-request', 
@@ -196,8 +202,8 @@ export default class UserForm extends React.Component {
   }
 
   render() {
-    const {additional_info, approver_type, school_district, school_name, title, emis_code, firstName, serverMessage, mobile_number, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
-    const values = {additional_info, approver_type, school_district, school_name, title, emis_code, firstName, mobile_number, lastName, email, gender,  DOB, password1, password2, formErrors, serverMessage};
+    const {to_create_listing, additional_info, approver_type, school_district, school_name, title, emis_code, firstName, serverMessage, mobile_number, lastName, email, gender, DOB, password1, password2, formErrors} = this.state;
+    const values = {to_create_listing, additional_info, approver_type, school_district, school_name, title, emis_code, firstName, mobile_number, lastName, email, gender,  DOB, password1, password2, formErrors, serverMessage};
     const step = this.state.step;
     switch (step) {
       case 0: 

@@ -2,6 +2,7 @@ import React  from 'react';
 import {H2, Input, It, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import axios from 'axios';
 import NumberFormat from 'react-number-format';
+import { CircularProgress } from '@material-ui/core';
 
 
 export default class EditMobile extends React.Component {
@@ -48,7 +49,7 @@ export default class EditMobile extends React.Component {
         else if (window.confirm('Are you sure you wish to update your mobile number? Press ok to continue.')) {
             this.updateMobile()
             this.setState({
-                error: 'loading..'
+                error: 'loading'
             })
               }
     }
@@ -63,8 +64,10 @@ export default class EditMobile extends React.Component {
     render() {
       return (
         <>
-        {this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
-        <H2>Do you need to update your mobile number?</H2> <br/>
+        {this.state.error==='loading' 
+        ?   <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+        : this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
+                <H2>Do you need to update your mobile number?</H2> <br/>
             <NumberFormat 
                 customInput={Input} 
                 style={{

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import NumberFormat from 'react-number-format';
 import {Select, FormControl, MenuItem, InputLabel} from "@material-ui/core/"
 import axios from 'axios';
+import { CircularProgress } from '@material-ui/core';
 
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
@@ -14,6 +15,7 @@ export default class CreateOpening extends Component {
         super(props);
         this.state = {
           step: 0,
+          user: props.user, 
           serverMessage: null, 
           submission: {
             title: '',
@@ -63,7 +65,7 @@ export default class CreateOpening extends Component {
       submit = () => e => {
         event.preventDefault();
         this.setState({
-            serverMessage: 'loading..',
+            serverMessage: 'loading',
             step:1
         })
         axios 
@@ -139,6 +141,7 @@ export default class CreateOpening extends Component {
 
 
   render() {
+    console.log(this.props)
       const {submission, formErrors} = this.state
       const {school_type} = submission
         return (
@@ -146,6 +149,7 @@ export default class CreateOpening extends Component {
       {this.state.step===2 && 
       <FormWrapper>
         <H1>{this.state.serverMessage}</H1>
+
         {this.state.serverMessage==="Job Opening submitted sucessfully" && 
         <H2>
           Your submission has been received.<br/>
@@ -153,10 +157,11 @@ export default class CreateOpening extends Component {
           <br/>
           Thank you!</H2>}
 
+
       </FormWrapper>}
         {this.state.step===1 && 
         <FormWrapper>
-          <H1>{this.state.serverMessage}</H1>
+          <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
           <H2>
           Please be patient. Your submission is being submitted... 
             
@@ -164,7 +169,16 @@ export default class CreateOpening extends Component {
 
         </FormWrapper>
       }
-      {this.state.step===0 &&      <FormWrapper>
+      {(this.state.step===0 && (this.props.user===undefined || (this.props.user.user_type!==4 && this.props.user.user_type!==5))) &&
+      <FormWrapper>
+        <H1>Further Steps Required</H1>
+        {Object.keys(this.props.user).length===0
+          ? <H2>It looks like you're not logged in. In order to submit a job opening request, please make an account and indicate that it's to post a job listing. <br/><br/>Upon submission, we verify credentials to ensure you are authorized to post a listing.<br/><br/>Thank you!</H2>
+          : (this.props.user.user_type!==4 && this.props.user.user_type!==5) && <H2>It looks like you're logged in as a user that cannot submit job opening requests. In order to submit a job opening request, please make a new account and indicate that it's to post a job listing. <br/><br/>Upon submission, we verify credentials to ensure you are authorized to post a listing.<br/><br/>Thank you!</H2>}
+      <A_center href="/register">Create a new account here</A_center>
+      </FormWrapper>
+      }
+      {(this.state.step===0 && this.props.user!==undefined && (this.props.user.user_type===4 || this.props.user.user_type===5)) &&  <FormWrapper>
               <H1>Job Opening Submission</H1>
               <H2>For school proprietors and school boards of governors</H2> 
               {this.state.serverMessage!==null && <Notification>{this.state.serverMessage}</Notification>}
@@ -511,8 +525,7 @@ export default class CreateOpening extends Component {
                 variant="contained"
                 onClick={this.submit()}
                 disabled={!this.validateForm()}
-              >Create Account</CreateButton> 
-              <A_center href="/login"> Have an account? Sign in here! </A_center>
+              >Submit Listing for Approval</CreateButton> 
             </FormWrapper>
        }     </Wrapper>
             );

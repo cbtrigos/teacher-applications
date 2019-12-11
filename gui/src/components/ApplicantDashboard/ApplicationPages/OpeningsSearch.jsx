@@ -40,7 +40,7 @@ export default function Opening(props) {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography className={classes.heading}><H2 left> {opening.emis_code}</H2></Typography>
+              <Typography className={classes.heading}><H2 left> EMIS: {opening.emis_code}</H2></Typography>
               <Typography className={classes.secondaryHeading}><H2 left>{opening.school}</H2> </Typography>
             </ExpansionPanelAppSummary>
             <ExpansionPanelDetails>

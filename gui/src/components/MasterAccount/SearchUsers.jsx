@@ -2,7 +2,7 @@ import React from 'react';
 import { MDBDataTable } from 'mdbreact';
 
 const AllUsers = (props) => {
-  const users = props.users
+  let users = props.users
   const data = {
     columns: [
       {
@@ -62,7 +62,15 @@ const AllUsers = (props) => {
     ],
     rows:users 
   };
-
+  Object.values(users).forEach(app =>
+    Object.values(data['columns']).forEach(filter => {
+      if (app[filter['field']]==='' || app[filter['field']]===null) {
+        app[filter['field']]='-'
+      }
+      if (app[filter['field']]==='' || app[filter['field']]===null) {
+      }
+    })
+    ) 
   return (
     <MDBDataTable
       striped

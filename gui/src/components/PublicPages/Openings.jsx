@@ -26,6 +26,12 @@ const AllOpenings = (props) => {
     const data = {
       columns: [
         {
+          label: 'Opening ID',
+          field: 'opening_key',
+          sort: 'asc',
+          width: 150
+        },
+        {
           label: 'School Name',
           field: 'school',
           sort: 'asc',

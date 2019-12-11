@@ -11,7 +11,7 @@ connection.connect((err) => {
 });
 
 //                  unverified admin seeing their approval request
-exports.getApproverRequest = function (req, res) {
+exports.getOpeningRequest = function (req, res) {
   const { user_id } = req.body;
   const { user_type } = req.body;
   last_edited = Date();
@@ -21,22 +21,36 @@ exports.getApproverRequest = function (req, res) {
     results,
   ) => {
     if (error) {
+      console.log(error)
       res.status(400).send('error in authenticating user');
     } else if (results.length === 1 && results[0].user_type === user_type) {
       connection.query(
-        'SELECT * FROM approver_requests WHERE user_id = ?',
+        'SELECT * FROM job_openings WHERE user_id = ?',
         user_id,
         (error, results) => {
           if (error) {
+            console.log(error)
+
             res.status(400).send('failed to pull application');
           } else {
+
+            const openingRequests = [];
+            const approvedRequests = [];
+            results.forEach((app) => {
+              if (app.reviewed === 'false') {
+                openingRequests.push(app);
+              } else approvedRequests.push(app);
+            });
             res.status(200).send({
-              approverRequest: results[0],
+              openingRequests,
+              approvedRequests,
             });
           }
         },
       );
     } else {
+      console.log(error)
+
       res.status(400).send('user not authorized');
     }
   });

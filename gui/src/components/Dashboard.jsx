@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {H1, A, H2, It, HorizSeparator, Wrapper, FormWrapper} from '../constants/utils/Styling.jsx'
+import {H1, A, Input, H2, It, HorizSeparator, Wrapper, FormWrapper} from '../constants/utils/Styling.jsx'
 import axios from 'axios';
 import Application from "./ApplicantDashboard/Application.jsx"
 import DraftPanels from './ApplicantDashboard/ApplicationPanels.jsx'
@@ -87,7 +87,7 @@ export default class Dashboard extends Component {
                   <FormWrapper large>
                     <H1>
                       Welcome to your personal dashboard, {user.first_name}!
-                    </H1>
+                      </H1>
                     <H2> Click on Dashboard in the above menu to start. <br/><br/>
                         You can complete a primary, secondary, 
                         or vocational school application within 15 minutes, or you can start one and 

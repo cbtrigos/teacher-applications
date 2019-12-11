@@ -35,7 +35,7 @@ export default class MasterDash extends React.Component {
   approveOpening = (opening) => e => {
   if (window.confirm(`Are you sure you wish to approve job opening "${opening.title_proposed_appt}" at "${opening.school}"? Press ok to continue.`)) {
     this.setState({
-      serverMessage: 'loading..',
+      serverMessage: 'loading',
     })
     axios 
     .post('http://localhost:5000/api/approve-opening', 
@@ -60,7 +60,7 @@ export default class MasterDash extends React.Component {
   rejectOpening = (opening) => e => { 
   if (window.confirm(`Are you sure you wish to reject job opening "${opening.title_proposed_appt}" at "${opening.school}"? Press ok to reject.`)) {
     this.setState({
-      serverMessage: 'loading..'
+      serverMessage: 'loading'
     })
     axios 
     .post('http://localhost:5000/api/reject-opening', 

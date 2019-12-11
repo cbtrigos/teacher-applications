@@ -1,6 +1,7 @@
 import React  from 'react';
-import {H2, It, Input, Label, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
+import {H2, It, Input, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import axios from 'axios';
+import { CircularProgress } from '@material-ui/core';
 
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
@@ -50,7 +51,7 @@ export default class EditEmail extends React.Component {
         else if (window.confirm('Are you sure you wish to change your email? Press ok to continue.')) {
             this.updateEmail()
             this.setState({
-                error: 'loading..'
+                error: 'loading'
             })
               }
     }
@@ -65,7 +66,10 @@ export default class EditEmail extends React.Component {
     render() {
       return (
         <>
-        {this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
+        {this.state.error==='loading' 
+        ?   <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+        : this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
+        
         <H2>Do you need to update your email?</H2> <br/>
           <Input small
             defaultValue= {this.state.email}

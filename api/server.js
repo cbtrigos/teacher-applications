@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const login = require('./routes/loginroutes');
 const applicantApplications = require('./routes/applicantApplications');
 const approverApps = require('./routes/approverApplications');
-const unverifiedApprover = require('./routes/unverifiedApprover');
+const openingRequesters = require('./routes/openingRequesters');
 const masterAccount = require('./routes/masterAccount');
 const account = require('./routes/account');
 const contact = require('./routes/contact');
@@ -103,7 +103,7 @@ router.post(
 router.post('/outside-contact', contact.sendEmail);
 
 // not yet verified admin
-router.post('/get-my-approver-request', unverifiedApprover.getApproverRequest);
+router.post('/get-my-opening-request', openingRequesters.getOpeningRequest);
 
 // get master account information
 router.post('/get-all-opening-requests', masterAccount.getallOpeningRequests);

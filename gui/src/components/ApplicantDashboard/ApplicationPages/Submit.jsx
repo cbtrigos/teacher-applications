@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import {H1, H2, It, Div, Category, Notification, Wrapper, Buttons, Left, FormWrapper, Input,  New, ErrorMessage, CreateButton} from '../../../constants/utils/Styling.jsx'
-
-
+import {H1, H2, It, Div, Category, Wrapper, Buttons, Left, FormWrapper, Input,  New, ErrorMessage, CreateButton} from '../../../constants/utils/Styling.jsx'
+import { CircularProgress } from '@material-ui/core';
 
 export default class Submit extends Component {
   constructor(props) {
@@ -27,9 +26,9 @@ export default class Submit extends Component {
     if (emptyFields.length!==0) 
       {missingString = emptyFields.join(', ')}
     Object.values(req).forEach((val) => {
-      if (val===null) {
+      if (val===null || val==='') {
         disabled = true
-        errors ='The following are required: National Identification Number, School Name, and Nationality.'
+        errors ='National Identification Number and Nationality are both required.'
       }});
       this.setState({
         errors: errors, 
@@ -39,14 +38,14 @@ export default class Submit extends Component {
   }
 
   render() {
-    const { values, checkmarked, step, submit, handleCheckboxChange, validateApplication } = this.props;
+    const { values, checkmarked, step, submit, handleCheckboxChange } = this.props;
 
     
     return (
           <Wrapper>
             <FormWrapper>
               <H1>Application</H1>
-              <H2>{values.title_proposed_appt} at {values.school_name} <br/>
+              <H2>{values.job_title} at {values.school_name} <br/>
               Application #{values.application_id}<br/><br/>
                5/5: Confirm Application Details</H2>
            <H2>
@@ -91,7 +90,20 @@ export default class Submit extends Component {
             <Category> Special Skills: </Category><It> {values.special_skills} </It>
             </Div>
           <br />
-
+          <Input
+          defaultValue = {`${values.first_name} ${values.last_name}`}
+          disabled={true}
+          style={{
+            width: '40%',
+            minWidth: '270px',
+            fontFamily: "'Alex Brush', cursive",
+            textAlign: 'center',
+            margin: 'auto',
+            fontSize: '20pt',
+            display: 'block',
+            height: '38px'
+          }}
+          /> <br/> <br/>
         {this.state.missingString!='' &&
           <Buttons>
             <Left style={{minWidth: '2%', width: '4%', marginRight:'-1%'}}>
@@ -106,10 +118,17 @@ export default class Submit extends Component {
           I verify that I purposefully did not provide the following: {this.state.missingString}.
           </New></Buttons>
           }
-          </H2>
+          </H2> 
           {this.state.missingString.length> 0 && !checkmarked && <ErrorMessage>Please check the above box in order to submit.</ErrorMessage>}
           {this.state.errors!=='' && <ErrorMessage>{this.state.errors}</ErrorMessage>}
-          {values.loading==='loading..' && <Notification>Please wait. Loading..</Notification>}
+          {(!(this.state.missingString.length> 0 && !checkmarked) && this.state.errors==='')
+          &&
+          <ErrorMessage>By clicking submit, I confirm that all of the submitted fields are accurate, all of my uploaded certificates are authentic, and I agree to using the above electronic signature to sign your application. I also give my consent to have all of my given information digitally and physicaly verified against government databases.</ErrorMessage>}          <br/>
+          {values.loading==='loading' && <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div> }
+          <br/>
+
+
+
         <Buttons>
           <Left> 
           <CreateButton

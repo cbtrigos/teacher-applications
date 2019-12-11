@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {H2, H1, Application, Buttons, CreateButton, Partition, New, Field, Bucket,  Input,  Left} from '../../../constants/utils/Styling.jsx'
+import {H2, H1, Application, Buttons, CreateButton, Partition, ErrorMessage, Field, Bucket,  Input,  Left} from '../../../constants/utils/Styling.jsx'
 
 
 
@@ -105,34 +105,39 @@ export default class Approver2Form extends Component {
           <Partition>
           <H1 style={{marginBottom:'0%'}}>Your Approval for #{application.application_id} </H1>
           <H2 style={{marginTop:'13px'}}>as TSC Chair</H2>
-          <Bucket>
+          {/* <Bucket> */}
+          <div style={{width:'85%'}}>
                 <H2 label left htmlFor="approver_2_name">Approver Name *</H2>
-                <Field 
+                <Input
                     type = "text"
                     name="approver_2_name"
                     onChange={this.handleChangeSave('approver_2_name')}
                     disabled= {true}
+                    style={{textAlign:'center'}}
                     defaultValue={approval.approver_2_name}
                     />
-          </Bucket>
-          <Bucket>
-                <H2 label left htmlFor="date">Signature*</H2>
-                <Field
-                    name="date"
-                    noValidate
-                    disabled= {true}
-                    defaultValue={approval.signed}
-                    />
-          </Bucket> 
-          <Bucket>
+                <H2 label left htmlFor="date">Signature *</H2>
+                <Input
+                  defaultValue = {`${user.first_name} ${user.last_name}`}
+                  disabled={true}
+                  style={{
+                    fontFamily: "'Alex Brush', cursive",
+                    fontWeight: 'light',
+                    textAlign: 'center',
+                    fontSize: '20pt',
+                    height: '40px'
+                  }}
+                  />
                 <H2 label left htmlFor="date">Date*</H2>
-                <Field
+                <Input
                     name="date"
                     noValidate
+                    style={{textAlign:'center'}}
                     disabled= {true}
                     defaultValue={today}
                     />
-          </Bucket> 
+              <br/><br/>
+          </div>
           </Partition>
           <br/>
           <Buttons >
@@ -144,9 +149,8 @@ export default class Approver2Form extends Component {
                     onChange={this.handleCheckboxChange()}
                     />
                 </Left>
-                <New>
-                    By clicking here I approve of this applicant to move on for hire as TSC Chair. 
-                </New>
+                <ErrorMessage>By clicking here I, as TSC Chair, approve of this applicant to move on for hire and I agree to using the above electronic signature to sign. </ErrorMessage>
+
                 <br/>
           </Buttons>          <CreateButton 
               onClick={() => approveApplication(approval)}

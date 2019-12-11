@@ -1,5 +1,5 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 
 function querystring(name, url = window.location.href) {
   name = name.replace(/[[]]/g, "\\$&");
@@ -17,12 +17,16 @@ function querystring(name, url = window.location.href) {
 }
 
 export default ({ component: C, props: cProps, ...rest }) => {
+  const redirect = querystring("redirect");
   return (
     <Route
       {...rest}
       render={props =>
         (cProps.isAuthenticated && cProps.user.user_type===5)
-                && <C {...props} {...cProps} /> 
+                ? <C {...props} {...cProps} /> 
+                :  <Redirect
+                to={redirect === "" || redirect === null ? "" : redirect}
+              />
                 
 
             }

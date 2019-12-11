@@ -2,7 +2,9 @@ import React from 'react';
 import { MDBDataTable } from 'mdbreact';
 
 const AllApps = (props) => {
-  const applications = props.applications
+  let applications = props.applications
+
+
   const data = {
     columns: [
       {
@@ -20,6 +22,18 @@ const AllApps = (props) => {
       {
         label: 'Submitted',
         field: 'submitted',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'TSC Department Reviewal Decision',
+        field: 'approver_1',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'TSC Approval Decision',
+        field: 'approver_2',
         sort: 'asc',
         width: 150
       },
@@ -78,6 +92,18 @@ const AllApps = (props) => {
         width: 150
       },
       {
+        label: 'Qualificatins',
+        field: 'qualifications',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'Special Skills',
+        field: 'special_skills',
+        sort: 'asc',
+        width: 150
+      },
+      {
         label: 'Created',
         field: 'created',
         sort: 'asc',
@@ -89,16 +115,43 @@ const AllApps = (props) => {
         sort: 'asc',
         width: 150
       },
-
+      {
+        label: 'Last Modified',
+        field: 'last_edited',
+        sort: 'asc',
+        width: 150
+      },
       {
         label: 'Rejection Reason',
         field: 'rejection_reason',
         sort: 'asc',
         width: 150
-      }
+      },
+      {
+        label: 'TSC Dept Reviewal Decision Date',
+        field: 'approver_1_decision',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'TSC Approval Decision Date',
+        field: 'approver_2_decision',
+        sort: 'asc',
+        width: 150
+      },
     ],
     rows: applications 
   };
+
+  Object.values(applications).forEach(app =>
+    Object.values(data['columns']).forEach(filter => {
+      if (app[filter['field']]==='' || app[filter['field']]===null) {
+        app[filter['field']]='-'
+      }
+      if (app[filter['field']]==='' || app[filter['field']]===null) {
+      }
+    })
+    ) 
   return (
     <MDBDataTable
       striped

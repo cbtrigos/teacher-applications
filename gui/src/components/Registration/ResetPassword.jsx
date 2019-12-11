@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {H1, Wrapper, FormWrapper, Form, Input, CreateButton, A} from '../../constants/utils/Styling.jsx'
+import { CircularProgress } from '@material-ui/core';
 
 const loading = {
     margin: '1em',
@@ -108,6 +109,7 @@ export default class ResetPassword extends Component {
     else if (isLoading) {
       return (
         <div>
+          <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
           <div style={loading}>Loading User Data...</div>
         </div>
       );

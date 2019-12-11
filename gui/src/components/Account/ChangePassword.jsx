@@ -1,6 +1,7 @@
 import React  from 'react';
 import {H2, Input,  ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import axios from 'axios';
+import { CircularProgress } from '@material-ui/core';
 
 
 const passwordRegex = RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})");
@@ -63,7 +64,7 @@ export default class ChangePassword extends React.Component {
         else if (window.confirm('Are you sure you wish to change your password? Press ok to continue.')) {
             this.updatePassword()
             this.setState({
-                error: 'loading..'
+                error: 'loading'
             })
               }
 
@@ -80,7 +81,10 @@ export default class ChangePassword extends React.Component {
     render() {
       return (
         <>
-        {this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
+        {this.state.error==='loading' 
+        ?   <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+        : this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
+        
         <H2>Would you like to change your password?</H2>
         <H2 >Current password</H2>
           <Input small

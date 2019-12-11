@@ -104,7 +104,8 @@ exports.submitApproverApplications_1 = function (req, res) {
     basic_yearly_salary: req.body.application.basic_yearly_salary,
     approver_1_name: req.body.application.approver_1_name,
     approver_1_email: req.body.application.approver_1_email,
-
+    approved: 'true',
+    date: today,
   };
   connection.query('SELECT * FROM users WHERE user_id = ?', user_id, (
     error,
@@ -123,24 +124,21 @@ exports.submitApproverApplications_1 = function (req, res) {
             connection.query(
               'UPDATE applications SET approver_1 = ?, approver_1_decision=? WHERE application_id = ?',
               ['true', today, submission.app_id],
-              (error) => {
+              (error, results) => {
                 if (error) {
                   res.status(400).send("couldn't find application");
                 } else {
+                  console.log('got here?')
                   connection.query(
                     'INSERT INTO approver_1 SET ?',
                     submission,
-                    (errors) => {
-                      if (error) {
-                        res
-                          .status(400)
-                          .send(
-                            'Error occured in submitting approval request',
-                          );
+                    (errors, results) => {
+                      if (errors) {
+                        console.log(errors)
+                        res.status(400).send('Error occured in submitting approval request');
                       } else {
-                        res
-                          .status(200)
-                          .send('Submitted Approval Successfully');
+                        console.log(results)
+                        res.status(200).send('Submitted Approval Successfully');
                       }
                     },
                   );
@@ -228,6 +226,7 @@ exports.rejectApproverApplications_1 = function (req, res) {
   const submission = {
     rejection_1_reason: req.body.application.rejection_reason,
     approver_1_name: req.body.application.approver_name,
+    approver_1_email: req.body.application.email,
     approver_1_id: req.body.application.approver_id,
     app_id: req.body.application.application_id,
     date: today,

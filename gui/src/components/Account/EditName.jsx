@@ -1,6 +1,7 @@
 import React  from 'react';
 import {H2, It, Input, Label, ErrorMessage, CreateButton} from '../../constants/utils/Styling.jsx'
 import axios from 'axios';
+import { CircularProgress } from '@material-ui/core';
 
 export default class EditName extends React.Component {
     constructor(props) {
@@ -52,7 +53,7 @@ export default class EditName extends React.Component {
         else if (window.confirm('Are you sure you wish to change your name? Press ok to continue.')) {
             this.updateName()
             this.setState({
-                error: 'loading..'
+                error: 'loading'
             })
               }
 
@@ -73,7 +74,9 @@ export default class EditName extends React.Component {
     render() {
       return (
         <>
-        {this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
+        {this.state.error==='loading' 
+        ?   <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+        : this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
         <H2>Do you need to update your name?</H2>
         <H2>First name</H2> 
           <Input small

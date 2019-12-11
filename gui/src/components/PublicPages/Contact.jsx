@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {FormWrapper, Form, Notification, New, Label, Input, BigInput, CreateButton, Wrapper, H1, ErrorMessage} from "../../constants/utils/Styling.jsx"
 import axios from 'axios';
+import { CircularProgress } from '@material-ui/core';
 
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
@@ -70,7 +71,7 @@ export default class Contact extends Component {
         }
         else {
           this.setState({
-            serverMessage: 'loading..'
+            serverMessage: 'loading'
           })
           axios 
           .post('http://localhost:5000/api/outside-contact', 
@@ -95,7 +96,12 @@ export default class Contact extends Component {
               <FormWrapper>
                   <H1>Contact Us!</H1>
 
-                  {serverMessage!=='' && <Notification>{serverMessage}</Notification>}
+                  {/* {serverMessage!=='' && <Notification>{serverMessage}</Notification>} */}
+
+                  {serverMessage==='loading' 
+                  ?   <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+                  : serverMessage!=='' && <Notification>{serverMessage}</Notification>}
+
 
                   <Form onSubmit = {this.handleSubmit} noValidate>
                   <New>

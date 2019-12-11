@@ -49,9 +49,16 @@ var searchApps = {
     "special_skills",
     "prev_appt",
     "national_id",
+    "naitonality",
+    "approver_1",
+    "approver_2",
+    "approver_1_decision",
+    "approver_2_decision",
     "school_district",
     "certificates",
-    "rejection_reason"
+    "rejection_reason",
+    "last_edited",
+
   ]
 };
 
@@ -66,8 +73,14 @@ var searchOpenings = {
     "emis_code",
     "school",
     "school_type",
-    "district",
+    "reviewed",
+    'contact_email',
+    'contact_mobile',
+    'contact_title',
+    'contact_name',
     "title_proposed_appt",
+    'date_proposed_appt',
+    "district",
     'grade_requested',
     "qualifications_required",
     'reasons_proposed_appt',
@@ -75,13 +88,17 @@ var searchOpenings = {
     "rejection_reason",
     "opening_key",
     "live",
-    "reviewed",
-    'contact_email',
-    'contact_mobile',
-    'contact_title',
-    'contact_name',
-    'date_proposed_appt',
+    "pupil_enrollment",
+    "number_of_teachers",
+    "on_payroll",
+    "tq_JSS",
+    "tq_SSS",
+    "tq_primary",
+    "tq_primary",
+    "opening_additional_info",
+    "teacher_id_allocated",
     'opening_key',
+    "opening_created",
     'closed',
   ]
 };
@@ -247,7 +264,6 @@ export default class MasterExplore extends React.Component {
          }
        })
   }
-
   updateType = (id, type, type_val) => e => {
     if (window.confirm(`Are you sure you wish to modify user ${id} to a ${type} user? Press ok to continue.`)) {
       if (type==='Master') {
@@ -274,33 +290,33 @@ export default class MasterExplore extends React.Component {
           }
         })
   }
-}
-updateOpening = (id, type, type_val) => e => {
-  var string = '' 
-  {type_val===false 
-    ? string = `Are you sure you want to remove opening ${id} from being live? No one will be able to continue applying for it. Press ok to continue. `
-    : string = `Are you sure you want to make opening ${id} live? It will immediately become public for anyone to apply to. Press ok to continue. `}
-  if (window.confirm(string)) {
-    axios 
-      .post('http://localhost:5000/api/update-opening', 
-        { 
-          "opening_key": id, 
-          "type": type_val,
-          "user_type": this.props.user.user_type,
-          "user_id": this.props.user.user_id, 
-      }) 
-      .then(response => {
-        if (response.data ==='Opening is already that type') {
-          this.setState({
-            serverOpeningMessage: response.data
-          })
-        } 
-        else if (response.data === 'Success') {
-          window.location.reload();
-        }
-      })
-}
-}
+  }
+  updateOpening = (id, type, type_val) => e => {
+    var string = '' 
+    {type_val===false 
+      ? string = `Are you sure you want to remove opening ${id} from being live? No one will be able to continue applying for it. Press ok to continue. `
+      : string = `Are you sure you want to make opening ${id} live? It will immediately become public for anyone to apply to. Press ok to continue. `}
+    if (window.confirm(string)) {
+      axios 
+        .post('http://localhost:5000/api/update-opening', 
+          { 
+            "opening_key": id, 
+            "type": type_val,
+            "user_type": this.props.user.user_type,
+            "user_id": this.props.user.user_id, 
+        }) 
+        .then(response => {
+          if (response.data ==='Opening is already that type') {
+            this.setState({
+              serverOpeningMessage: response.data
+            })
+          } 
+          else if (response.data === 'Success') {
+            window.location.reload();
+          }
+        })
+  }
+  }
     render() {
       const user = this.props.user
       const {selectedUser, selectedOpening} = this.state

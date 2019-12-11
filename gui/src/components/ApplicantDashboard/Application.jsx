@@ -32,12 +32,14 @@ class Application extends Component {
       application: {
         application_id: null,
         job_opening: '',
-        school_name:null,
-        other_names:null,
-        nationality: null, 
-        prev_appt: null,
-        pin_code: null,
-        nassit: null,
+        job_title: '',
+        school_name:'',
+        other_names:'',
+        nationality: '', 
+        prev_appt: '',
+        pin_code: '',
+        nassit: '',
+        files: [],
         qualifications: '',
         special_skills: '',
         certificates: '',
@@ -95,7 +97,7 @@ this.beginApp=this.beginApp.bind(this);
     const { step } = this.state;
     event.preventDefault();
     this.setState({
-      loading: 'loading..', 
+      loading: 'loading', 
     });
       axios 
         .post('http://localhost:5000/api/submit-application', 
@@ -150,6 +152,7 @@ this.beginApp=this.beginApp.bind(this);
           "last_name": this.state.application.last_name, 
           "mobile_number": this.state.application.mobile_number,
           "job_opening": opening.opening_key,
+          "job_title": opening.title_proposed_appt,
           "user_id": this.props.user.user_id, 
           "birth_date": this.state.application.birth_date
       }) 
@@ -162,6 +165,7 @@ this.beginApp=this.beginApp.bind(this);
               ...prevState.application,
               application_id: response.data.application_id,
               job_opening: opening.opening_key,
+              job_title: opening.title_proposed_appt,
               created: response.data.created,
               school_name: opening.school,
               title_proposed_appt: opening.title_proposed_appt,
@@ -223,8 +227,17 @@ this.beginApp=this.beginApp.bind(this);
   this.setState({ formErrors, [name]: value });
   }
 
+  attachFiles = files => e => {
+    this.setState(prevState => ({
+      application: {                 
+          ...prevState.application, 
+          files: files
+      }
+  }))
 
-  validateApplication = () => e=> {
+  } 
+  validateApplication = HEHE => e => {
+    console.log('IN THE VALIDATE', this.state)
     let valid = true;
     let errors = ''
     let missingString = ''
@@ -239,7 +252,8 @@ this.beginApp=this.beginApp.bind(this);
     if (emptyFields.length!==0) 
       {missingString = emptyFields.join(', ')}
     Object.values(req).forEach((val) => {
-      if (val===null) {
+      console.log(val)
+      if (val===null || val==='') {
         valid = false
         errors ='The following are required: National Identification Number, School Name, School District, and Nationality.'
       }});
@@ -254,9 +268,9 @@ this.beginApp=this.beginApp.bind(this);
 
 
   render() {
-    const { title_proposed_appt, certificates, school_district, birth_date, national_id, school_name, prev_appt, nationality, job_opening, application_id, last_name, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
+    const {job_title,  title_proposed_appt, certificates, school_district, birth_date, national_id, school_name, prev_appt, nationality, job_opening, application_id, last_name, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex} = this.state.application;
     const { loading, formErrors, step, errors, missingString, toolTip, serverMessage, bannedOpening } = this.state
-    const values = {loading, title_proposed_appt, certificates, toolTip, formErrors, school_district, birth_date, national_id, school_name, prev_appt, application_id, nationality, job_opening, last_name, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex, errors, missingString};
+    const values = {job_title, loading, title_proposed_appt, certificates, toolTip, formErrors, school_district, birth_date, national_id, school_name, prev_appt, application_id, nationality, job_opening, last_name, first_name, other_names, mobile_number, pin_code, nassit, qualifications, special_skills, sex, errors, missingString};
     switch (step) {
       case 0: 
         return (
@@ -297,6 +311,7 @@ this.beginApp=this.beginApp.bind(this);
             <Attachments
               step={this.step}
               values={values}
+              attachFiles = {this.attachFiles}
               handleChangeSave={this.handleChangeSave}
 
             />);    
@@ -305,7 +320,6 @@ this.beginApp=this.beginApp.bind(this);
           <Submit
             step={this.step}
             submit = {this.submit}
-            validateApplication= {this.validateApplication}
             values={values}
             checkmarked = {this.state.checkMark}
             handleCheckboxChange = {this.handleCheckboxChange}

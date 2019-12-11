@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from 'axios';
 import {H1, Wrapper, FormWrapper, Form, Input, Label, New, ErrorMessage, CreateButton, A_center} from '../constants/utils/Styling.jsx'
 import { withRouter} from "react-router-dom";
-
+import { CircularProgress } from '@material-ui/core';
 
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
@@ -29,7 +29,7 @@ class Login extends Component {
     handleSubmit = async e => {
       e.preventDefault();
       this.setState({
-        error: 'loading..'
+        error: 'loading'
       })
       axios 
       .post('http://localhost:5000/api/login', 
@@ -54,8 +54,11 @@ class Login extends Component {
             <Wrapper>
             <FormWrapper>
                 <H1>Login</H1>
-                {this.state.error!=="" && <ErrorMessage>{this.state.error}</ErrorMessage>}
-                <Form onSubmit = {this.handleSubmit} noValidate>
+                {this.state.error==='loading' 
+                  ?   <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+                  : this.state.error!=='' && <ErrorMessage>{this.state.error}</ErrorMessage>}
+
+              <Form onSubmit = {this.handleSubmit} noValidate>
                 <New>
                     <Label htmlFor="email">Email </Label>
                     <Input

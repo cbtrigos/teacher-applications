@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import {H1, H2, Wrapper, Buttons,  Notification, Left, FormWrapper,  Input, Label, New, ErrorMessage, CreateButton, A_center} from '../../constants/utils/Styling.jsx'
 import styled from 'styled-components'
 import NumberFormat from 'react-number-format';
+import { CircularProgress } from '@material-ui/core';
+import {Select, FormControl, MenuItem, InputLabel} from "@material-ui/core/"
 
 
 // The "Personal Details" page is the 1st panel of the registration 
@@ -15,7 +17,32 @@ export default class ApplicantRegister extends Component {
               <H2>For prospective primary, secondary, and vocational school teachers</H2> 
               {/* <A_center H2 onClick={step('Clear')}>Looking for the approver registration? Go here! </A_center><br/> */}
 
-              {values.serverMessage!==null && <Notification>{values.serverMessage}</Notification>}
+
+
+              {values.serverMessage==='loading' 
+                  ?   <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+                  : values.serverMessage!==null && <Notification>{values.serverMessage}</Notification>}
+
+
+                <New>
+                    <Label htmlFor="to_create_listing">User Type *</Label>
+                    <FormControl variant="outlined" style={{ width: "100%", height: "45px", padding: '0', margin: '0 0 20px 0' }}>
+                                <InputLabel id="demo-simple-select-outlined-label">
+                                </InputLabel>
+                                <Select style={{ height: "45px" }}
+                                  labelId="demo-simple-select-outlined-label"
+                                  id="demo-simple-select-outlined"
+                                  value={values.to_create_listing}
+                                  defaultValue={values.to_create_listing}
+                                  onChange={handleChangeSave('to_create_listing')}
+                                >
+                                  <MenuItem value=""><H2 small>Please select one:</H2></MenuItem>
+                                  <MenuItem value={"I wish to apply for a teacher position"}><H2 left small >I wish to apply for a teacher position</H2></MenuItem>
+                                  <MenuItem value={"I wish to submit a job listing"}><H2 left small>I wish to submit a job listing</H2></MenuItem>
+                                  </Select>
+                              </FormControl>
+ 
+                </New>
                 <Buttons> 
                 <Left>
                     <Label htmlFor="firstName"> First Name *</Label>

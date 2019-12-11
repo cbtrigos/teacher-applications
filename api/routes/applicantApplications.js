@@ -26,6 +26,7 @@ exports.begin = function (req, res) {
     email: req.body.email,
     sex: req.body.sex,
     birth_date: req.body.birth_date,
+    job_title: req.body.job_title
   };
 
   connection.query(
@@ -144,8 +145,9 @@ exports.submit = function (req, res) {
   connection.query(
     'UPDATE applications SET submitted = ?, last_edited=? WHERE application_id = ?',
     ['true', last_edited, application_id],
-    (error) => {
+    (error, results) => {
       if (error) {
+        console.log(error)
         res.status(400).send("couldn't find application");
       } else {
 
@@ -164,18 +166,15 @@ exports.submit = function (req, res) {
   
         transporter.sendMail(mailOptions, (err) => {
           if (err) {
+            console.log(err)
+
             return res.status(200).send('Your opening has been received.',
             );
           }
-          return res.status(200).send('application submitted successfully');
+          else return res.status(200).send('application submitted successfully');
 
 
         });
-
-
-
-
-
 
       }
     },

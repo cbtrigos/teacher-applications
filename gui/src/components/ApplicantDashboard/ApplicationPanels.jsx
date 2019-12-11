@@ -5,6 +5,7 @@ import Tracker from './Tracker.jsx'
  
 export default function DraftPanels(props) {
 const {application, type, updateChosen, deleteApplication} = props
+console.log(application)
 
 const [expanded, setExpanded] = React.useState('panel1');
 const handleChange = panel => (event, newExpanded) => {
@@ -14,18 +15,18 @@ const handleChange = panel => (event, newExpanded) => {
 return ( <div>
                 <ExpansionPanel square expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
                     <ExpansionPanelSummary aria-controls="panel2d-content" id="panel2d-header">
- <H2 style={{textAlign:'center'}}>#{application.application_id}: {application.title_proposed_appt} {application.school_name!==null && <>for {application.school_name}</>} {application.rejection_reason!==null && <> --- <span style={{color: 'darkred'}}>REJECTED</span></>} </H2>
+ <H2 style={{textAlign:'center'}}>#{application.application_id}: {application.job_title} {application.school_name!==null && <>for {application.school_name}</>} {application.rejection_reason!==null && <> --- <span style={{color: 'darkred'}}>REJECTED</span></>} </H2>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
 
                     {type==='draft' 
                         ?  <div style ={{width:'100%', display:'block'}}>
                             <H2>
-                            Last Edited: {application.last_edited.slice(0,10)}<br/><br/>
                             Application ID: {application.application_id} <br/>  
-                            Created: {application.created.slice(0,10)} <br/>
-                            Other names: {application.other_names} <br/>
-                            Nationality: {application.nationality} <br/>
+                            Last Edited: {application.last_edited.slice(0,10)}<br/>
+                            Created on: {application.created.slice(0,10)} <br/>
+                            ...
+
                             </H2>
                             <Buttons>
                                 <Left>

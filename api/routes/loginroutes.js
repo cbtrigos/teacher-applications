@@ -23,6 +23,7 @@ exports.register = function (req, res) {
     password: hash_password,
     created: today,
     modified: today,
+    user_type: req.body.user_type,
     birth_date: req.body.birth_date,
     gender: req.body.gender,
     mobile_number: req.body.mobile_number,

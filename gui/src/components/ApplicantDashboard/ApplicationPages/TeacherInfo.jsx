@@ -21,7 +21,7 @@ export default class TeacherInfo extends Component {
               <Wrapper>
                <FormWrapper>
                <H1>Teacher Application</H1>
-               <H2>{values.title_proposed_appt} at {values.school_name} <br/>
+               <H2>{values.job_title} at {values.school_name} <br/>
               Application #{values.application_id}<br/><br/>
 
                 School and Teacher Information: Part 2/5</H2><br/>

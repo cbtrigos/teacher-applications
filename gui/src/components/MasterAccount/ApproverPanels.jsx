@@ -1,6 +1,7 @@
 import React from "react";
 import { H1, H2, Field, Notification, InputLarge, ErrorMessage, Label, Bucket, Partition, Application, Buttons, Left, CreateButton} from '../../constants/utils/Styling.jsx'
 import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails} from '../../constants/utils/ExpandingPanels.jsx'
+import { CircularProgress } from '@material-ui/core';
 
 
 export default function ApproverPanels(props) {
@@ -196,7 +197,13 @@ export default function ApproverPanels(props) {
                 <br/> <br/>
                 <Application>
                     <H1>Your Approval</H1>
-                    {serverMessage!== '' && <Notification>{serverMessage}</Notification>}
+
+
+                    {serverMessage==='loading' 
+                  ?   <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+                  : serverMessage!=='' && <Notification>{serverMessage}</Notification>}
+
+
                     <Label>Rejection Reason</Label>
                     <InputLarge
                     style= {{padding: '1em', width: '100%'}}

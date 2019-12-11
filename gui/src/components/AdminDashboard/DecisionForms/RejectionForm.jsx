@@ -13,6 +13,7 @@ export default class RejectionForm extends Component {
           rejection_reason: '',
           additional: '',
           approver_name: user.first_name + ' ' + user.last_name, 
+          approver_email: user.email,
           approver_id: user.user_id, 
           application_id: props.application.application_id, 
           user_id: user.user_id,

@@ -16,6 +16,10 @@ export const H1 = styled.h1`
       : `text-align: center;
       `};`
 
+export const Signature = styled.h1`
+font-family: 'Great Vibes', cursive;
+`
+
 export const Wrapper = styled.div`
     min-height: 120vh;
     height: 130%;

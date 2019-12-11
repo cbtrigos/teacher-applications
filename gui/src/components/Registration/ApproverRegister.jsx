@@ -3,6 +3,7 @@ import {H1, H2, Wrapper, Buttons, TextArea, Partition, Tooltip, InfoIcon, Toolti
 import styled from 'styled-components'
 import NumberFormat from 'react-number-format';
 import {Select, FormControl, MenuItem, InputLabel} from "@material-ui/core/"
+import { CircularProgress } from '@material-ui/core';
 
 export function Info(title) {
     event.preventDefault();
@@ -24,7 +25,12 @@ export default class ApproverRegister extends Component {
               <H2>For Education Secretaries, School proprietors, TSC management members, and Chairmen representing a school's Board of Governors.</H2> 
               <A_center H2 onClick={step('Clear')}>Looking for the applicant registration? Go here! </A_center><br/>
 
-              {values.serverMessage!==null && <Notification>{values.serverMessage}</Notification>}
+              {values.serverMessage==='loading' 
+                  ?   <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+                  : values.serverMessage!==null && <Notification>{this.state.error}</Notification>}
+
+
+             
               <Partition style={{padding: '3%'}}>
                   <H1>Approval Request Information</H1>
                   <New>
