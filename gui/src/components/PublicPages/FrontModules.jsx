@@ -15,7 +15,7 @@ import styled from "styled-components"
 const Coat_of_arms_of_Sierra_Leone= 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Coat_of_arms_of_Sierra_Leone.svg/1200px-Coat_of_arms_of_Sierra_Leone.svg.png'
 const posts = [
     {
-     title: "Reports & Data",
+     title: "Data & Reports",
      excerpt: "Explore data on school directories, exams, learning impact indicators, and other educational data.",
      image: "https://i0.wp.com/www.thesierraleonetelegraph.com/wp-content/uploads/2018/08/Children-in-Sierra-Leone22-e1535633931366.png?fit=500%2C303&ssl=1",
      link: "http://educationdatahub.dsti.gov.sl/"
