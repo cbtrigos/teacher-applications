@@ -79,7 +79,6 @@ export default class UserForm extends React.Component {
     let type = null 
     if (this.state.to_create_listing ==="I wish to apply for a teacher position") {type=0}
     if (this.state.to_create_listing ==="I wish to submit a job listing") {type=4}
-    console.log(type)
     event.preventDefault();
     this.setState({
       serverMessage: 'loading'
@@ -185,7 +184,7 @@ export default class UserForm extends React.Component {
         break;
         case "DOB":
           formErrors.DOB =
-          value.length < 10 ? "date not valid" : ""
+          value.length != 10  ? "date not valid" : ""
         break;
         case "password1":
           formErrors.password1 =

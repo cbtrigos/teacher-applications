@@ -6,6 +6,7 @@ import AllApps from './SearchApps.jsx'
 import AllOpenings from './SearchOpenings.jsx'
 import ScrollableAnchor from 'react-scrollable-anchor'
 import Fuse from "fuse.js";
+import { CircularProgress } from '@material-ui/core';
 
 var searchUsers = {
   shouldSort: true,
@@ -114,17 +115,26 @@ export default class MasterExplore extends React.Component {
         chosenUsers: [],
         chosenOpenings: [],
         chosenApplications: [],
+        
+        searchedOpening: '',
+        openingLoading: false,
 
         selectedUser: {},
+        userLoading: false,
+        searchedUser: '',
         selectedOpening: {},
         selectedApp: {},
 
+        loadingPage: false,
         serverUserMessage: '',
         serverOpeningMessage: '',
       }
     }
   
     async componentDidMount() {
+      this.setState({ 
+        loadingPage: true
+       });
       axios 
        .post(process.env.REACT_APP_API+'/api/get-all-applications', 
          {"user_id": this.props.user.user_id, 
@@ -136,7 +146,7 @@ export default class MasterExplore extends React.Component {
          else {
           this.setState({
             applications: response.data.applications,
-            chosenApplications: response.data.applications
+            chosenApplications: response.data.applications,
           })
          }
        })
@@ -166,7 +176,8 @@ export default class MasterExplore extends React.Component {
          else {
           this.setState({
             openings: response.data.openings,
-            chosenOpenings: response.data.openings
+            chosenOpenings: response.data.openings,
+            loadingPage: false 
           })
          }
        })
@@ -219,6 +230,8 @@ export default class MasterExplore extends React.Component {
   modifyUser = input => e => {
     this.setState({ 
       selectedUser: {}, 
+      searchedUser: e.target.value,
+      userLoading: true
      });
     axios 
        .post(process.env.REACT_APP_API+'/api/get-user', 
@@ -236,6 +249,8 @@ export default class MasterExplore extends React.Component {
          else {
            this.setState({ 
             selectedUser: response.data.selectedUser, 
+            searchedUser: '',
+            userLoading: false
            });
          }
        })
@@ -243,6 +258,8 @@ export default class MasterExplore extends React.Component {
   modifyOpening = input => e => {
     this.setState({ 
       selectedOpening: {}, 
+      searchedOpening: e.target.value,
+      openingLoading: true
      });
     axios 
        .post(process.env.REACT_APP_API+'/api/get-opening', 
@@ -260,6 +277,8 @@ export default class MasterExplore extends React.Component {
          else {
            this.setState({ 
             selectedOpening: response.data.selectedOpening, 
+            searchedOpening: '',
+            openingLoading: false
            });
          }
        })
@@ -327,6 +346,7 @@ export default class MasterExplore extends React.Component {
             <Wrapper>
             <FormWrapper large>
                 <H1>Welcome to the exploration page, {user.first_name}!</H1>
+                {this.state.loadingPage && <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div> }
                 <H2>You're in the right place to explore the {this.state.users.length} <a style={{color:"#EB7BC0"}} href='#users'>users</a>, {this.state.openings.length} <a style={{color:"#EB7BC0"}} href='#openings'>job openings</a>, and {this.state.applications.length} <a style={{color:"#EB7BC0"}} href='#applications'>applications</a>.</H2>          
 
               </FormWrapper>
@@ -351,12 +371,12 @@ export default class MasterExplore extends React.Component {
               type = "text"
               name="search"
               noValidate
-              placeholder="Search by user ID"
+              placeholder="Search by exact user ID"
               onChange={this.modifyUser('search')}
             />
             
             {Object.keys(selectedUser).length!== 0
-              && 
+              ? 
               <Application>
               <H2>One user was found:<br/><br/>
               First Name: <span style={{fontStyle:"italic"}}>{selectedUser.first_name}</span> <br/>
@@ -398,7 +418,8 @@ export default class MasterExplore extends React.Component {
                   </CreateButton>
                 </Buttons>
             </Application>
-            }
+              : this.state.searchedUser && <div style={{display:'flex', justifyContent:'center'}}><CircularProgress/></div> 
+               }
             
             </FormWrapper>
             </ScrollableAnchor>
@@ -423,12 +444,12 @@ export default class MasterExplore extends React.Component {
               type = "text"
               name="search"
               noValidate
-              placeholder="Search by opening ID"
+              placeholder="Search by exact opening ID"
               onChange={this.modifyOpening('search')}
             />
             
             {Object.keys(selectedOpening).length!== 0
-              && 
+              ?
               <Application>
               <H2>One opening was found:<br/><br/>
               Job Opening ID: <span style={{fontStyle:"italic"}}>{selectedOpening.opening_key}</span> <br/>
@@ -453,6 +474,7 @@ export default class MasterExplore extends React.Component {
                   </CreateButton>
                 </Buttons>
             </Application>
+              : this.state.searchedOpening && <div style={{display:'flex', justifyContent:'center'}}><CircularProgress/></div> 
             }
             
             </FormWrapper>

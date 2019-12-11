@@ -5,7 +5,6 @@ import Tracker from './Tracker.jsx'
  
 export default function DraftPanels(props) {
 const {application, type, updateChosen, deleteApplication} = props
-console.log(application)
 
 const [expanded, setExpanded] = React.useState('panel1');
 const handleChange = panel => (event, newExpanded) => {

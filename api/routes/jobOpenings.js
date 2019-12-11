@@ -1,64 +1,66 @@
-const mysql = require('mysql');
-const nodemailer = require('nodemailer');
-const { db } = require('../authentication/mysql.js');
-const { emailAuth } = require('../authentication/emailAuth.js');
+const mysql = require("mysql");
+const nodemailer = require("nodemailer");
+const { db } = require("../authentication/mysql.js");
+const { emailAuth } = require("../authentication/emailAuth.js");
+const moment = require("moment");
 
 //                                 CONNECTING TO MYSQL
 
 const connection = mysql.createConnection(db);
-connection.connect((err) => {
+connection.connect((err, results) => {
   if (err) {
     console.error(`error connecting: ${err.stack}`);
   }
 });
 
-exports.getJobOpenings = function (req, res) {
-  connection.query('SELECT * FROM job_openings WHERE closed = ? and live = ?', ['false', 'true'], (
-    error,
-    results,
-  ) => {
-    if (error) {
-        res.status(400).send('error in getting openings');
-    } 
-    else  {
+exports.getJobOpenings = function(req, res) {
+  connection.query(
+    "SELECT * FROM job_openings WHERE closed = ? and live = ?",
+    ["false", "true"],
+    (error, results) => {
+      if (error) {
+        res.status(400).send("error in getting openings");
+      } else {
         res.status(200).send({
-            openings: results,
-            });
-
-     } 
+          openings: results
+        });
+      }
     }
   );
 };
 
-exports.postJobOpenings = function (req, res) {
-const search = req.body.search
-connection.query('SELECT * FROM job_openings WHERE closed = ? and live = ? and emis_code = ?', ['false', 'true', search], (
-  error,
-  results,
-) => {
-  if (error) {
-      res.status(400).send('error in getting openings');
-  } 
-  else  {
-      res.status(200).send({
-          openings: results,
-          });
-
-   } 
-  }
-);
+exports.postJobOpenings = function(req, res) {
+  const search = req.body.search;
+  connection.query(
+    "SELECT * FROM job_openings WHERE closed = ? and live = ? and emis_code = ?",
+    ["false", "true", search],
+    (error, results) => {
+      if (error) {
+        res.status(400).send("error in getting openings");
+      } else {
+        res.status(200).send({
+          openings: results
+        });
+      }
+    }
+  );
 };
 
-exports.createJobOpening = function (req, res) {
+exports.createJobOpening = function(req, res) {
   const today = new Date();
   const submission = {
-    contact_name: req.body.name_title + ' ' + req.body.first_name + ' ' + req.body.last_name,
+    contact_name:
+      req.body.name_title +
+      " " +
+      req.body.first_name +
+      " " +
+      req.body.last_name,
     contact_email: req.body.email,
     contact_mobile: req.body.mobile_number,
     contact_title: req.body.title,
-    contact_DOB: req.body.DOB, 
+    contact_DOB: moment(req.body.DOB).format("YYYY-MM-DD hh:mm:ss"),
     opening_created: today,
-    opening_additional_info: req.body.additional_info, 
+    opening_additional_info: req.body.additional_info,
     school: req.body.school,
     school_type: req.body.school_type,
     emis_code: req.body.emis_code,
@@ -75,48 +77,47 @@ exports.createJobOpening = function (req, res) {
     grade_requested: req.body.grade_requested,
     district: req.body.district,
     qualifications_required: req.body.qualifications_required,
-    live: 'false'
+    live: "false"
   };
 
   const toSend = {
     email: submission.contact_email,
     name: submission.contact_name,
-    subject: 'You teacher opening has been received',
-    sent: new Date(),
-  }; 
+    subject: "You teacher opening has been received",
+    sent: new Date()
+  };
 
-    connection.query('INSERT INTO job_openings SET ?', submission, (
-      error
-    ) => {
+  connection.query(
+    "INSERT INTO job_openings SET ?",
+    submission,
+    (error, results) => {
       if (error) {
         res
           .status(200)
-          .send('An error occured. Please refresh and try again. ');
+          .send("An error occured. Please refresh and try again. ");
       } else {
-
-
-        const transporter = nodemailer.createTransport(emailAuth.authentication);
+        const transporter = nodemailer.createTransport(
+          emailAuth.authentication
+        );
         const mailOptions = {
           from: emailAuth.applicationEmail,
           to: toSend.email,
           subject: toSend.subject,
           text:
             `Dear ${toSend.name},
-            \nThis email is to confirm that we have received your teacher opening "${submission.title_proposed_appt}" for the following school: ${submission.school}.\n\nThe details of the school information and position will be reviewed soon.`
-            + '\n\nYou will be notified via email as soon as there is an update. Please note that this notice is automatically generated.' 
-            + '\n\nThank you! You\'ll hear from us soon. '
-            + 'Good luck!',
+            \nThis email is to confirm that we have received your teacher opening "${submission.title_proposed_appt}" for the following school: ${submission.school}.\n\nThe details of the school information and position will be reviewed soon.` +
+            "\n\nYou will be notified via email as soon as there is an update. Please note that this notice is automatically generated." +
+            "\n\nThank you! You'll hear from us soon. " +
+            "Good luck!"
         };
-  
-        transporter.sendMail(mailOptions, (err) => {
+
+        transporter.sendMail(mailOptions, err => {
           if (err) {
-            return res.status(200).send('Your opening has been received.',
-            );
+            return res.status(200).send("Your opening has been received.");
           }
-          return res.status(200).send("Job Opening submitted sucessfully")
-
+          return res.status(200).send("Job Opening submitted sucessfully");
         });
-
       }
-    });
-}
+    }
+  );
+};

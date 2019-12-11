@@ -1,499 +1,499 @@
-const mysql = require('mysql');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-const moment = require('moment');
-const bcrypt = require('bcrypt');
-const { db } = require('../authentication/mysql.js');
-const { emailAuth } = require('../authentication/emailAuth.js');
+const mysql = require("mysql");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
+const moment = require("moment");
+const bcrypt = require("bcrypt");
+const { db } = require("../authentication/mysql.js");
+const { emailAuth } = require("../authentication/emailAuth.js");
 
 //                                 CONNECTING TO MYSQL
 
 const connection = mysql.createConnection(db);
-connection.connect((err) => {
+connection.connect((err, results) => {
   if (err) {
     console.error(`error connecting: ${err.stack}`);
   }
 });
 
 //                           EMAILING USER TOKEN FROM FORGOT PASSWORD
-exports.forgotPassword = function (req, res) {
+exports.forgotPassword = function(req, res) {
   const { email } = req.body;
-  const token = crypto.randomBytes(64).toString('hex');
+  const token = crypto.randomBytes(64).toString("hex");
   let isInDatabase = true;
 
-  if (email === '') {
-    res.json('email required');
+  if (email === "") {
+    res.json("email required");
     res.end();
   }
 
-  connection.query('SELECT * FROM users WHERE email = ?', email, (
-    error,
-    results,
-    fields,
-  ) => {
-    if (results.length == 0) {
-      isInDatabase = false;
-    } else {
-      const request = {
-        id: token,
-        user_id: results[0].user_id,
-        expires: moment()
-          .add(1, 'hour')
-          .format('YYYY-MM-DD hh:mm:ss'),
-      };
+  connection.query(
+    "SELECT * FROM users WHERE email = ?",
+    email,
+    (error, results) => {
+      if (results.length == 0) {
+        isInDatabase = false;
+      } else {
+        const request = {
+          id: token,
+          user_id: results[0].user_id,
+          expires: moment()
+            .add(1, "hour")
+            .format("YYYY-MM-DD hh:mm:ss")
+        };
 
-      connection.query(
-        'INSERT INTO password_change_requests SET ?',
-        request,
-        (error, results, fields) => {
-          if (error) {
-            res
-              .status(400)
-              .json('insertion into password_change_requests failed');
-            res.end();
-          }
-          const transporter = nodemailer.createTransport(
-            emailAuth.authentication,
-          );
-
-          const mailYesAccount = {
-            from: emailAuth.applicationEmail,
-            to: email,
-            subject: 'Link to Reset Password',
-            text:
-              'You are receiving this because you (or someone else) have requested the reset of the password for your account. \n\n'
-              + 'Please click on the following link, or paste this into your browser to complete the process within the next hour of receiving it: \n\n'
-              + `http://localhost:8080/reset/${token}\n\n`
-              + 'If you did not request this, please ignore this email and your password will remain unchanged. \n '
-              + 'Thank you!',
-          };
-          const mailNoAccount = {
-            from: emailAuth.applicationEmail,
-            to: email,
-            subject: 'Link to Reset Password',
-            text:
-              'You are receiving this because you (or someone else) has requested the reset of the password for the account associated with this email. \n\n'
-              + 'There is, however, no account associated with this email. \n\n'
-              + 'If you did not request this, please ignore this email!\n '
-              + 'Thank you!',
-          };
-
-          let valid = true;
-          let mailOptions = mailYesAccount;
-          if (!isInDatabase) {
-            mailOptions = mailNoAccount;
-          }
-          transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-              valid = false;
+        connection.query(
+          "INSERT INTO password_change_requests SET ?",
+          request,
+          (error, results) => {
+            if (error) {
+              res
+                .status(400)
+                .json("insertion into password_change_requests failed");
+              res.end();
             }
-          });
-          if (valid) {
-            return res.status(200).send('recovery email sent');
+            const transporter = nodemailer.createTransport(
+              emailAuth.authentication
+            );
+
+            const mailYesAccount = {
+              from: emailAuth.applicationEmail,
+              to: email,
+              subject: "Link to Reset Password",
+              text:
+                "You are receiving this because you (or someone else) have requested the reset of the password for your account. \n\n" +
+                "Please click on the following link, or paste this into your browser to complete the process within the next hour of receiving it: \n\n" +
+                `http://localhost:8080/reset/${token}\n\n` +
+                "If you did not request this, please ignore this email and your password will remain unchanged. \n " +
+                "Thank you!"
+            };
+            const mailNoAccount = {
+              from: emailAuth.applicationEmail,
+              to: email,
+              subject: "Link to Reset Password",
+              text:
+                "You are receiving this because you (or someone else) has requested the reset of the password for the account associated with this email. \n\n" +
+                "There is, however, no account associated with this email. \n\n" +
+                "If you did not request this, please ignore this email!\n " +
+                "Thank you!"
+            };
+
+            let valid = true;
+            let mailOptions = mailYesAccount;
+            if (!isInDatabase) {
+              mailOptions = mailNoAccount;
+            }
+            transporter.sendMail(mailOptions, (err, info) => {
+              if (err) {
+                valid = false;
+              }
+            });
+            if (valid) {
+              return res.status(200).send("recovery email sent");
+            }
+            return res.status(500).send("Failed to send");
           }
-          return res.status(500).send('Failed to send');
-        },
-      );
+        );
+      }
     }
-  });
+  );
 };
 
 //                           VERIFYING TOKEN FROM FORGOT PASSWORD
 
-exports.resetValid = function (req, res) {
+exports.resetValid = function(req, res) {
   const token = req.body.id;
   connection.query(
-    'SELECT * FROM password_change_requests WHERE id = ?',
+    "SELECT * FROM password_change_requests WHERE id = ?",
     token,
-    (error, results, fields) => {
+    (error, results) => {
       if (error) {
       }
       if (results.length > 0) {
         const valid = moment(results[0].expires).isAfter(
-          moment().format('YYYY-MM-DD hh:mm:ss'),
+          moment().format("YYYY-MM-DD hh:mm:ss")
         );
         if (valid) {
-          res.status(200).send('password reset link valid');
+          res.status(200).send("password reset link valid");
         } else {
-          res.status(504).send('link has expired');
+          res.status(504).send("link has expired");
         }
       } else {
-        res.status(501).send('link does not exist');
+        res.status(501).send("link does not exist");
       }
-    },
+    }
   );
 };
 //                        ACTUALLY RESETING PASSWORD FROM FORGOT PASSWORD
 
-exports.resetPassword = function (req, res) {
+exports.resetPassword = function(req, res) {
   const token = req.body.id;
   const hash_password = bcrypt.hashSync(req.body.password, 12);
 
   connection.query(
-    'SELECT * FROM password_change_requests WHERE id = ?',
+    "SELECT * FROM password_change_requests WHERE id = ?",
     token,
-    (error, results, fields) => {
+    (error, results) => {
       if (error) {
       }
       if (results.length > 0) {
         const valid = moment(results[0].expires).isAfter(
-          moment().format('YYYY-MM-DD hh:mm:ss'),
+          moment().format("YYYY-MM-DD hh:mm:ss")
         );
         if (valid) {
           const { user_id } = results[0];
           connection.query(
-            'UPDATE users SET password = ? WHERE user_id = ?',
+            "UPDATE users SET password = ? WHERE user_id = ?",
             [hash_password, user_id],
-            (error, results, fields) => {
+            (error, results) => {
               if (error) {
                 res.status(500).send("couldn't update password");
               } else {
-                res.status(202).send('password updated');
+                res.status(202).send("password updated");
               }
-            },
+            }
           );
         } else {
-          res.status(5044).send('link has expired');
+          res.status(5044).send("link has expired");
         }
       } else {
-        res.status(501).send('link does not exist');
+        res.status(501).send("link does not exist");
       }
-    },
+    }
   );
 };
 
 //   //                                 CHANGE NAME
-exports.changeName = function (req, res) {
+exports.changeName = function(req, res) {
   const changeName = {
     prev_first_name: req.body.prev_first_name,
     prev_last_name: req.body.prev_last_name,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     expires: moment()
-      .add(60, 'days')
-      .format('YYYY-MM-DD hh:mm:ss'),
-    user_id: req.body.user_id,
+      .add(60, "days")
+      .format("YYYY-MM-DD hh:mm:ss"),
+    user_id: req.body.user_id
   };
 
   connection.query(
-    'SELECT * FROM name_change_requests WHERE user_id = ?',
+    "SELECT * FROM name_change_requests WHERE user_id = ?",
     changeName.user_id,
-    (error, results, fields) => {
+    (error, results) => {
       if (error) {
       }
       if (results.length !== 0) {
-        const today = moment().format('YYYY-MM-DD hh:mm:ss');
-        results.forEach((app) => {
+        const today = moment().format("YYYY-MM-DD hh:mm:ss");
+        results.forEach(app => {
           const valid = moment(app.expires).isBefore(today); // if the stored date, when you can change your name again, is after today, you can't change
           if (!valid) {
             res.status(200).send({
               message:
-                'Name changed within the last 60 days. Please wait the full 60 days before attempting to change again.',
+                "Name changed within the last 60 days. Please wait the full 60 days before attempting to change again."
             });
           } else {
             connection.query(
-              'INSERT INTO name_change_requests SET ?',
+              "INSERT INTO name_change_requests SET ?",
               changeName,
-              (error, results, fields) => {
+              (error, results) => {
                 if (error) {
                   res.status(200).send({
                     message:
-                      'Failed to update name. Please refresh and try again.',
+                      "Failed to update name. Please refresh and try again."
                   });
                 } else {
                   connection.query(
-                    'UPDATE users SET first_name = ?, last_name=? WHERE user_id = ?',
+                    "UPDATE users SET first_name = ?, last_name=? WHERE user_id = ?",
                     [
                       changeName.first_name,
                       changeName.last_name,
-                      changeName.user_id,
+                      changeName.user_id
                     ],
                     (error, results, fields) => {
                       if (error) {
                         res.status(200).send({
                           message:
-                            'Failed to update name. Please refresh and try again.',
+                            "Failed to update name. Please refresh and try again."
                         });
                       } else {
                         res
                           .status(200)
-                          .send({ message: 'Name updated sucessfully. ' });
+                          .send({ message: "Name updated sucessfully. " });
                       }
-                    },
+                    }
                   );
                 }
-              },
+              }
             );
           }
         });
       } else {
         connection.query(
-          'INSERT INTO name_change_requests SET ?',
+          "INSERT INTO name_change_requests SET ?",
           changeName,
-          (error, results, fields) => {
+          (error, results) => {
             if (error) {
               res.status(200).send({
-                message: 'Failed to update name. Please refresh and try again.',
+                message: "Failed to update name. Please refresh and try again."
               });
             } else {
               connection.query(
-                'UPDATE users SET first_name = ?, last_name=? WHERE user_id = ?',
+                "UPDATE users SET first_name = ?, last_name=? WHERE user_id = ?",
                 [
                   changeName.first_name,
                   changeName.last_name,
-                  changeName.user_id,
+                  changeName.user_id
                 ],
-                (error, results, fields) => {
+                (error, results) => {
                   if (error) {
                     res.status(200).send({
                       message:
-                        'Failed to update name. Please refresh and try again.',
+                        "Failed to update name. Please refresh and try again."
                     });
                   } else {
                     res.status(200).send({
                       message:
-                        'Name updated sucessfully. Please log out and back in to reflect updates.',
+                        "Name updated sucessfully. Please log out and back in to reflect updates."
                     });
                   }
-                },
+                }
               );
             }
-          },
+          }
         );
       }
-    },
+    }
   );
 };
 
 //   //                                 CHANGE EMAIL
-exports.changeEmail = function (req, res) {
+exports.changeEmail = function(req, res) {
   const changeEmail = {
     prev_email: req.body.prev_email,
     email: req.body.email,
     expires: moment()
-      .add(60, 'days')
-      .format('YYYY-MM-DD hh:mm:ss'),
-    user_id: req.body.user_id,
+      .add(60, "days")
+      .format("YYYY-MM-DD hh:mm:ss"),
+    user_id: req.body.user_id
   };
 
   connection.query(
-    'SELECT * FROM email_change_requests WHERE user_id = ?',
+    "SELECT * FROM email_change_requests WHERE user_id = ?",
     changeEmail.user_id,
     (error, results) => {
       if (error) {
       }
       if (results.length !== 0) {
-        const today = moment().format('YYYY-MM-DD hh:mm:ss');
-        results.forEach((app) => {
+        const today = moment().format("YYYY-MM-DD hh:mm:ss");
+        results.forEach(app => {
           const valid = moment(app.expires).isBefore(today);
           if (!valid) {
             res.status(200).send({
               message:
-                'Email changed within the last 60 days. Please wait the full 60 days before attempting to change again.',
+                "Email changed within the last 60 days. Please wait the full 60 days before attempting to change again."
             });
           } else {
             connection.query(
-              'INSERT INTO email_change_requests SET ?',
+              "INSERT INTO email_change_requests SET ?",
               changeEmail,
-              (error) => {
+              (error, results) => {
                 if (error) {
                   res.status(200).send({
                     message:
-                      'Failed to update email. Please refresh and try again.',
+                      "Failed to update email. Please refresh and try again."
                   });
                 } else {
                   connection.query(
-                    'UPDATE users SET email = ? WHERE user_id = ?',
+                    "UPDATE users SET email = ? WHERE user_id = ?",
                     [changeEmail.email, changeEmail.user_id],
-                    (error) => {
+                    (error, results) => {
                       if (error) {
                         res.status(200).send({
                           message:
-                            'Failed to update email. Please refresh and try again.',
+                            "Failed to update email. Please refresh and try again."
                         });
                       } else {
                         res.status(200).send({
                           message:
-                            'Email updated sucessfully. Please log out and back in to reflect updates.',
+                            "Email updated sucessfully. Please log out and back in to reflect updates."
                         });
                       }
-                    },
+                    }
                   );
                 }
-              },
+              }
             );
           }
         });
       } else {
         connection.query(
-          'INSERT INTO email_change_requests SET ?',
+          "INSERT INTO email_change_requests SET ?",
           changeEmail,
-          (error) => {
+          (error, results) => {
             if (error) {
               res.status(200).send({
-                message: 'Failed to update email. Please refresh and try again.',
+                message: "Failed to update email. Please refresh and try again."
               });
             } else {
               connection.query(
-                'UPDATE users SET email = ? WHERE user_id = ?',
+                "UPDATE users SET email = ? WHERE user_id = ?",
                 [changeEmail.email, changeEmail.user_id],
-                (error) => {
+                (error, results) => {
                   if (error) {
                     res.status(200).send({
                       message:
-                        'Failed to update email. Please refresh and try again.',
+                        "Failed to update email. Please refresh and try again."
                     });
                   } else {
                     res
                       .status(200)
-                      .send({ message: 'Email updated sucessfully. ' });
+                      .send({ message: "Email updated sucessfully. " });
                   }
-                },
+                }
               );
             }
-          },
+          }
         );
       }
-    },
+    }
   );
 };
 
 //   //                                 CHANGE EMAIL
-exports.changeMobile = function (req, res) {
+exports.changeMobile = function(req, res) {
   const changeMobile = {
     prev_mobile_number: req.body.prev_mobile_number,
     mobile_number: req.body.mobile_number,
     expires: moment()
-      .add(30, 'days')
-      .format('YYYY-MM-DD hh:mm:ss'),
-    user_id: req.body.user_id,
+      .add(30, "days")
+      .format("YYYY-MM-DD hh:mm:ss"),
+    user_id: req.body.user_id
   };
 
   connection.query(
-    'SELECT * FROM mobile_change_requests WHERE user_id = ?',
+    "SELECT * FROM mobile_change_requests WHERE user_id = ?",
     changeMobile.user_id,
     (error, results) => {
       if (error) {
       }
       if (results.length !== 0) {
-        const today = moment().format('YYYY-MM-DD hh:mm:ss');
-        results.forEach((app) => {
+        const today = moment().format("YYYY-MM-DD hh:mm:ss");
+        results.forEach(app => {
           const valid = moment(app.expires).isBefore(today);
           if (!valid) {
             res.status(200).send({
               message:
-                'Mobile changed within the last 30 days. Please wait the full 30 days before attempting to change again.',
+                "Mobile changed within the last 30 days. Please wait the full 30 days before attempting to change again."
             });
           } else {
             connection.query(
-              'INSERT INTO mobile_change_requests SET ?',
+              "INSERT INTO mobile_change_requests SET ?",
               changeMobile,
-              (error) => {
+              (error, results) => {
                 if (error) {
                   res.status(200).send({
                     message:
-                      'Failed to update mobile. Please refresh and try again.',
+                      "Failed to update mobile. Please refresh and try again."
                   });
                 } else {
                   connection.query(
-                    'UPDATE users SET mobile_number = ? WHERE user_id = ?',
+                    "UPDATE users SET mobile_number = ? WHERE user_id = ?",
                     [changeMobile.mobile_number, changeMobile.user_id],
-                    (error, results, fields) => {
+                    (error, results) => {
                       if (error) {
                         res.status(200).send({
                           message:
-                            'Failed to update mobile number. Please refresh and try again.',
+                            "Failed to update mobile number. Please refresh and try again."
                         });
                       } else {
                         res.status(200).send({
                           message:
-                            'Mobile number updated sucessfully. Please log out and back in to reflect updates.',
+                            "Mobile number updated sucessfully. Please log out and back in to reflect updates."
                         });
                       }
-                    },
+                    }
                   );
                 }
-              },
+              }
             );
           }
         });
       } else {
         connection.query(
-          'INSERT INTO mobile_change_requests SET ?',
+          "INSERT INTO mobile_change_requests SET ?",
           changeMobile,
-          (error) => {
+          (error, results) => {
             if (error) {
               res.status(200).send({
                 message:
-                  'Failed to update mobile number. Please refresh and try again.',
+                  "Failed to update mobile number. Please refresh and try again."
               });
             } else {
               connection.query(
-                'UPDATE users SET mobile_number = ? WHERE user_id = ?',
+                "UPDATE users SET mobile_number = ? WHERE user_id = ?",
                 [changeMobile.mobile_number, changeMobile.user_id],
-                (error) => {
+                (error, results) => {
                   if (error) {
                     res.status(200).send({
                       message:
-                        'Failed to update mobile number. Please refresh and try again.',
+                        "Failed to update mobile number. Please refresh and try again."
                     });
                   } else {
                     res.status(200).send({
                       message:
-                        'Mobile number updated sucessfully. Please log out and back in to reflect updates.',
+                        "Mobile number updated sucessfully. Please log out and back in to reflect updates."
                     });
                   }
-                },
+                }
               );
             }
-          },
+          }
         );
       }
-    },
+    }
   );
 };
 
 //                        CHANGE PASSWORD
 
-exports.changePassword = function (req, res) {
+exports.changePassword = function(req, res) {
   const { password } = req.body;
   const { current_password } = req.body;
   const { user_id } = req.body;
 
   const hash_password = bcrypt.hashSync(password, 12);
 
-  connection.query('SELECT * FROM users WHERE user_id = ?', user_id, (
-    error,
-    results,
-  ) => {
-    if (results.length > 0) {
-      
-      if (bcrypt.compareSync(current_password, results[0].password)) {
-        connection.query(
-          'UPDATE users SET password = ? WHERE user_id = ?',
-          [hash_password, user_id],
-          (error) => {
-            if (error) {
-              res.status(200).send({
-                message:
-                  "Couldn't update password. Please refresh and try again.",
-              });
-            } else {
-              res.status(202).send({
-                message: 'Password updated successfully.',
-              });
+  connection.query(
+    "SELECT * FROM users WHERE user_id = ?",
+    user_id,
+    (error, results) => {
+      if (results.length > 0) {
+        if (bcrypt.compareSync(current_password, results[0].password)) {
+          connection.query(
+            "UPDATE users SET password = ? WHERE user_id = ?",
+            [hash_password, user_id],
+            (error, results) => {
+              if (error) {
+                res.status(200).send({
+                  message:
+                    "Couldn't update password. Please refresh and try again."
+                });
+              } else {
+                res.status(202).send({
+                  message: "Password updated successfully."
+                });
+              }
             }
-          },
-        );
+          );
+        } else {
+          res.status(200).send({
+            message: "Incorrect current password. Please try again."
+          });
+        }
       } else {
-        res.status(200).send({
-          message: 'Incorrect current password. Please try again.',
+        res.status(500).send({
+          message: "Error occured in finding your account."
         });
       }
-    } else {
-      res.status(500).send({
-        message: 'Error occured in finding your account.',
-      });
     }
-  });
+  );
 };

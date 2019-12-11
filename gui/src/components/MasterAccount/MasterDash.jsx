@@ -2,13 +2,14 @@ import React  from 'react';
 import {H2, H1, Wrapper, FormWrapper, HorizSeparator, It} from '../../constants/utils/Styling.jsx'
 import axios from 'axios';
 import ApproverPanels from './ApproverPanels.jsx';
-
+import { CircularProgress } from '@material-ui/core';
 
 export default class MasterDash extends React.Component {
     constructor(props) {
       super(props)
       this.state= {
         error: '',
+        loading: false,
         toApprove: [],
         serverMessage: '',
         rejection_reason: ''
@@ -16,7 +17,8 @@ export default class MasterDash extends React.Component {
     } 
   
   async componentDidMount() {
-  axios 
+    this.setState({loading: true})
+    axios 
     .post(process.env.REACT_APP_API+'/api/get-all-opening-requests', 
       {"user_id": this.props.user.user_id, 
       "user_type": this.props.user.user_type
@@ -27,6 +29,7 @@ export default class MasterDash extends React.Component {
       else {
         this.setState({ 
         toApprove: response.data.toApprove, 
+        loading: false
         });
       }
     })
@@ -35,7 +38,7 @@ export default class MasterDash extends React.Component {
   approveOpening = (opening) => e => {
   if (window.confirm(`Are you sure you wish to approve job opening "${opening.title_proposed_appt}" at "${opening.school}"? Press ok to continue.`)) {
     this.setState({
-      serverMessage: 'loading',
+      loading: true,
     })
     axios 
     .post(process.env.REACT_APP_API+'/api/approve-opening', 
@@ -60,7 +63,7 @@ export default class MasterDash extends React.Component {
   rejectOpening = (opening) => e => { 
   if (window.confirm(`Are you sure you wish to reject job opening "${opening.title_proposed_appt}" at "${opening.school}"? Press ok to reject.`)) {
     this.setState({
-      serverMessage: 'loading'
+      loading: true
     })
     axios 
     .post(process.env.REACT_APP_API+'/api/reject-opening', 
@@ -120,7 +123,10 @@ updateReason = (reason) => e => {
                     <HorizSeparator/>
                       <div>
                         {toDos}
-                        {this.state.toApprove.length===0 && <It> No applications to approve. All done!</It>}
+                        {this.state.loading 
+                          ? <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+                          : this.state.toApprove.length===0 && <It> No applications to approve. All done!</It>
+                        }
                       </div>
                       </div>
                 </FormWrapper>

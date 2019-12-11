@@ -3,6 +3,7 @@ import {FormWrapper, Field, Wrapper, H1, H2,HorizSeparator, CreateButton, Button
 import axios from 'axios';
 import { MDBDataTable } from 'mdbreact';
 import Fuse from "fuse.js";
+import { CircularProgress } from '@material-ui/core';
 
 var searchOptions = {
   shouldSort: true,
@@ -99,10 +100,14 @@ export default class Openings extends Component {
     super(props);
     this.state = {
       allOpenings: [],
-      listedOpenings: []
+      listedOpenings: [],
+      loading: false
   }
 }
     async componentDidMount() {
+      this.setState({
+        loading: true
+      })
         axios 
         .get(process.env.REACT_APP_API+'/api/get-job-openings') 
         .then(response => {
@@ -111,7 +116,8 @@ export default class Openings extends Component {
         else {
             this.setState({ 
             listedOpenings: response.data.openings,
-            allOpenings: response.data.openings
+            allOpenings: response.data.openings,
+            loading: false
             });
         }
         })
@@ -171,7 +177,9 @@ export default class Openings extends Component {
                     defaultValue={this.state.search}
                     />
                 </form>
+                {this.state.loading && <div style={{display:'flex', justifyContent:'center'}}><br/><CircularProgress /> <br/> <br/> <br/></div>}
                   {jobOpenings}
+                  
 
               </FormWrapper>
               </Wrapper>

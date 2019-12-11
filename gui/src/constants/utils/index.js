@@ -1,4 +1,4 @@
-const TOKEN_KEY = 'user';
+const TOKEN_KEY = "user";
 
 export const isLogin = () => {
   if (localStorage.getItem(TOKEN_KEY)) {
@@ -12,7 +12,7 @@ export const logout = () => {
   localStorage.removeItem(TOKEN_KEY);
 };
 
-export const login = (user) => {
+export const login = user => {
   localStorage.setItem(TOKEN_KEY, JSON.stringify(user));
 };
 

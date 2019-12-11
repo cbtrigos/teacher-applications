@@ -6,6 +6,7 @@ import DraftPanels from './ApplicantDashboard/ApplicationPanels.jsx'
 import ApproverPanels from './AdminDashboard/ApproverPanels.jsx'
 import MasterDash from "./MasterAccount/MasterDash.jsx";
 import RequestingApproval from "./RequestingAdmin/RequestingApproval.jsx"
+import { CircularProgress } from '@material-ui/core';
 
 // The "App Type" page is the 0th panel of registration 
 export default class Dashboard extends Component {
@@ -15,10 +16,12 @@ export default class Dashboard extends Component {
       submittedApps: [],
       currentApps: [], 
       chosen: null, 
+      loading: false, 
         };
   }
 
   async componentDidMount() {
+    this.setState({loading: true})
        axios 
         .post(process.env.REACT_APP_API+'/api/get-user-applications', 
           {"user_id": this.props.user.user_id
@@ -30,7 +33,8 @@ export default class Dashboard extends Component {
             this.setState({ 
               submittedApps: response.data.submittedApps, 
               currentApps: response.data.incompleteApps,
-              chosen: null
+              chosen: null,
+              loading: false
             });
           }
         })
@@ -58,6 +62,7 @@ export default class Dashboard extends Component {
 
 
   deleteApplication = (input) => {
+    this.setState({loading: true})
     axios 
       .post(process.env.REACT_APP_API+'/api/delete-application', 
         {"application_id": input
@@ -105,13 +110,23 @@ export default class Dashboard extends Component {
                       <div>
                         <H2>Unfinished Applications</H2>
                         {drafts}
-                        {this.state.currentApps.length===0 ? <It>No applications to continue! Start a new application {startApp}.</It>: <It> Start another application {startApp}!</It>}
+                        {this.state.loading 
+                          ? <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+                          : this.state.currentApps.length===0 ? <It>No applications to continue! Start a new application {startApp}.</It>: <It> Start another application {startApp}!</It>
+                        }
+
+                        {/* {} */}
                       </div>
                       <div>
                       <HorizSeparator/>
                       <H2>Submitted Applications</H2>
-                      {this.state.submittedApps.length===0 &&  <It>No submitted applications to track! </It> }
+                      {/* { } */}
                         {submitted}
+                      {this.state.loading 
+                        ? <div style={{display:'flex', justifyContent:'center'}}><CircularProgress /></div>
+                        : this.state.submittedApps.length===0 &&  <It>No submitted applications to track! </It>
+                      }
+
                       </div>
                       </div>
                 </FormWrapper>

@@ -13,18 +13,20 @@ const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\
 export default class CreateOpening extends Component {
     constructor(props) {
         super(props);
+        const user = props.user
         this.state = {
           step: 0,
-          user: props.user, 
+          user: user, 
+          loading: false, 
           serverMessage: null, 
           submission: {
             title: '',
             name_title: '', 
-            first_name: '', 
-            last_name: '', 
-            email: '', 
-            mobile_number: '', 
-            DOB: '', 
+            first_name: user.first_name, 
+            last_name: user.last_name, 
+            email: user.email, 
+            mobile_number: user.mobile_number, 
+            DOB: user.birth_date, 
             additional_info: '-',
 
             school: '',
@@ -110,18 +112,21 @@ export default class CreateOpening extends Component {
             break;
             case "DOB":
                 formErrors.DOB =
-                value.length < 10 ? "date not valid" : ""
+                value.length != 10 ? "date not valid" : ""
             break;
+            case "date_proposed_appt":
+              const today = new Date()
+              const given = new Date(value)
+              formErrors.date_proposed_appt =
+              value.length != 10 ? "date not valid" : 
+              given<today ? "choose a future date" : ""
+
+          break;
             case "emis_code":
                 formErrors.emis_code =
                 value.length !== 9 ? "emis code not valid" : ""
             break;
-            case "date_proposed_appt":
-                const today = new Date()
-                const given = new Date(value)
-                formErrors.date_proposed_appt =
-                given<today ? "choose a future date" : ""
-            break;
+
         }
         this.setState({ formErrors });
     }
@@ -141,7 +146,6 @@ export default class CreateOpening extends Component {
 
 
   render() {
-    console.log(this.props)
       const {submission, formErrors} = this.state
       const {school_type} = submission
         return (
@@ -357,6 +361,8 @@ export default class CreateOpening extends Component {
                         onChange={this.handleChangeSave('date_proposed_appt')}
                         defaultValue={submission.date_proposed_appt}
                         />
+                  {formErrors.date_proposed_appt!=='' && <ErrorMessage>{formErrors.date_proposed_appt}</ErrorMessage>}
+
                 </New>
                 <New>
                     <Label htmlFor="reasons_proposed_appt">Reasons for the Proposed Appointment *</Label>
@@ -446,7 +452,7 @@ export default class CreateOpening extends Component {
                             type = "text"
                             name='first_name'
                             noValidate
-                            onChange={this.handleChangeSave('first_name')}
+                            disabled= {true}
                             defaultValue={submission.first_name}
                             />
                         {formErrors.first_name.length > 0 && (
@@ -459,7 +465,7 @@ export default class CreateOpening extends Component {
                         type = "text"
                         name='last_name'
                         noValidate
-                        onChange={this.handleChangeSave('last_name') }
+                        disabled= {true}
                         defaultValue={submission.last_name}
 
                         />
@@ -474,7 +480,7 @@ export default class CreateOpening extends Component {
                         type = "text"
                         name="email"
                         noValidate
-                        onChange={this.handleChangeSave('email')}
+                        disabled= {true}
                         defaultValue={submission.email}
                         />
                  <ErrorMessage>{formErrors.email}</ErrorMessage>
@@ -487,7 +493,7 @@ export default class CreateOpening extends Component {
                           name="mobile_number"
                           mask="*"
                           value={submission.mobile_number} 
-                          onChange={this.handleChangeSave('mobile_number')}
+                          disabled= {true}
                           />
                   {formErrors.mobile_number!=='' &&<ErrorMessage>{formErrors.mobile_number}</ErrorMessage>}
 
@@ -500,7 +506,7 @@ export default class CreateOpening extends Component {
                             placeholder="MM/DD/YYYY"
                             name='DOB'
                             noValidate
-                            onChange={this.handleChangeSave('DOB')}
+                            disabled= {true}
                             defaultValue={submission.DOB}
                             />
                 {formErrors.DOB!=='' && <ErrorMessage>{formErrors.DOB}</ErrorMessage>}

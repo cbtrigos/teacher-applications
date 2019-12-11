@@ -127,7 +127,6 @@ this.beginApp=this.beginApp.bind(this);
       if (response.data==="application updated sucessfully") {
         }
     }).catch(error => {
-     console.log(error)
   });
   if (val==='exit') {
     if (this.props.clearChosen!==undefined) {
@@ -237,7 +236,6 @@ this.beginApp=this.beginApp.bind(this);
 
   } 
   validateApplication = HEHE => e => {
-    console.log('IN THE VALIDATE', this.state)
     let valid = true;
     let errors = ''
     let missingString = ''
@@ -252,7 +250,6 @@ this.beginApp=this.beginApp.bind(this);
     if (emptyFields.length!==0) 
       {missingString = emptyFields.join(', ')}
     Object.values(req).forEach((val) => {
-      console.log(val)
       if (val===null || val==='') {
         valid = false
         errors ='The following are required: National Identification Number, School Name, School District, and Nationality.'
