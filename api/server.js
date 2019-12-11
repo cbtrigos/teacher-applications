@@ -127,4 +127,4 @@ router.post('/reject-opening', masterAccount.rejectOpening);
 app.use('/api', router);
 console.log('hitting the api')
 console.log(process.env.DB_HOST)
-app.listen(5000);
+app.listen( process.env.PORT || 5000);
