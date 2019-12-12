@@ -5,7 +5,7 @@
 This portal, SL Teacher Applications, is made for five user types: 
 * Applicant (user type = 0 ) 
 * Reviewer: TSC Teacher Manangement Department Representatives (user type = 1) 
-* Approver 2: TSC Chair (user type = 2)
+* Approver: TSC Chair (user type = 2)
 * School Administrator: those submitting a job opening for their school (user type = 4)
 * Master User: reviews job opening requests submitted by school administrators and has the ability to modify user types, job openings, and application reviewal (user type = 5)
 
@@ -32,7 +32,8 @@ The following are private pages available to signed-in users only:
     - Applicants (user type 0) can create, edit, submit, and track their applications 
     - Reviewers (user type 1) can approve for continuation or reject applicant applications by submitting the appropriate form. They can then track all of _their own_ previously reviewed applications. Rejections mandate a reason. 
     - Approvers (user type 2) see all applications approved by any reviewer. Approvers can track their reviewed applications and either approve or reject new applications with the same rejection form or an approval form (requiring a signature).
-- The Master account users' dashboard is where job opening requests get reviewed. Master account users can also see all submitted application info, all user info, and job opening info, as well as make user type changes and can make job openings live and not live. 
+     - School Administrators (user type 4) are able to create job listings that will appear on master users' dashboards for approval. School administrators are notified by email when they submit an application or when their application gets either approved or rejected. 
+- The Master account users' (user type 5) dashboard is where job opening requests get reviewed. Master account users can also see all submitted application info, all user info, and job opening info, as well as make user type changes and can make job openings live and not live. 
 - All logged-in users regardless of user type can access an account page where they can change their:
     - first or last name (once / 60 days)
     - email (once / 60 days)
